@@ -15,6 +15,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
         debugShowCheckedModeBanner: false,
         localizationsDelegates: const [
+          GlobalCupertinoLocalizations.delegate,
           GlobalMaterialLocalizations.delegate,
           GlobalWidgetsLocalizations.delegate,
         ],
@@ -24,7 +25,8 @@ class MyApp extends StatelessWidget {
         ],
         locale: const Locale('ar', 'AE'),
         theme: ThemeData(
-          primarySwatch: Colors.red,
+          useMaterial3: false,
+          primarySwatch: Colors.deepPurple,
           fontFamily: "NRT",
         ),
         home: WelcomeScreen());

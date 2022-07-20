@@ -1,3 +1,5 @@
+// ignore_for_file: file_names
+
 const categories = [
   {"name": "دیکۆرات"},
   {"name": "بیناسازی"},
