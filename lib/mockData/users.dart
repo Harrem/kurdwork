@@ -8,7 +8,7 @@ const users = [
     'lname': 'محەمەد',
     'birthdate': '09-09-1999',
     'profilePic': 'url',
-    'bio': 'من گەشەپێداری مۆبایل ئاپ و یاری ئەلیکرۆنی و وێبم.',
+    'bio': 'من گەشەپێدەری مۆبایل ئاپ و یاری ئەلیکرۆنی و وێبم.',
     'rating': 5,
     'followers': ['karzan', 'Mariwan', 'Mhamad', 'Jacob'],
     'following': ['karzan', 'Mariwan', 'Mhamad', 'Jacob'],

@@ -1,8 +1,11 @@
 // ignore_for_file: prefer_const_constructors
 
+import 'dart:ffi';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:kurdwork/main.dart';
+import 'package:kurdwork/screens/jobViewScreen.dart';
 
 class MyWidgets {
   static Widget h1(
@@ -194,6 +197,7 @@ class MyWidgets {
 
   static Widget myExpansionTile(
       {String title = "ناوی کار",
+      required int index,
       String subtitle = "خاوەن کارەکە",
       String description = "زانیاری کار",
       double width = double.infinity}) {
@@ -225,162 +229,196 @@ class MyWidgets {
     );
   }
 
-  static Widget myCard(
-      {String title = "ناوی کار",
-      String subtitle = "خاوەن کارەکە",
-      String description = "زانیاری کار",
-      double width = double.infinity}) {
+  static String timePosted(releaseTime) {
+    var measuredTime =
+        (DateTime.now().difference(DateTime.parse("$releaseTime")));
+
+    if (measuredTime.inHours < 1) {
+      return "${measuredTime.inMinutes} دەقە ";
+    }
+    if (measuredTime.inHours < 24) {
+      return "${measuredTime.inHours} کاتژمێر ";
+    }
+    if (measuredTime.inHours >= 24) {
+      return "${measuredTime.inDays} ڕۆژ ";
+    }
+    return measuredTime.inHours.toString();
+  }
+
+  static Widget myCard(BuildContext context,
+      {required Map<String, dynamic> map, double width = double.infinity}) {
+    String title = map['title'];
+    String subtitle = map['owner'];
+    String description = map['description'];
+
     return Padding(
-      padding: const EdgeInsets.all(1.0),
-      child: Expanded(
-        child: Container(
-          color: Colors.white,
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      padding: const EdgeInsets.all(8.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
                   children: [
-                    Row(
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Padding(
-                          padding: const EdgeInsets.all(10.0),
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(100),
-                            child: Image.asset(
-                              "assets/images/avatar1.png",
-                              width: 50,
-                            ),
+                        Text(
+                          title,
+                          style: const TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
                           ),
                         ),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.only(
-                                right: 10.0,
-                                left: 10.0,
-                              ),
-                              child: Text(
-                                title,
-                                style: const TextStyle(
-                                  color: Colors.deepPurple,
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.only(
-                                right: 10.0,
-                                left: 10.0,
-                              ),
-                              child: Text(
-                                subtitle,
-                                style: const TextStyle(color: Colors.grey),
-                              ),
-                            ),
-                            const Text(
-                              "٢٠٢٢-٢-١٠",
-                              style: TextStyle(color: Colors.grey),
-                            ),
-                          ],
+                        Text(
+                          "${MyWidgets.timePosted("${map["date"]} ${map["time"]}")} لەمەوبەر",
+                          style: const TextStyle(color: Colors.grey),
                         ),
                       ],
                     ),
-                    Container(
-                      padding: const EdgeInsets.all(10.0),
-                      alignment: Alignment.topLeft,
-                      child: const Icon(CupertinoIcons.bookmark),
-                    )
                   ],
                 ),
-                const Divider(
-                  color: Colors.transparent,
+              ),
+              Container(
+                alignment: Alignment.topLeft,
+                child: IconButton(
+                    onPressed: () {}, icon: Icon(CupertinoIcons.bookmark)),
+              )
+            ],
+          ),
+          const Divider(color: Colors.transparent),
+          Padding(
+            padding: const EdgeInsets.only(right: 10.0, left: 10.0, bottom: 3),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Icon(CupertinoIcons.info, color: Colors.grey[600], size: 18),
+                VerticalDivider(
+                  thickness: 0.2,
+                  width: 3,
                 ),
-                Padding(
-                  padding: const EdgeInsets.only(right: 10.0, left: 10.0),
-                  child: Text(
-                    description.length > 200
-                        ? "${description.substring(0, 200)}..."
-                        : description,
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(10),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      Column(
-                        children: [
-                          Icon(CupertinoIcons.briefcase),
-                          Container(
-                            alignment: Alignment.center,
-                            height: 25,
-                            child: Text("ئەزموون",
-                                style: TextStyle(
-                                    color: Colors.grey, fontSize: 14)),
-                          ),
-                          Container(
-                            alignment: Alignment.center,
-                            width: 100,
-                            height: 30,
-                            child: Text("زیاتر لە ٥ ساڵ"),
-                          ),
-                        ],
-                      ),
-                      Column(
-                        children: [
-                          Icon(CupertinoIcons.time),
-                          Container(
-                            alignment: Alignment.center,
-                            height: 25,
-                            child: Text("کات",
-                                style: TextStyle(
-                                    color: Colors.grey, fontSize: 14)),
-                          ),
-                          Container(
-                            alignment: Alignment.center,
-                            height: 30,
-                            child: Text("زیاتر لە ١ مانگ"),
-                          ),
-                        ],
-                      ),
-                      Column(
-                        children: [
-                          Icon(CupertinoIcons.location),
-                          Container(
-                            alignment: Alignment.center,
-                            width: 100,
-                            height: 25,
-                            child: Text("شوێن",
-                                style: TextStyle(
-                                    color: Colors.grey, fontSize: 14)),
-                          ),
-                          Container(
-                            alignment: Alignment.center,
-                            width: 100,
-                            height: 30,
-                            child: Text("هەولێر"),
-                          ),
-                        ],
-                      )
-                    ],
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(right: 8.0, left: 8.0),
-                  child: TextButton(
-                    onPressed: () {},
-                    child: const Text("زیاتر بزانە"),
-                  ),
+                Text(
+                  "زانیاری کار",
+                  style: TextStyle(color: Colors.grey[600]),
                 ),
               ],
             ),
           ),
-        ),
+          Padding(
+            padding: const EdgeInsets.only(right: 10.0, left: 10.0),
+            child: Text(
+              description.length >= 200
+                  ? "${description.substring(0, 200)}..."
+                  : description,
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(10),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Column(
+                  children: [
+                    Icon(CupertinoIcons.briefcase_fill, color: Colors.grey),
+                    Container(
+                      alignment: Alignment.center,
+                      height: 25,
+                      child: Text("ئەزموون",
+                          style: TextStyle(color: Colors.grey, fontSize: 14)),
+                    ),
+                    Container(
+                      alignment: Alignment.center,
+                      width: 100,
+                      height: 30,
+                      child: Text("زیاتر لە ٥ ساڵ"),
+                    ),
+                  ],
+                ),
+                Column(
+                  children: [
+                    Icon(CupertinoIcons.timer_fill, color: Colors.grey),
+                    Container(
+                      alignment: Alignment.center,
+                      height: 25,
+                      child: Text("کات",
+                          style: TextStyle(color: Colors.grey, fontSize: 14)),
+                    ),
+                    Container(
+                      alignment: Alignment.center,
+                      height: 30,
+                      child: Text("Part-Time"),
+                    ),
+                  ],
+                ),
+                Column(
+                  children: [
+                    Icon(CupertinoIcons.location_fill, color: Colors.grey),
+                    Container(
+                      alignment: Alignment.center,
+                      width: 100,
+                      height: 25,
+                      child: Text("شوێن",
+                          style: TextStyle(color: Colors.grey, fontSize: 14)),
+                    ),
+                    Container(
+                      alignment: Alignment.center,
+                      width: 100,
+                      height: 30,
+                      child: Text("هەولێر"),
+                    ),
+                  ],
+                )
+              ],
+            ),
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Row(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(100),
+                      child: Image.asset(
+                        "assets/images/avatar3.png",
+                        width: 50,
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(
+                      right: 10.0,
+                      left: 10.0,
+                    ),
+                    child: Text(
+                      subtitle,
+                      style: const TextStyle(color: Colors.grey),
+                    ),
+                  ),
+                ],
+              ),
+              Padding(
+                padding: const EdgeInsets.only(right: 8.0, left: 8.0),
+                child: TextButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => JobViewerScreen(map: map),
+                      ),
+                    );
+                  },
+                  child: const Text("زیاتر بزانە"),
+                ),
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }
