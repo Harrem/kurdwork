@@ -206,15 +206,15 @@ class _HomeScreenState extends State<HomeScreen> {
           onTap: ((value) {
             setState(() {
               _currentIndex = value;
-              if (_currentIndex == 3) {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => ProfileScreen(),
-                  ),
-                );
-              }
             });
+            if (_currentIndex == 3) {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => ProfileScreen(),
+                ),
+              );
+            }
           }),
           selectedItemColor: const Color.fromARGB(255, 0, 0, 0),
           backgroundColor: const Color.fromARGB(255, 240, 240, 240),

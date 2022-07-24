@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:kurdwork/myWidgets.dart';
+import 'package:kurdwork/screens/homeScreen.dart';
 import 'signinScreen.dart';
 
 class SignupScreen extends StatefulWidget {
@@ -62,6 +63,11 @@ class _SignupScreenState extends State<SignupScreen> {
                                 borderRadius: BorderRadius.circular(10),
                               ),
                             ),
+                            validator: (value) {
+                              if (value == "") {
+                                return "please enter your email or phone number";
+                              }
+                            },
                             onChanged: (value) {
                               email = value;
                             },
@@ -88,10 +94,18 @@ class _SignupScreenState extends State<SignupScreen> {
                     context,
                     text: "دروستکردن",
                     onPressed: () {
-                      FirebaseAuth.instance.createUserWithEmailAndPassword(
-                        email: email,
-                        password: password,
-                      );
+                      setState(() {
+                        FirebaseAuth.instance
+                            .createUserWithEmailAndPassword(
+                              email: email,
+                              password: password,
+                            )
+                            .catchError((error) => print(error));
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => HomeScreen()));
+                      });
                     },
                   ),
                   const SizedBox(height: 20),
