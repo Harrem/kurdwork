@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:kurdwork/myWidgets.dart';
 import 'signinScreen.dart';
@@ -10,10 +12,11 @@ class SignupScreen extends StatefulWidget {
 }
 
 class _SignupScreenState extends State<SignupScreen> {
+  String email = "", password = "";
+  final _formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // appBar: AppBar(title: const Text("چوونەژوورەوە")),
       body: Center(
         child: SizedBox(
           width: double.infinity,
@@ -47,11 +50,36 @@ class _SignupScreenState extends State<SignupScreen> {
                   MyWidgets.h3("دروستکردن بە ئیمەیل یان ژمارە مۆبایل",
                       color: Colors.grey),
                   const SizedBox(height: 10),
-                  MyWidgets.myTextField(
-                    context,
-                    labelText: "ئیمەیل یان ژمارە مۆبایل",
-                    width: 330,
-                  ),
+                  Form(
+                      key: _formKey,
+                      child: Column(
+                        children: [
+                          TextFormField(
+                            decoration: InputDecoration(
+                              labelText: "ئیمەیل",
+                              labelStyle: TextStyle(color: Colors.grey),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                            ),
+                            onChanged: (value) {
+                              email = value;
+                            },
+                          ),
+                          TextFormField(
+                            decoration: InputDecoration(
+                              labelText: "ژمارەی مۆبایل",
+                              labelStyle: TextStyle(color: Colors.grey),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                            ),
+                            onChanged: (value) {
+                              password = value;
+                            },
+                          ),
+                        ],
+                      )),
                   const SizedBox(height: 10),
                   MyWidgets.myTextField(context,
                       labelText: "وشەی تێپەر", width: 330),
@@ -59,7 +87,12 @@ class _SignupScreenState extends State<SignupScreen> {
                   MyWidgets.myElevatedButton(
                     context,
                     text: "دروستکردن",
-                    onPressed: () {},
+                    onPressed: () {
+                      FirebaseAuth.instance.createUserWithEmailAndPassword(
+                        email: email,
+                        password: password,
+                      );
+                    },
                   ),
                   const SizedBox(height: 20),
                   MyWidgets.h3("هەژماری تایبەت بە خۆتت هەیە؟",
