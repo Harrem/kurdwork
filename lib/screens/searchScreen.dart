@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:kurdwork/mockData/jobs.dart';
 import 'package:kurdwork/mockData/users.dart';
@@ -16,29 +17,31 @@ class _SearchScreenState extends State<SearchScreen> {
         body: SafeArea(
       child: Scaffold(
           body: SingleChildScrollView(
-        child: Column(children: [
-          Container(
-            width: double.infinity,
-            height: 400,
-            child: Image.asset("assets/images/1.jpg"),
+        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Expanded(
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Icon(CupertinoIcons.search),
+                  SizedBox(
+                    height: 45,
+                    width: 250,
+                    child: TextField(
+                      decoration: InputDecoration(
+                        hintText: "Search",
+                        border: UnderlineInputBorder(
+                          borderRadius: BorderRadius.circular(15),
+                          borderSide: BorderSide.none,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
           ),
-          Row(
-            children: [
-              ClipRRect(
-                borderRadius: BorderRadius.circular(100),
-                child: Image.asset(
-                  "assets/images/avatar2.png",
-                  width: 100,
-                  height: 100,
-                ),
-              ),
-              Text(
-                "${users[0]['fname']} ${users[0]['lname']}",
-                style:
-                    const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-              ),
-            ],
-          )
         ]),
       )),
     ));
