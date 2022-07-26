@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:flutter/material.dart';
+import 'package:kurdwork/main.dart';
 import 'package:kurdwork/myWidgets.dart';
 import 'package:kurdwork/screens/homeScreen.dart';
 import 'signinScreen.dart';
@@ -43,9 +44,17 @@ class _SignupScreenState extends State<SignupScreen> {
                           height: 60,
                           width: 60,
                           child: ElevatedButton(
-                            onPressed: () {
-                              FirebaseAuth.instance
-                                  .signInWithAuthProvider(GoogleAuthProvider());
+                            onPressed: () async {
+                              User? user =
+                                  await Authentication.signInWithGoogle(
+                                      context: context);
+                              if (user != null) {
+                                Navigator.of(context).pushReplacement(
+                                  MaterialPageRoute(
+                                    builder: (context) => HomeScreen(),
+                                  ),
+                                );
+                              }
                             },
                             style: ElevatedButton.styleFrom(
                                 primary:
@@ -133,16 +142,18 @@ class _SignupScreenState extends State<SignupScreen> {
                     text: "دروستکردن",
                     onPressed: () {
                       setState(() {
-                        FirebaseAuth.instance
-                            .createUserWithEmailAndPassword(
-                              email: email,
-                              password: password,
-                            )
-                            .catchError((error) => print(error));
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => HomeScreen()));
+                        if (_formKey.currentState!.validate()) {
+                          FirebaseAuth.instance
+                              .createUserWithEmailAndPassword(
+                                email: email,
+                                password: password,
+                              )
+                              .catchError((error) => print(error));
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => HomeScreen()));
+                        }
                       });
                     },
                   ),
