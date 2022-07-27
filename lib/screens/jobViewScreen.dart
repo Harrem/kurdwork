@@ -46,27 +46,13 @@ class _JobViewerScreenState extends State<JobViewerScreen> {
             children: [
               SizedBox(
                 width: double.infinity,
-                height: 100,
+                height: 60,
                 child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       MyWidgets.h1("زانیاری کار"),
-                      Container(
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        child: IconButton(
-                          icon: const Icon(
-                            CupertinoIcons.back,
-                            textDirection: TextDirection.ltr,
-                          ),
-                          onPressed: () {
-                            Navigator.pop(context);
-                          },
-                        ),
-                      )
+                      MyWidgets.backButton(context),
                     ]),
               ),
               const SizedBox(height: 15),

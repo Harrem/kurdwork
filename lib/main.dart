@@ -1,16 +1,17 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:kurdwork/screens/homeScreen.dart';
 import 'package:kurdwork/screens/welcomeScreen.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'screens/welcomeScreen.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'firebase_options.dart';
+import 'package:flutter/services.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
+  Authentication.initializeFirebase();
   runApp(MyApp());
 }
 
@@ -31,11 +32,36 @@ class MyApp extends StatelessWidget {
         ],
         locale: const Locale('ar', 'AE'),
         theme: ThemeData(
+          appBarTheme: const AppBarTheme(
+            systemOverlayStyle: SystemUiOverlayStyle(
+              //<-- SEE HERE
+              // Status bar color
+              statusBarColor: Colors.purple,
+              statusBarIconBrightness: Brightness.dark,
+              statusBarBrightness: Brightness.light,
+            ),
+          ),
           useMaterial3: false,
           primarySwatch: Colors.deepPurple,
           fontFamily: "NRT",
         ),
-        home: WelcomeScreen());
+        home: Scaffold(
+          body: Center(
+            child: FutureBuilder(
+              future: Authentication.initializeFirebase(),
+              builder: (context, snapshot) {
+                if (snapshot.hasError) {
+                  return const Text('Error initializing Firebase');
+                } else if (snapshot.connectionState == ConnectionState.done) {
+                  return const HomeScreen();
+                }
+                return const CircularProgressIndicator(
+                  valueColor: AlwaysStoppedAnimation<Color>(Colors.deepPurple),
+                );
+              },
+            ),
+          ),
+        ));
   }
 }
 
@@ -66,7 +92,7 @@ class Authentication {
             await auth.signInWithCredential(credential);
         user = userCredential.user;
       } on FirebaseAuthException catch (e) {
-        if (e == 'account_exists_with_different_creditential') {
+        if (e.message == 'account_exists_with_different_creditential') {
           //handleErrorHere
           ScaffoldMessenger.of(context).showSnackBar(
             Authentication.customSnackBar(

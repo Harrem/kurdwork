@@ -3,7 +3,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/services.dart';
 import 'package:kurdwork/mockData/jobs.dart';
 import 'package:kurdwork/myWidgets.dart';
 import 'package:kurdwork/mockData/categoriesData.dart';
@@ -13,6 +12,7 @@ import 'package:kurdwork/screens/searchScreen.dart';
 import 'package:kurdwork/screens/signinScreen.dart';
 import 'package:kurdwork/screens/profileScreen.dart';
 import 'package:kurdwork/main.dart';
+import 'package:google_nav_bar/google_nav_bar.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -21,18 +21,248 @@ class HomeScreen extends StatefulWidget {
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _HomeScreenState extends State<HomeScreen>
+    with SingleTickerProviderStateMixin {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  late final tabController = TabController(length: 4, vsync: this);
   var _currentIndex = 0;
   var index = 0;
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: DefaultTabController(
-        length: 4,
-        child: Scaffold(
-          key: _scaffoldKey,
-          backgroundColor: const Color.fromARGB(255, 240, 240, 240),
+    return DefaultTabController(
+      length: 4,
+      child: Scaffold(
+        key: _scaffoldKey,
+        backgroundColor: const Color.fromARGB(255, 240, 240, 240),
+        body: TabBarView(
+          controller: tabController,
+          physics: const NeverScrollableScrollPhysics(),
+          children: [
+            SingleChildScrollView(
+              child: Expanded(
+                child: Column(
+                  children: [
+                    const SizedBox(height: 40),
+                    // topCategories(),
+                    const SizedBox(height: 20),
+                    // topDevs("title"),
+                    Padding(
+                      padding: const EdgeInsets.only(right: 20, left: 20),
+                      child: Row(
+                        children: [
+                          const Icon(CupertinoIcons.search),
+                          const VerticalDivider(),
+                          Expanded(
+                            child: Container(
+                              padding:
+                                  const EdgeInsets.only(right: 20, left: 20),
+                              alignment: Alignment.bottomCenter,
+                              height: 50,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(15),
+                                color: Colors.white,
+                              ),
+                              child: const TextField(
+                                clipBehavior: Clip.none,
+                                decoration: InputDecoration(
+                                  border: InputBorder.none,
+                                  hintText: "گەڕان",
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+                    mostRecentJobs(),
+                    const SizedBox(height: 10),
+                  ],
+                ),
+              ),
+            ),
+            SearchScreen(),
+            JobViewerScreen(map: jobs[index]),
+            ProfileScreen(),
+          ],
+        ),
+        bottomNavigationBar: Container(
+          padding: const EdgeInsets.only(bottom: 10),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            boxShadow: [
+              BoxShadow(
+                blurRadius: 20,
+                color: Colors.black.withOpacity(.1),
+              )
+            ],
+          ),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 10),
+            child: GNav(
+              rippleColor: Colors.grey[300]!,
+              hoverColor: Colors.grey[100]!,
+              gap: 8,
+              activeColor: Colors.black,
+              iconSize: 24,
+              padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+              duration: Duration(milliseconds: 400),
+              tabBackgroundColor: Colors.grey[100]!,
+              color: Colors.black,
+              tabs: const [
+                GButton(
+                  icon: CupertinoIcons.home,
+                  text: 'سەرەکی',
+                ),
+                GButton(
+                  icon: CupertinoIcons.heart,
+                  text: 'هەڵگیراو',
+                ),
+                GButton(
+                  icon: CupertinoIcons.search,
+                  text: 'گەڕان',
+                ),
+                GButton(
+                  icon: CupertinoIcons.person,
+                  text: 'پڕۆفایل',
+                ),
+              ],
+              selectedIndex: _currentIndex,
+              onTabChange: (index) {
+                setState(() {
+                  tabController.index = index;
+                });
+              },
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget topCategories() {
+    return Padding(
+      padding: const EdgeInsets.only(right: 20, left: 20),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const SizedBox(height: 30),
+          MyWidgets.h1("پیشە باوەکان"),
+          const Divider(color: Colors.transparent),
+          SizedBox(
+            child: Wrap(
+              spacing: 15,
+              runSpacing: 15,
+              children: List.generate(
+                7,
+                (index) => index == 6
+                    ? MyWidgets.cateCard(text: 'زیاتر')
+                    : MyWidgets.cateCard(text: categories[index]['name']!),
+              ),
+            ),
+          )
+        ],
+      ),
+    );
+  }
+
+  Widget topDevs(String title) {
+    // return Text("data");
+    return Padding(
+      padding: const EdgeInsets.only(top: 20),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(right: 20.0),
+            child: MyWidgets.h1("باشترین گەشەپێدەرەکان"),
+          ),
+          const Divider(color: Colors.transparent),
+          SizedBox(
+            height: 110,
+            child: ListView.builder(
+              scrollDirection: Axis.horizontal,
+              itemCount: users.length,
+              itemBuilder: ((context, index) {
+                return Padding(
+                  padding: const EdgeInsets.only(right: 8, left: 8),
+                  child: MyWidgets.personHeads(
+                      title: users[index]['fname'].toString(), radius: 70),
+                );
+              }),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget mostRecentJobs() {
+    List<Widget> list = [
+      Padding(
+        padding: const EdgeInsets.only(right: 20.0, left: 20),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            MyWidgets.h1("نوێترین هەلی کار", fontWeight: FontWeight.bold),
+            Container(
+                height: 50,
+                width: 50,
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(15),
+                    color: Colors.white),
+                child: const Icon(Icons.filter_list)),
+          ],
+        ),
+      ),
+    ];
+    List.generate(5, (index) {
+      this.index = index;
+      var e = MyWidgets.myCard(context, map: jobs[index]);
+      list.add(e);
+      list.add(const Divider(
+        color: Colors.grey,
+        thickness: 0.2,
+        height: 1,
+      ));
+      return e;
+    });
+    return Column(crossAxisAlignment: CrossAxisAlignment.start, children: list);
+  }
+}
+
+          // bottomNavigationBar: BottomNavigationBar(
+          //   onTap: ((value) {
+          //     setState(() {
+          //       _currentIndex = value;
+          //     });
+          //     if (_currentIndex == 3) {
+          //       Navigator.push(
+          //         context,
+          //         MaterialPageRoute(
+          //           builder: (context) => ProfileScreen(),
+          //         ),
+          //       );
+          //     }
+          //   }),
+          //   selectedItemColor: const Color.fromARGB(255, 0, 0, 0),
+          //   backgroundColor: const Color.fromARGB(255, 240, 240, 240),
+          //   unselectedItemColor: Colors.grey[700],
+          //   currentIndex: _currentIndex,
+          //   showUnselectedLabels: false,
+          //   enableFeedback: true,
+          //   items: const [
+          //     BottomNavigationBarItem(
+          //         icon: Icon(CupertinoIcons.home), label: "Home"),
+          //     BottomNavigationBarItem(
+          //         icon: Icon(CupertinoIcons.square_favorites_alt),
+          //         label: "Saved"),
+          //     BottomNavigationBarItem(
+          //         icon: Icon(CupertinoIcons.search), label: "Search"),
+          //     BottomNavigationBarItem(
+          //         icon: Icon(CupertinoIcons.person), label: "Account"),
+          //   ],
+          // ),
           // appBar: AppBar(
           //   centerTitle: true,
           //   title: const Text(
@@ -191,196 +421,3 @@ class _HomeScreenState extends State<HomeScreen> {
           //     ],
           //   ),
           // ),
-          body: TabBarView(
-            children: [
-              SingleChildScrollView(
-                child: Expanded(
-                  child: Column(
-                    children: [
-                      // topCategories(),
-                      // const SizedBox(height: 20),
-                      // topDevs("title"),
-                      const SizedBox(height: 20),
-                      mostRecentJobs(),
-                      const SizedBox(height: 10),
-                    ],
-                  ),
-                ),
-              ),
-              SearchScreen(),
-              JobViewerScreen(map: jobs[index]),
-              ProfileScreen(),
-            ],
-          ),
-          bottomNavigationBar: SizedBox(
-            height: 60,
-            child: SizedBox(
-              height: double.infinity,
-              child: TabBar(labelColor: Colors.black, tabs: [
-                Tab(
-                  child: (Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: const [
-                      Icon(
-                        CupertinoIcons.home,
-                        size: 20,
-                      ),
-                      Text("Home"),
-                    ],
-                  )),
-                ),
-                Tab(
-                  child: (Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: const [
-                      Icon(
-                        CupertinoIcons.search,
-                        size: 20,
-                      ),
-                      Text("Search"),
-                    ],
-                  )),
-                ),
-                Tab(
-                  child: (Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: const [
-                      Icon(
-                        CupertinoIcons.bookmark,
-                        size: 20,
-                      ),
-                      Text("Saved"),
-                    ],
-                  )),
-                ),
-                Tab(
-                  child: (Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: const [
-                      Icon(
-                        CupertinoIcons.person,
-                        size: 20,
-                      ),
-                      Text("Profile"),
-                    ],
-                  )),
-                ),
-              ]),
-            ),
-          ),
-          // bottomNavigationBar: BottomNavigationBar(
-          //   onTap: ((value) {
-          //     setState(() {
-          //       _currentIndex = value;
-          //     });
-          //     if (_currentIndex == 3) {
-          //       Navigator.push(
-          //         context,
-          //         MaterialPageRoute(
-          //           builder: (context) => ProfileScreen(),
-          //         ),
-          //       );
-          //     }
-          //   }),
-          //   selectedItemColor: const Color.fromARGB(255, 0, 0, 0),
-          //   backgroundColor: const Color.fromARGB(255, 240, 240, 240),
-          //   unselectedItemColor: Colors.grey[700],
-          //   currentIndex: _currentIndex,
-          //   showUnselectedLabels: false,
-          //   enableFeedback: true,
-          //   items: const [
-          //     BottomNavigationBarItem(
-          //         icon: Icon(CupertinoIcons.home), label: "Home"),
-          //     BottomNavigationBarItem(
-          //         icon: Icon(CupertinoIcons.square_favorites_alt),
-          //         label: "Saved"),
-          //     BottomNavigationBarItem(
-          //         icon: Icon(CupertinoIcons.search), label: "Search"),
-          //     BottomNavigationBarItem(
-          //         icon: Icon(CupertinoIcons.person), label: "Account"),
-          //   ],
-          // ),
-        ),
-      ),
-    );
-  }
-
-  Widget topCategories() {
-    return Padding(
-      padding: const EdgeInsets.only(right: 20, left: 20),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const SizedBox(height: 30),
-          MyWidgets.h1("پیشە باوەکان"),
-          const Divider(color: Colors.transparent),
-          SizedBox(
-            child: Wrap(
-              spacing: 15,
-              runSpacing: 15,
-              children: List.generate(
-                7,
-                (index) => index == 6
-                    ? MyWidgets.cateCard(text: 'زیاتر')
-                    : MyWidgets.cateCard(text: categories[index]['name']!),
-              ),
-            ),
-          )
-        ],
-      ),
-    );
-  }
-
-  Widget topDevs(String title) {
-    // return Text("data");
-    return Padding(
-      padding: const EdgeInsets.only(top: 20),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Padding(
-            padding: const EdgeInsets.only(right: 20.0),
-            child: MyWidgets.h1("باشترین گەشەپێدەرەکان"),
-          ),
-          const Divider(color: Colors.transparent),
-          SizedBox(
-            height: 110,
-            child: ListView.builder(
-              scrollDirection: Axis.horizontal,
-              itemCount: users.length,
-              itemBuilder: ((context, index) {
-                return Padding(
-                  padding: const EdgeInsets.only(right: 8, left: 8),
-                  child: MyWidgets.personHeads(
-                      title: users[index]['fname'].toString(), radius: 70),
-                );
-              }),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget mostRecentJobs() {
-    List<Widget> list = [
-      const Divider(color: Colors.transparent),
-      Padding(
-        padding: const EdgeInsets.only(right: 20.0),
-        child: MyWidgets.h1("نوێترین هەلی کار", fontWeight: FontWeight.bold),
-      ),
-    ];
-    List.generate(5, (index) {
-      this.index = index;
-      var e = MyWidgets.myCard(context, map: jobs[index]);
-      list.add(e);
-      list.add(const Divider(
-        color: Colors.grey,
-        thickness: 0.2,
-        height: 1,
-      ));
-      return e;
-    });
-    return Column(crossAxisAlignment: CrossAxisAlignment.start, children: list);
-  }
-}

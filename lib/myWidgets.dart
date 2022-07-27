@@ -108,6 +108,24 @@ class MyWidgets {
     );
   }
 
+  static Widget backButton(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: IconButton(
+        icon: const Icon(
+          CupertinoIcons.back,
+          textDirection: TextDirection.ltr,
+        ),
+        onPressed: () {
+          Navigator.pop(context);
+        },
+      ),
+    );
+  }
+
   static Widget myElevatedButton(context,
       {String text = "button",
       onPressed,
@@ -317,9 +335,9 @@ class MyWidgets {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.all(10),
+            padding: const EdgeInsets.only(top: 40, bottom: 20),
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 Column(
                   children: [

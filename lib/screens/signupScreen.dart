@@ -9,16 +9,14 @@ import 'package:kurdwork/screens/homeScreen.dart';
 import 'signinScreen.dart';
 
 class SignupScreen extends StatefulWidget {
-  SignupScreen({Key? key}) : super(key: key);
+  const SignupScreen({Key? key}) : super(key: key);
 
   @override
   State<SignupScreen> createState() => _SignupScreenState();
 }
 
 class _SignupScreenState extends State<SignupScreen> {
-  final _auth = FirebaseAuth.instance;
-  final _googleSignIn = GoogleSignIn();
-  String email = "", password = "";
+  late final email, password;
   final _formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
@@ -51,14 +49,13 @@ class _SignupScreenState extends State<SignupScreen> {
                               if (user != null) {
                                 Navigator.of(context).pushReplacement(
                                   MaterialPageRoute(
-                                    builder: (context) => HomeScreen(),
+                                    builder: (context) => const HomeScreen(),
                                   ),
                                 );
                               }
                             },
                             style: ElevatedButton.styleFrom(
-                                primary:
-                                    const Color.fromARGB(255, 255, 211, 211),
+                                primary: Color.fromARGB(255, 255, 255, 255),
                                 elevation: 0,
                                 fixedSize: const Size(60, 60),
                                 padding: const EdgeInsets.all(9)),

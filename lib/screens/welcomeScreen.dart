@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'signinScreen.dart';
 import 'signupScreen.dart';
+import 'homeScreen.dart';
 import 'package:kurdwork/myWidgets.dart';
+import 'package:kurdwork/main.dart';
 
 class WelcomeScreen extends StatefulWidget {
   WelcomeScreen({Key? key}) : super(key: key);
