@@ -25,114 +25,124 @@ class _HomeScreenState extends State<HomeScreen>
     with SingleTickerProviderStateMixin {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   late final tabController = TabController(length: 4, vsync: this);
-  var _currentIndex = 0;
+  var currentIndex = 0;
   var index = 0;
+  var searchController = TextEditingController();
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return DefaultTabController(
-      length: 4,
-      child: Scaffold(
-        key: _scaffoldKey,
-        backgroundColor: const Color.fromARGB(255, 240, 240, 240),
-        body: TabBarView(
-          controller: tabController,
-          physics: const NeverScrollableScrollPhysics(),
-          children: [
-            SingleChildScrollView(
-              child: Expanded(
-                child: Column(
-                  children: [
-                    const SizedBox(height: 40),
-                    // topCategories(),
-                    const SizedBox(height: 20),
-                    // topDevs("title"),
-                    Padding(
-                      padding: const EdgeInsets.only(right: 20, left: 20),
-                      child: Row(
-                        children: [
-                          const Icon(CupertinoIcons.search),
-                          const VerticalDivider(),
-                          Expanded(
-                            child: Container(
-                              padding:
-                                  const EdgeInsets.only(right: 20, left: 20),
-                              alignment: Alignment.bottomCenter,
-                              height: 50,
-                              decoration: BoxDecoration(
+    return Container(
+      color: Colors.grey[100],
+      child: SafeArea(
+        bottom: false,
+        child: DefaultTabController(
+          length: 4,
+          child: Scaffold(
+            key: _scaffoldKey,
+            backgroundColor: Colors.grey[100],
+            body: TabBarView(
+              controller: tabController,
+              physics: const NeverScrollableScrollPhysics(),
+              children: [
+                SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      // topCategories(),
+                      const SizedBox(height: 20),
+                      // topDevs("title"),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 20),
+                        child: SizedBox(
+                          height: 50,
+                          child: TextField(
+                            controller: searchController,
+                            decoration: InputDecoration(
+                              fillColor: Colors.white,
+                              filled: true,
+                              contentPadding: const EdgeInsets.symmetric(
+                                  vertical: 5, horizontal: 15),
+                              border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(15),
-                                color: Colors.white,
+                                borderSide: BorderSide.none,
                               ),
-                              child: const TextField(
-                                clipBehavior: Clip.none,
-                                decoration: InputDecoration(
-                                  border: InputBorder.none,
-                                  hintText: "گەڕان",
-                                ),
-                              ),
+                              hintText: "گەڕان",
+                              prefixIcon: const Icon(CupertinoIcons.search),
+                              suffixIcon: IconButton(
+                                  onPressed: () {
+                                    searchController.clear();
+                                  },
+                                  icon: const Icon(CupertinoIcons.multiply)),
                             ),
                           ),
-                        ],
+                        ),
                       ),
+                      const SizedBox(height: 20),
+                      mostRecentJobs(),
+                      const SizedBox(height: 10),
+                    ],
+                  ),
+                ),
+                SearchScreen(),
+                JobViewerScreen(map: jobs[index]),
+                ProfileScreen(),
+              ],
+            ),
+            bottomNavigationBar: Container(
+              padding: const EdgeInsets.only(bottom: 10),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                boxShadow: [
+                  BoxShadow(
+                    blurRadius: 20,
+                    color: Colors.black.withOpacity(.1),
+                  )
+                ],
+              ),
+              child: Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 15.0, vertical: 10),
+                child: GNav(
+                  rippleColor: Colors.grey[300]!,
+                  hoverColor: Colors.grey[100]!,
+                  gap: 8,
+                  activeColor: Colors.black,
+                  iconSize: 24,
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                  duration: const Duration(milliseconds: 400),
+                  // tabBackgroundColor: const Color.fromARGB(255, 242, 235, 255),
+                  color: Colors.black,
+                  tabs: const [
+                    GButton(
+                      icon: CupertinoIcons.home,
+                      text: 'سەرەکی',
                     ),
-                    const SizedBox(height: 20),
-                    mostRecentJobs(),
-                    const SizedBox(height: 10),
+                    GButton(
+                      icon: CupertinoIcons.heart,
+                      text: 'هەڵگیراو',
+                    ),
+                    GButton(
+                      icon: CupertinoIcons.bell,
+                      text: 'هەنوکە',
+                    ),
+                    GButton(
+                      icon: CupertinoIcons.person,
+                      text: 'پڕۆفایل',
+                    ),
                   ],
+                  selectedIndex: currentIndex,
+                  onTabChange: (index) {
+                    setState(() {
+                      tabController.index = index;
+                    });
+                  },
                 ),
               ),
-            ),
-            SearchScreen(),
-            JobViewerScreen(map: jobs[index]),
-            ProfileScreen(),
-          ],
-        ),
-        bottomNavigationBar: Container(
-          padding: const EdgeInsets.only(bottom: 10),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            boxShadow: [
-              BoxShadow(
-                blurRadius: 20,
-                color: Colors.black.withOpacity(.1),
-              )
-            ],
-          ),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 10),
-            child: GNav(
-              rippleColor: Colors.grey[300]!,
-              hoverColor: Colors.grey[100]!,
-              gap: 8,
-              activeColor: Colors.black,
-              iconSize: 24,
-              padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-              duration: Duration(milliseconds: 400),
-              tabBackgroundColor: Colors.grey[100]!,
-              color: Colors.black,
-              tabs: const [
-                GButton(
-                  icon: CupertinoIcons.home,
-                  text: 'سەرەکی',
-                ),
-                GButton(
-                  icon: CupertinoIcons.heart,
-                  text: 'هەڵگیراو',
-                ),
-                GButton(
-                  icon: CupertinoIcons.search,
-                  text: 'گەڕان',
-                ),
-                GButton(
-                  icon: CupertinoIcons.person,
-                  text: 'پڕۆفایل',
-                ),
-              ],
-              selectedIndex: _currentIndex,
-              onTabChange: (index) {
-                setState(() {
-                  tabController.index = index;
-                });
-              },
             ),
           ),
         ),

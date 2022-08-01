@@ -1,11 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:google_sign_in/google_sign_in.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
-import 'package:kurdwork/main.dart';
+import 'package:email_validator/email_validator.dart';
 import 'package:kurdwork/myWidgets.dart';
 import 'package:kurdwork/screens/homeScreen.dart';
+import '../authentication.dart';
 import 'signinScreen.dart';
 
 class SignupScreen extends StatefulWidget {
@@ -16,7 +16,7 @@ class SignupScreen extends StatefulWidget {
 }
 
 class _SignupScreenState extends State<SignupScreen> {
-  late final email, password;
+  late String email, password;
   final _formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
@@ -25,153 +25,185 @@ class _SignupScreenState extends State<SignupScreen> {
         child: SizedBox(
           width: double.infinity,
           child: SingleChildScrollView(
-            child: Expanded(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  MyWidgets.h1("دروستکردنی هەژماری تایبەت"),
-                  const SizedBox(height: 30),
-                  MyWidgets.h3("دروستکردن لەگەڵ", color: Colors.grey),
-                  const SizedBox(height: 10),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      ClipRRect(
-                        borderRadius: BorderRadius.circular(15),
-                        child: SizedBox(
-                          height: 60,
-                          width: 60,
-                          child: ElevatedButton(
-                            onPressed: () async {
-                              User? user =
-                                  await Authentication.signInWithGoogle(
-                                      context: context);
-                              if (user != null) {
-                                Navigator.of(context).pushReplacement(
-                                  MaterialPageRoute(
-                                    builder: (context) => const HomeScreen(),
-                                  ),
-                                );
-                              }
-                            },
-                            style: ElevatedButton.styleFrom(
-                                primary: Color.fromARGB(255, 255, 255, 255),
-                                elevation: 0,
-                                fixedSize: const Size(60, 60),
-                                padding: const EdgeInsets.all(9)),
-                            clipBehavior: Clip.none,
-                            child: SizedBox(
-                              height: 55,
-                              width: 55,
-                              child: Image.asset("assets/icons/google.png"),
-                            ),
-                          ),
-                        ),
-                      ),
-                      const SizedBox(width: 10),
-                      ClipRRect(
-                        borderRadius: BorderRadius.circular(15),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                MyWidgets.h1("دروستکردنی هەژماری تایبەت"),
+                const SizedBox(height: 30),
+                MyWidgets.h3("دروستکردن لەگەڵ", color: Colors.grey),
+                const SizedBox(height: 10),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(15),
+                      child: SizedBox(
+                        height: 60,
+                        width: 60,
                         child: ElevatedButton(
-                          onPressed: () {},
+                          onPressed: () async {
+                            User? user;
+                            user = await Authentication.signInWithGoogle(
+                                context: context);
+                            if (user != null) {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const HomeScreen(),
+                                ),
+                              );
+                            }
+                          },
                           style: ElevatedButton.styleFrom(
-                              primary: const Color.fromARGB(255, 221, 247, 255),
+                              primary: const Color.fromARGB(255, 255, 255, 255),
                               elevation: 0,
                               fixedSize: const Size(60, 60),
-                              padding: const EdgeInsets.all(7)),
+                              padding: const EdgeInsets.all(9)),
                           clipBehavior: Clip.none,
                           child: SizedBox(
-                            height: 50,
-                            width: 50,
-                            child: Image.asset("assets/icons/facebook.png"),
+                            height: 55,
+                            width: 55,
+                            child: Image.asset("assets/icons/google.png"),
                           ),
                         ),
                       ),
-                    ],
-                  ),
-                  const SizedBox(height: 40),
-                  MyWidgets.h3("دروستکردن بە ئیمەیل یان ژمارە مۆبایل",
-                      color: Colors.grey),
-                  const SizedBox(height: 10),
-                  Form(
-                      key: _formKey,
-                      child: Column(
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: TextFormField(
-                              decoration: InputDecoration(
-                                labelText: "ئیمەیل",
-                                labelStyle: TextStyle(color: Colors.grey),
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                              ),
-                              validator: (value) {
-                                if (value == "") {
-                                  return "please enter your email or phone number";
-                                }
-                              },
-                              onChanged: (value) {
-                                email = value;
-                              },
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: TextFormField(
-                              decoration: InputDecoration(
-                                labelText: "وشەی تێپەر",
-                                labelStyle: TextStyle(color: Colors.grey),
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                              ),
-                              onChanged: (value) {
-                                password = value;
-                              },
-                            ),
-                          ),
-                        ],
-                      )),
-                  const SizedBox(height: 30),
-                  MyWidgets.myElevatedButton(
-                    context,
-                    text: "دروستکردن",
-                    onPressed: () {
-                      setState(() {
-                        if (_formKey.currentState!.validate()) {
-                          FirebaseAuth.instance
-                              .createUserWithEmailAndPassword(
-                                email: email,
-                                password: password,
-                              )
-                              .catchError((error) => print(error));
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => HomeScreen()));
-                        }
-                      });
-                    },
-                  ),
-                  const SizedBox(height: 20),
-                  MyWidgets.h3("هەژماری تایبەت بە خۆتت هەیە؟",
-                      color: Colors.grey),
-                  const SizedBox(height: 5),
-                  TextButton(
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => SigninScreen()),
-                      );
-                    },
-                    child: const Text(
-                      'بچۆرە ژوورەوە',
-                      style: TextStyle(fontSize: 16),
                     ),
+                    const SizedBox(width: 10),
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(15),
+                      child: ElevatedButton(
+                        onPressed: () {},
+                        style: ElevatedButton.styleFrom(
+                            primary: const Color.fromARGB(255, 221, 247, 255),
+                            elevation: 0,
+                            fixedSize: const Size(60, 60),
+                            padding: const EdgeInsets.all(7)),
+                        clipBehavior: Clip.none,
+                        child: SizedBox(
+                          height: 50,
+                          width: 50,
+                          child: Image.asset("assets/icons/facebook.png"),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 40),
+                MyWidgets.h3("دروستکردن بە ئیمەیل یان ژمارە مۆبایل",
+                    color: Colors.grey),
+                const SizedBox(height: 10),
+                Form(
+                    key: _formKey,
+                    child: Column(
+                      children: [
+                        SizedBox(
+                          width: MediaQuery.of(context).size.width - 100,
+                          child: TextFormField(
+                            decoration: InputDecoration(
+                              fillColor: Colors.grey[200],
+                              filled: true,
+                              labelText: "ئیمەیل",
+                              labelStyle: const TextStyle(color: Colors.grey),
+                              floatingLabelStyle:
+                                  const TextStyle(color: Colors.deepPurple),
+                              // errorBorder: InputBorder.none,
+                              border: OutlineInputBorder(
+                                borderSide: BorderSide.none,
+                                borderRadius: BorderRadius.circular(15),
+                              ),
+                            ),
+                            validator: (value) {
+                              if (value == "") {
+                                return "تکایە بۆشاییەکان پڕبکەوە";
+                              }
+                              if (!EmailValidator.validate(email)) {
+                                return "هەڵە هەیە لە ئیمەیلەکە";
+                              }
+                              email = value!;
+                              return null;
+                            },
+                            onChanged: (value) {
+                              email = value;
+                            },
+                          ),
+                        ),
+                        const SizedBox(height: 10),
+                        SizedBox(
+                          width: MediaQuery.of(context).size.width - 100,
+                          child: TextFormField(
+                            decoration: InputDecoration(
+                              fillColor: Colors.grey[200],
+                              filled: true,
+                              labelText: "وشەی تێپەر",
+                              labelStyle: const TextStyle(color: Colors.grey),
+                              floatingLabelStyle:
+                                  const TextStyle(color: Colors.deepPurple),
+                              border: OutlineInputBorder(
+                                borderSide: BorderSide.none,
+                                borderRadius: BorderRadius.circular(15),
+                              ),
+                            ),
+                            validator: (value) {
+                              if (value == "") {
+                                return "تکایە بۆشاییەکان پڕبکەوە";
+                              }
+                              if (value!.length < 7) {
+                                return "وشەی تێپەر پێویستە لە ٨ پیت یان ژمارە زیاتربێت";
+                              }
+                              return null;
+                            },
+                            onChanged: (value) {
+                              if (value.length > 7) {
+                                password = value;
+                              }
+                            },
+                          ),
+                        ),
+                      ],
+                    )),
+                const SizedBox(height: 30),
+                MyWidgets.myElevatedButton(
+                  context,
+                  text: "دروستکردن",
+                  onPressed: () {
+                    setState(() {
+                      if (_formKey.currentState!.validate()) {
+                        FirebaseAuth.instance
+                            .createUserWithEmailAndPassword(
+                          email: email,
+                          password: password,
+                        )
+                            .catchError((error) {
+                          if (error == "sign_in_canceled") {
+                            return SnackBar(content: Text("signin canceled"));
+                          }
+                          return SnackBar(content: Text("signin failed"));
+                          // Navigator.push(
+                          //     context,
+                          //     MaterialPageRoute(
+                          //         builder: (context) => HomeScreen()));
+                        });
+                      }
+                    });
+                  },
+                ),
+                const SizedBox(height: 20),
+                MyWidgets.h3("هەژماری تایبەت بە خۆتت هەیە؟",
+                    color: Colors.grey),
+                const SizedBox(height: 5),
+                TextButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => SigninScreen()),
+                    );
+                  },
+                  child: const Text(
+                    'بچۆرە ژوورەوە',
+                    style: TextStyle(fontSize: 16),
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
         ),

@@ -137,6 +137,9 @@ class MyWidgets {
         width: width,
         height: height,
         child: ElevatedButton(
+          style: ElevatedButton.styleFrom(
+              // primary: Color.fromARGB(255, 28, 126, 255),
+              ),
           onPressed: onPressed,
           child: Text(
             text,

@@ -1,6 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:kurdwork/myWidgets.dart';
+import 'package:kurdwork/main.dart';
+import 'package:kurdwork/screens/signinScreen.dart';
+
+import '../authentication.dart';
 
 class Settings extends StatefulWidget {
   Settings({Key? key}) : super(key: key);
@@ -33,6 +37,27 @@ class _SettingsState extends State<Settings> {
         const ListTile(
           leading: Icon(CupertinoIcons.person),
           title: Text("هەژمارەکەم"),
+        ),
+        GestureDetector(
+          onTap: () {
+            try {
+              Authentication.signOut(context: context);
+            } catch (e) {
+              const SnackBar(content: Text("an error occured"));
+            }
+            setState(() {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (BuildContext context) => SigninScreen(),
+                ),
+              );
+            });
+          },
+          child: const ListTile(
+            leading: Icon(Icons.logout_rounded),
+            title: Text("چونەدەرەوە"),
+          ),
         ),
       ],
     ));
