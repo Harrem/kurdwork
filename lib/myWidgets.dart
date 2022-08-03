@@ -129,10 +129,10 @@ class MyWidgets {
   static Widget myElevatedButton(context,
       {String text = "button",
       onPressed,
-      double width = 250,
-      double height = 60}) {
+      double width = double.infinity,
+      double height = 55}) {
     return ClipRRect(
-      borderRadius: BorderRadius.circular(12),
+      borderRadius: BorderRadius.circular(15),
       child: SizedBox(
         width: width,
         height: height,

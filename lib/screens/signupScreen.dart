@@ -1,6 +1,6 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+// ignore_for_file: file_names
+
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:kurdwork/myWidgets.dart';
@@ -16,7 +16,8 @@ class SignupScreen extends StatefulWidget {
 }
 
 class _SignupScreenState extends State<SignupScreen> {
-  late String email, password;
+  String email = "", password = "";
+  bool isVisible = false;
   final _formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
@@ -93,45 +94,42 @@ class _SignupScreenState extends State<SignupScreen> {
                     color: Colors.grey),
                 const SizedBox(height: 10),
                 Form(
-                    key: _formKey,
-                    child: Column(
-                      children: [
-                        SizedBox(
-                          width: MediaQuery.of(context).size.width - 100,
-                          child: TextFormField(
-                            decoration: InputDecoration(
-                              fillColor: Colors.grey[200],
-                              filled: true,
-                              labelText: "ئیمەیل",
-                              labelStyle: const TextStyle(color: Colors.grey),
-                              floatingLabelStyle:
-                                  const TextStyle(color: Colors.deepPurple),
-                              // errorBorder: InputBorder.none,
-                              border: OutlineInputBorder(
-                                borderSide: BorderSide.none,
-                                borderRadius: BorderRadius.circular(15),
-                              ),
+                  key: _formKey,
+                  child: Column(
+                    children: [
+                      SizedBox(
+                        width: MediaQuery.of(context).size.width - 100,
+                        child: TextFormField(
+                          decoration: InputDecoration(
+                            fillColor: Colors.grey[200],
+                            filled: true,
+                            labelText: "ئیمەیل",
+                            labelStyle: const TextStyle(color: Colors.grey),
+                            floatingLabelStyle:
+                                const TextStyle(color: Colors.deepPurple),
+                            border: OutlineInputBorder(
+                              borderSide: BorderSide.none,
+                              borderRadius: BorderRadius.circular(15),
                             ),
-                            validator: (value) {
-                              if (value == "") {
-                                return "تکایە بۆشاییەکان پڕبکەوە";
-                              }
-                              if (!EmailValidator.validate(email)) {
-                                return "هەڵە هەیە لە ئیمەیلەکە";
-                              }
-                              email = value!;
-                              return null;
-                            },
-                            onChanged: (value) {
-                              email = value;
-                            },
                           ),
+                          validator: (value) {
+                            if (value == "") {
+                              return "تکایە بۆشاییەکان پڕبکەوە";
+                            }
+                            if (!EmailValidator.validate(email)) {
+                              return "هەڵە هەیە لە ئیمەیلەکە";
+                            }
+                            email = value!;
+                            return null;
+                          },
                         ),
-                        const SizedBox(height: 10),
-                        SizedBox(
-                          width: MediaQuery.of(context).size.width - 100,
-                          child: TextFormField(
-                            decoration: InputDecoration(
+                      ),
+                      const SizedBox(height: 10),
+                      SizedBox(
+                        width: MediaQuery.of(context).size.width - 100,
+                        child: TextFormField(
+                          obscureText: !isVisible,
+                          decoration: InputDecoration(
                               fillColor: Colors.grey[200],
                               filled: true,
                               labelText: "وشەی تێپەر",
@@ -142,50 +140,50 @@ class _SignupScreenState extends State<SignupScreen> {
                                 borderSide: BorderSide.none,
                                 borderRadius: BorderRadius.circular(15),
                               ),
-                            ),
-                            validator: (value) {
-                              if (value == "") {
-                                return "تکایە بۆشاییەکان پڕبکەوە";
-                              }
-                              if (value!.length < 7) {
-                                return "وشەی تێپەر پێویستە لە ٨ پیت یان ژمارە زیاتربێت";
-                              }
-                              return null;
-                            },
-                            onChanged: (value) {
-                              if (value.length > 7) {
-                                password = value;
-                              }
-                            },
-                          ),
+                              suffixIcon: IconButton(
+                                onPressed: () {
+                                  setState(() {
+                                    isVisible = !isVisible;
+                                  });
+                                },
+                                icon: isVisible
+                                    ? const Icon(Icons.visibility)
+                                    : const Icon(Icons.visibility_off),
+                              )),
+                          validator: (value) {
+                            if (value == "") {
+                              return "تکایە بۆشاییەکان پڕبکەوە";
+                            }
+                            if (value!.length < 8) {
+                              return "وشەی تێپەر پێویستە لە ٨ پیت یان ژمارە زیاتربێت";
+                            }
+                            password = value;
+                            return null;
+                          },
                         ),
-                      ],
-                    )),
-                const SizedBox(height: 30),
-                MyWidgets.myElevatedButton(
-                  context,
-                  text: "دروستکردن",
-                  onPressed: () {
-                    setState(() {
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 20),
+                Container(
+                  width: MediaQuery.of(context).size.width - 100,
+                  child: MyWidgets.myElevatedButton(
+                    context,
+                    text: "دروستکردن",
+                    onPressed: () async {
+                      User? user;
                       if (_formKey.currentState!.validate()) {
-                        FirebaseAuth.instance
-                            .createUserWithEmailAndPassword(
-                          email: email,
-                          password: password,
-                        )
-                            .catchError((error) {
-                          if (error == "sign_in_canceled") {
-                            return SnackBar(content: Text("signin canceled"));
-                          }
-                          return SnackBar(content: Text("signin failed"));
-                          // Navigator.push(
-                          //     context,
-                          //     MaterialPageRoute(
-                          //         builder: (context) => HomeScreen()));
-                        });
+                        user = await Authentication.signUpWithEmailAndPassword(
+                            context: context, email: email, password: password);
                       }
-                    });
-                  },
+                      setState(() {
+                        if (user != null) {
+                          debugPrint("User created \n user email: $user");
+                        }
+                      });
+                    },
+                  ),
                 ),
                 const SizedBox(height: 20),
                 MyWidgets.h3("هەژماری تایبەت بە خۆتت هەیە؟",
