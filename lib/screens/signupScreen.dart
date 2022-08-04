@@ -169,7 +169,6 @@ class _SignupScreenState extends State<SignupScreen> {
                 Container(
                   width: MediaQuery.of(context).size.width - 100,
                   child: MyWidgets.myElevatedButton(
-                    context,
                     text: "دروستکردن",
                     onPressed: () async {
                       User? user;

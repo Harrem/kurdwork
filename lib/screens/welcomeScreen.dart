@@ -45,7 +45,6 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                 ),
                 const SizedBox(height: 70),
                 MyWidgets.myElevatedButton(
-                  context,
                   text: "چوونە بەژوورەوە",
                   onPressed: () {
                     Navigator.push(

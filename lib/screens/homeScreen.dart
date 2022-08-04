@@ -8,7 +8,7 @@ import 'package:kurdwork/myWidgets.dart';
 import 'package:kurdwork/mockData/categoriesData.dart';
 import 'package:kurdwork/mockData/users.dart';
 import 'package:kurdwork/screens/jobViewScreen.dart';
-import 'package:kurdwork/screens/searchScreen.dart';
+import 'package:kurdwork/screens/savedJobsScreen.dart';
 import 'package:kurdwork/screens/signinScreen.dart';
 import 'package:kurdwork/screens/profileScreen.dart';
 import 'package:kurdwork/main.dart';

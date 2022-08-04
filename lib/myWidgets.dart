@@ -126,7 +126,7 @@ class MyWidgets {
     );
   }
 
-  static Widget myElevatedButton(context,
+  static Widget myElevatedButton(
       {String text = "button",
       onPressed,
       double width = double.infinity,
@@ -138,8 +138,8 @@ class MyWidgets {
         height: height,
         child: ElevatedButton(
           style: ElevatedButton.styleFrom(
-              // primary: Color.fromARGB(255, 28, 126, 255),
-              ),
+            elevation: 1,
+          ),
           onPressed: onPressed,
           child: Text(
             text,
