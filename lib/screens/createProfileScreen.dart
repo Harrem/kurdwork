@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:kurdwork/myWidgets.dart';
@@ -14,13 +15,16 @@ class CreateProfile extends StatefulWidget {
 class _CreateProfileState extends State<CreateProfile> {
   DateTime? birthdate;
   final formKey = GlobalKey<FormState>();
+
   TextEditingController birthdatePicker = TextEditingController();
+  TextEditingController fnameController = TextEditingController();
+  TextEditingController lnameController = TextEditingController();
 
   List<DropdownMenuItem<String>> menuItems = const [
-    DropdownMenuItem(value: "USA", child: Text("هەولێر")),
-    DropdownMenuItem(value: "Canada", child: Text("سلێمانی")),
-    DropdownMenuItem(value: "Brazil", child: Text("کەرکوک")),
-    DropdownMenuItem(value: "England", child: Text("دهۆک")),
+    DropdownMenuItem(value: "Erbil", child: Text("هەولێر")),
+    DropdownMenuItem(value: "Sulaymaniyah", child: Text("سلێمانی")),
+    DropdownMenuItem(value: "Karkuk", child: Text("کەرکوک")),
+    DropdownMenuItem(value: "Duhok", child: Text("دهۆک")),
   ];
 
   String? selectedDropValue;
@@ -48,6 +52,7 @@ class _CreateProfileState extends State<CreateProfile> {
                       ),
                       const SizedBox(height: 10),
                       TextFormField(
+                        controller: fnameController,
                         decoration: InputDecoration(
                           hintText: "ناوی یەکەمت بنوسە",
                           fillColor: Colors.grey[200],
@@ -73,6 +78,7 @@ class _CreateProfileState extends State<CreateProfile> {
                       ),
                       const SizedBox(height: 10),
                       TextFormField(
+                        controller: lnameController,
                         decoration: InputDecoration(
                           hintText: "ناوی دووەمت بنوسە",
                           fillColor: Colors.grey[200],
@@ -139,7 +145,12 @@ class _CreateProfileState extends State<CreateProfile> {
                           return null;
                         }),
                       ),
-                      const SizedBox(height: 40),
+                      const SizedBox(height: 20),
+                      const SizedBox(
+                        width: double.infinity,
+                        child: Text("شوێنی نیشتەجێبوون"),
+                      ),
+                      const SizedBox(height: 10),
                       SizedBox(
                         width: double.infinity,
                         child: ButtonTheme(
@@ -190,7 +201,20 @@ class _CreateProfileState extends State<CreateProfile> {
                         MyWidgets.myElevatedButton(
                             text: "دواتر",
                             onPressed: () {
-                              if (!formKey.currentState!.validate()) {}
+                              if (formKey.currentState!.validate()) {
+                                FirebaseFirestore.instance
+                                    .collection("users")
+                                    .doc(FirebaseAuth.instance.currentUser!.uid)
+                                    .set({
+                                  "fname": fnameController.value.text,
+                                  "lname": lnameController.value.text,
+                                  "dob": birthdate,
+                                  "address": selectedDropValue,
+                                  "email":
+                                      FirebaseAuth.instance.currentUser!.email,
+                                }).onError((error, stackTrace) =>
+                                        debugPrint("error occured $error"));
+                              }
                             }),
                       ],
                     ),
