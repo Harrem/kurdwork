@@ -7,6 +7,8 @@ import 'package:flutter/material.dart';
 import 'package:kurdwork/main.dart';
 import 'package:kurdwork/screens/jobViewScreen.dart';
 
+import 'Models/job/job.dart';
+
 class MyWidgets {
   static Widget h1(
     String text, {
@@ -267,11 +269,8 @@ class MyWidgets {
   }
 
   static Widget myCard(BuildContext context,
-      {required Map<String, dynamic> map, double width = double.infinity}) {
-    String title = map['title'];
-    String subtitle = map['owner'];
-    String description = map['description'];
-
+      {required Job job, double width = double.infinity}) {
+    debugPrint(job.title);
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Column(
@@ -289,14 +288,14 @@ class MyWidgets {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          title,
+                          job.title ?? "missing!",
                           style: const TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
                         Text(
-                          "${MyWidgets.timePosted("${map["date"]} ${map["time"]}")} لەمەوبەر",
+                          "${MyWidgets.timePosted(job.date)} لەمەوبەر",
                           style: const TextStyle(color: Colors.grey),
                         ),
                       ],
@@ -332,9 +331,9 @@ class MyWidgets {
           Padding(
             padding: const EdgeInsets.only(right: 10.0, left: 10.0),
             child: Text(
-              description.length >= 200
-                  ? "${description.substring(0, 200)}..."
-                  : description,
+              job.description!.length >= 200
+                  ? "${job.description!.substring(0, 200)}..."
+                  : job.description!,
             ),
           ),
           Padding(
@@ -355,7 +354,7 @@ class MyWidgets {
                       alignment: Alignment.center,
                       width: 100,
                       height: 30,
-                      child: Text("زیاتر لە ٥ ساڵ"),
+                      child: Text(job.experience!),
                     ),
                   ],
                 ),
@@ -371,7 +370,7 @@ class MyWidgets {
                     Container(
                       alignment: Alignment.center,
                       height: 30,
-                      child: Text("Part-Time"),
+                      child: Text(job.type!),
                     ),
                   ],
                 ),
@@ -389,7 +388,7 @@ class MyWidgets {
                       alignment: Alignment.center,
                       width: 100,
                       height: 30,
-                      child: Text("هەولێر"),
+                      child: Text(job.location!),
                     ),
                   ],
                 )
@@ -405,10 +404,9 @@ class MyWidgets {
                     padding: const EdgeInsets.all(10.0),
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(100),
-                      child: Image.asset(
-                        "assets/images/avatar3.png",
-                        width: 50,
-                      ),
+                      child: job.proImgUrl != null
+                          ? Image.network(job.proImgUrl!, width: 50)
+                          : Image.asset("assets/images/avatar3.png", width: 50),
                     ),
                   ),
                   Padding(
@@ -417,7 +415,7 @@ class MyWidgets {
                       left: 10.0,
                     ),
                     child: Text(
-                      subtitle,
+                      job.owner!,
                       style: const TextStyle(color: Colors.grey),
                     ),
                   ),
@@ -430,7 +428,7 @@ class MyWidgets {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => JobViewerScreen(map: map),
+                        builder: (context) => JobViewerScreen(job: job),
                       ),
                     );
                   },
@@ -444,7 +442,6 @@ class MyWidgets {
     );
   }
 }
-
 
 // Text(
 //                     description.length > 300
