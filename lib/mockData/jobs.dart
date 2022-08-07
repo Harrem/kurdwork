@@ -19,6 +19,7 @@ const jobs = [
 """,
     'owner': "کۆمپانیای گراند",
     'date': '2022-07-22',
+    'deadline': '2022-07-29',
     'time': '12:00',
     'location': 'سلێمانی',
     'jobType': 'Part-Time',

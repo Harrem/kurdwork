@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:kurdwork/myWidgets.dart';
 import 'package:flutter_holo_date_picker/flutter_holo_date_picker.dart';
+import 'package:kurdwork/screens/homeScreen.dart';
 
 class CreateProfile extends StatefulWidget {
   const CreateProfile({Key? key}) : super(key: key);
@@ -214,6 +215,13 @@ class _CreateProfileState extends State<CreateProfile> {
                                       FirebaseAuth.instance.currentUser!.email,
                                 }).onError((error, stackTrace) =>
                                         debugPrint("error occured $error"));
+                                Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (BuildContext context) =>
+                                        const HomeScreen(),
+                                  ),
+                                );
                               }
                             }),
                       ],

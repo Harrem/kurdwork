@@ -1,18 +1,19 @@
 // ignore_for_file: file_names
 
-import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:kurdwork/mockData/jobs.dart';
 import 'package:kurdwork/myWidgets.dart';
 import 'package:kurdwork/mockData/categoriesData.dart';
 import 'package:kurdwork/mockData/users.dart';
+import 'package:kurdwork/screens/jobPostScreen.dart';
 import 'package:kurdwork/screens/jobViewScreen.dart';
 import 'package:kurdwork/screens/savedJobsScreen.dart';
-import 'package:kurdwork/screens/signinScreen.dart';
 import 'package:kurdwork/screens/profileScreen.dart';
-import 'package:kurdwork/main.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
+import 'package:kurdwork/services/jobServices.dart';
+
+import '../Models/job/job.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -23,7 +24,12 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen>
     with SingleTickerProviderStateMixin {
+  late User user;
+
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
+  Job job = Job();
+
   late final tabController = TabController(length: 4, vsync: this);
   var currentIndex = 0;
   var index = 0;
@@ -32,6 +38,12 @@ class _HomeScreenState extends State<HomeScreen>
   @override
   void dispose() {
     super.dispose();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    user = FirebaseAuth.instance.currentUser!;
   }
 
   @override
@@ -82,13 +94,23 @@ class _HomeScreenState extends State<HomeScreen>
                         ),
                       ),
                       const SizedBox(height: 20),
-                      mostRecentJobs(),
+                      FutureBuilder<List<Widget>>(
+                          future: mostRecentJobs(),
+                          builder: ((context, snapshot) {
+                            if (snapshot.data != null) {
+                              return Column(children: snapshot.data!);
+                            }
+                            if (snapshot.data == null) {
+                              debugPrint("null");
+                            }
+                            return Text("Nothing to show");
+                          })),
                       const SizedBox(height: 10),
                     ],
                   ),
                 ),
                 SearchScreen(),
-                JobViewerScreen(map: jobs[index]),
+                JobViewerScreen(job: job),
                 ProfileScreen(),
               ],
             ),
@@ -207,7 +229,7 @@ class _HomeScreenState extends State<HomeScreen>
     );
   }
 
-  Widget mostRecentJobs() {
+  Future<List<Widget>> mostRecentJobs() async {
     List<Widget> list = [
       Padding(
         padding: const EdgeInsets.only(right: 20.0, left: 20),
@@ -216,218 +238,242 @@ class _HomeScreenState extends State<HomeScreen>
           children: [
             MyWidgets.h1("نوێترین هەلی کار", fontWeight: FontWeight.bold),
             Container(
-                height: 50,
-                width: 50,
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(15),
-                    color: Colors.white),
-                child: const Icon(Icons.filter_list)),
+              height: 50,
+              width: 50,
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(15), color: Colors.white),
+              child: IconButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (BuildContext context) => JobPosting(
+                        user: user,
+                      ),
+                    ),
+                  );
+                },
+                icon: const Icon(Icons.filter_list),
+              ),
+            ),
           ],
         ),
       ),
     ];
-    List.generate(5, (index) {
-      this.index = index;
-      var e = MyWidgets.myCard(context, map: jobs[index]);
-      list.add(e);
-      list.add(const Divider(
-        color: Colors.grey,
-        thickness: 0.2,
-        height: 1,
-      ));
-      return e;
-    });
-    return Column(crossAxisAlignment: CrossAxisAlignment.start, children: list);
+    List<Job> jobs = await JobServices().getJobList();
+    for (var e in jobs) {
+      debugPrint("statement");
+      list.add(MyWidgets.myCard(context, job: e));
+      job = job;
+    }
+
+    // List.generate(5, (index) {
+    //   this.index = index;
+    //   var e = MyWidgets.myCard(context, map: jobs[index]);
+    //   list.add(e);
+    //   list.add(const Divider(
+    //     color: Colors.grey,
+    //     thickness: 0.2,
+    //     height: 1,
+    //   ));
+    //   return e;
+    // });
+    return list;
+  }
+
+  Future<List<Job>> getJobs() async {
+    List<Job> list = await JobServices().getJobList();
+    return list;
   }
 }
 
-          // bottomNavigationBar: BottomNavigationBar(
-          //   onTap: ((value) {
-          //     setState(() {
-          //       _currentIndex = value;
-          //     });
-          //     if (_currentIndex == 3) {
-          //       Navigator.push(
-          //         context,
-          //         MaterialPageRoute(
-          //           builder: (context) => ProfileScreen(),
-          //         ),
-          //       );
-          //     }
-          //   }),
-          //   selectedItemColor: const Color.fromARGB(255, 0, 0, 0),
-          //   backgroundColor: const Color.fromARGB(255, 240, 240, 240),
-          //   unselectedItemColor: Colors.grey[700],
-          //   currentIndex: _currentIndex,
-          //   showUnselectedLabels: false,
-          //   enableFeedback: true,
-          //   items: const [
-          //     BottomNavigationBarItem(
-          //         icon: Icon(CupertinoIcons.home), label: "Home"),
-          //     BottomNavigationBarItem(
-          //         icon: Icon(CupertinoIcons.square_favorites_alt),
-          //         label: "Saved"),
-          //     BottomNavigationBarItem(
-          //         icon: Icon(CupertinoIcons.search), label: "Search"),
-          //     BottomNavigationBarItem(
-          //         icon: Icon(CupertinoIcons.person), label: "Account"),
-          //   ],
-          // ),
-          // appBar: AppBar(
-          //   centerTitle: true,
-          //   title: const Text(
-          //     "کوردوۆرک",
-          //     style: TextStyle(
-          //         color: Colors.deepPurple,
-          //         fontSize: 20,
-          //         fontWeight: FontWeight.normal),
-          //   ),
-          //   toolbarHeight: 50,
-          //   backgroundColor: Colors.white,
-          //   foregroundColor: Colors.black,
-          //   elevation: 0.5,
-          //   actions: [
-          //     Padding(
-          //       padding: const EdgeInsets.all(6.0),
-          //       child: IconButton(
-          //         onPressed: () {},
-          //         icon: const Icon(CupertinoIcons.bell),
-          //       ),
-          //     )
-          //   ],
-          // ),
-          // drawer: Drawer(
-          //   child: ListView(
-          //     children: <Widget>[
-          //       SizedBox(
-          //         height: 150,
-          //         child: DrawerHeader(
-          //           child: Row(children: [
-          //             ClipRRect(
-          //               borderRadius: BorderRadius.circular(100),
-          //               child: Image.asset(
-          //                 "assets/images/avatar2.png",
-          //                 width: 75,
-          //                 height: 75,
-          //               ),
-          //             ),
-          //             const VerticalDivider(color: Colors.transparent),
-          //             SizedBox(
-          //               height: 100,
-          //               child: Column(
-          //                 mainAxisAlignment: MainAxisAlignment.center,
-          //                 crossAxisAlignment: CrossAxisAlignment.start,
-          //                 children: [
-          //                   MyWidgets.h2(
-          //                     "${users[0]['fname']} ${users[0]['lname']}",
-          //                   ),
-          //                   MyWidgets.h3("${users[0]['username'].toString()}@",
-          //                       color: Colors.grey,
-          //                       textAlign: TextAlign.left,
-          //                       fontSize: 15),
-          //                 ],
-          //               ),
-          //             ),
-          //           ]),
-          //         ),
-          //       ),
-          //       ListTile(
-          //         title: const Text(
-          //           'پرۆفایل',
-          //           style: TextStyle(
-          //             fontWeight: FontWeight.normal,
-          //             fontSize: 20,
-          //           ),
-          //         ),
-          //         leading: const Icon(
-          //           CupertinoIcons.person,
-          //           size: 30,
-          //         ),
-          //         onTap: () {
-          //           // Update the state of the app
-          //           // ...
-          //           // Then close the drawer
-          //           Navigator.pop(context);
-          //         },
-          //       ),
-          //       ListTile(
-          //         title: const Text(
-          //           'جۆرەکانی کار',
-          //           style: TextStyle(
-          //             fontWeight: FontWeight.normal,
-          //             fontSize: 20,
-          //           ),
-          //         ),
-          //         leading: const Icon(
-          //           CupertinoIcons.list_bullet_indent,
-          //           size: 30,
-          //         ),
-          //         onTap: () {
-          //           // Update the state of the app
-          //           // ...
-          //           // Then close the drawer
-          //           Navigator.pop(context);
-          //         },
-          //       ),
-          //       ListTile(
-          //         title: const Text(
-          //           'هەڵگیراوەکان',
-          //           style: TextStyle(
-          //             fontWeight: FontWeight.normal,
-          //             fontSize: 20,
-          //           ),
-          //         ),
-          //         leading: const Icon(
-          //           CupertinoIcons.bookmark,
-          //           size: 30,
-          //         ),
-          //         onTap: () {
-          //           // Update the state of the app
-          //           // ...
-          //           // Then close the drawer
-          //           Navigator.pop(context);
-          //         },
-          //       ),
-          //       ListTile(
-          //         title: const Text(
-          //           'ڕێکخستنەکان',
-          //           style: TextStyle(
-          //             fontWeight: FontWeight.normal,
-          //             fontSize: 20,
-          //           ),
-          //         ),
-          //         leading: const Icon(
-          //           CupertinoIcons.settings,
-          //           size: 30,
-          //         ),
-          //         onTap: () {
-          //           // Update the state of the app
-          //           // ...
-          //           // Then close the drawer
-          //           Navigator.pop(context);
-          //         },
-          //       ),
-          //       ListTile(
-          //         title: const Text(
-          //           'چوونەدەرەوە',
-          //           style: TextStyle(
-          //             fontWeight: FontWeight.normal,
-          //             fontSize: 20,
-          //           ),
-          //         ),
-          //         leading: const Icon(
-          //           Icons.logout_rounded,
-          //           size: 30,
-          //         ),
-          //         onTap: () {
-          //           Navigator.push(
-          //             context,
-          //             MaterialPageRoute(
-          //               builder: (context) => SigninScreen(),
-          //             ),
-          //           );
-          //         },
-          //       ),
-          //     ],
-          //   ),
-          // ),
+// bottomNavigationBar: BottomNavigationBar(
+//   onTap: ((value) {
+//     setState(() {
+//       _currentIndex = value;
+//     });
+//     if (_currentIndex == 3) {
+//       Navigator.push(
+//         context,
+//         MaterialPageRoute(
+//           builder: (context) => ProfileScreen(),
+//         ),
+//       );
+//     }
+//   }),
+//   selectedItemColor: const Color.fromARGB(255, 0, 0, 0),
+//   backgroundColor: const Color.fromARGB(255, 240, 240, 240),
+//   unselectedItemColor: Colors.grey[700],
+//   currentIndex: _currentIndex,
+//   showUnselectedLabels: false,
+//   enableFeedback: true,
+//   items: const [
+//     BottomNavigationBarItem(
+//         icon: Icon(CupertinoIcons.home), label: "Home"),
+//     BottomNavigationBarItem(
+//         icon: Icon(CupertinoIcons.square_favorites_alt),
+//         label: "Saved"),
+//     BottomNavigationBarItem(
+//         icon: Icon(CupertinoIcons.search), label: "Search"),
+//     BottomNavigationBarItem(
+//         icon: Icon(CupertinoIcons.person), label: "Account"),
+//   ],
+// ),
+// appBar: AppBar(
+//   centerTitle: true,
+//   title: const Text(
+//     "کوردوۆرک",
+//     style: TextStyle(
+//         color: Colors.deepPurple,
+//         fontSize: 20,
+//         fontWeight: FontWeight.normal),
+//   ),
+//   toolbarHeight: 50,
+//   backgroundColor: Colors.white,
+//   foregroundColor: Colors.black,
+//   elevation: 0.5,
+//   actions: [
+//     Padding(
+//       padding: const EdgeInsets.all(6.0),
+//       child: IconButton(
+//         onPressed: () {},
+//         icon: const Icon(CupertinoIcons.bell),
+//       ),
+//     )
+//   ],
+// ),
+// drawer: Drawer(
+//   child: ListView(
+//     children: <Widget>[
+//       SizedBox(
+//         height: 150,
+//         child: DrawerHeader(
+//           child: Row(children: [
+//             ClipRRect(
+//               borderRadius: BorderRadius.circular(100),
+//               child: Image.asset(
+//                 "assets/images/avatar2.png",
+//                 width: 75,
+//                 height: 75,
+//               ),
+//             ),
+//             const VerticalDivider(color: Colors.transparent),
+//             SizedBox(
+//               height: 100,
+//               child: Column(
+//                 mainAxisAlignment: MainAxisAlignment.center,
+//                 crossAxisAlignment: CrossAxisAlignment.start,
+//                 children: [
+//                   MyWidgets.h2(
+//                     "${users[0]['fname']} ${users[0]['lname']}",
+//                   ),
+//                   MyWidgets.h3("${users[0]['username'].toString()}@",
+//                       color: Colors.grey,
+//                       textAlign: TextAlign.left,
+//                       fontSize: 15),
+//                 ],
+//               ),
+//             ),
+//           ]),
+//         ),
+//       ),
+//       ListTile(
+//         title: const Text(
+//           'پرۆفایل',
+//           style: TextStyle(
+//             fontWeight: FontWeight.normal,
+//             fontSize: 20,
+//           ),
+//         ),
+//         leading: const Icon(
+//           CupertinoIcons.person,
+//           size: 30,
+//         ),
+//         onTap: () {
+//           // Update the state of the app
+//           // ...
+//           // Then close the drawer
+//           Navigator.pop(context);
+//         },
+//       ),
+//       ListTile(
+//         title: const Text(
+//           'جۆرەکانی کار',
+//           style: TextStyle(
+//             fontWeight: FontWeight.normal,
+//             fontSize: 20,
+//           ),
+//         ),
+//         leading: const Icon(
+//           CupertinoIcons.list_bullet_indent,
+//           size: 30,
+//         ),
+//         onTap: () {
+//           // Update the state of the app
+//           // ...
+//           // Then close the drawer
+//           Navigator.pop(context);
+//         },
+//       ),
+//       ListTile(
+//         title: const Text(
+//           'هەڵگیراوەکان',
+//           style: TextStyle(
+//             fontWeight: FontWeight.normal,
+//             fontSize: 20,
+//           ),
+//         ),
+//         leading: const Icon(
+//           CupertinoIcons.bookmark,
+//           size: 30,
+//         ),
+//         onTap: () {
+//           // Update the state of the app
+//           // ...
+//           // Then close the drawer
+//           Navigator.pop(context);
+//         },
+//       ),
+//       ListTile(
+//         title: const Text(
+//           'ڕێکخستنەکان',
+//           style: TextStyle(
+//             fontWeight: FontWeight.normal,
+//             fontSize: 20,
+//           ),
+//         ),
+//         leading: const Icon(
+//           CupertinoIcons.settings,
+//           size: 30,
+//         ),
+//         onTap: () {
+//           // Update the state of the app
+//           // ...
+//           // Then close the drawer
+//           Navigator.pop(context);
+//         },
+//       ),
+//       ListTile(
+//         title: const Text(
+//           'چوونەدەرەوە',
+//           style: TextStyle(
+//             fontWeight: FontWeight.normal,
+//             fontSize: 20,
+//           ),
+//         ),
+//         leading: const Icon(
+//           Icons.logout_rounded,
+//           size: 30,
+//         ),
+//         onTap: () {
+//           Navigator.push(
+//             context,
+//             MaterialPageRoute(
+//               builder: (context) => SigninScreen(),
+//             ),
+//           );
+//         },
+//       ),
+//     ],
+//   ),
+// ),

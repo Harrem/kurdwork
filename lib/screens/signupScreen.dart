@@ -1,9 +1,11 @@
 // ignore_for_file: file_names
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:kurdwork/myWidgets.dart';
+import 'package:kurdwork/screens/createProfileScreen.dart';
 import 'package:kurdwork/screens/homeScreen.dart';
 import '../authentication.dart';
 import 'signinScreen.dart';
@@ -46,11 +48,19 @@ class _SignupScreenState extends State<SignupScreen> {
                             User? user;
                             user = await Authentication.signInWithGoogle(
                                 context: context);
-                            if (user != null) {
-                              Navigator.push(
+
+                            bool exists = await FirebaseFirestore.instance
+                                .collection("users")
+                                .doc(user!.uid)
+                                .get()
+                                .then((value) => value.exists);
+                            if (exists) {
+                              // ignore: use_build_context_synchronously
+                              Navigator.pushReplacement(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => const HomeScreen(),
+                                  builder: (BuildContext context) =>
+                                      const CreateProfile(),
                                 ),
                               );
                             }
@@ -113,13 +123,13 @@ class _SignupScreenState extends State<SignupScreen> {
                             ),
                           ),
                           validator: (value) {
-                            if (value == "") {
+                            if (value == "" || value == null) {
                               return "تکایە بۆشاییەکان پڕبکەوە";
                             }
-                            if (!EmailValidator.validate(email)) {
+                            if (!EmailValidator.validate(value)) {
                               return "هەڵە هەیە لە ئیمەیلەکە";
                             }
-                            email = value!;
+                            email = value;
                             return null;
                           },
                         ),
@@ -166,7 +176,7 @@ class _SignupScreenState extends State<SignupScreen> {
                   ),
                 ),
                 const SizedBox(height: 20),
-                Container(
+                SizedBox(
                   width: MediaQuery.of(context).size.width - 100,
                   child: MyWidgets.myElevatedButton(
                     text: "دروستکردن",
@@ -179,6 +189,13 @@ class _SignupScreenState extends State<SignupScreen> {
                       setState(() {
                         if (user != null) {
                           debugPrint("User created \n user email: $user");
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                              builder: (BuildContext context) =>
+                                  const CreateProfile(),
+                            ),
+                          );
                         }
                       });
                     },
