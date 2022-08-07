@@ -60,7 +60,8 @@ class DefaultFirebaseOptions {
     messagingSenderId: '237630468649',
     projectId: 'kurdwork-99',
     storageBucket: 'kurdwork-99.appspot.com',
-    iosClientId: '237630468649-vv2ig7jgle00pvtks55leldbuslqtprt.apps.googleusercontent.com',
+    iosClientId:
+        '237630468649-vv2ig7jgle00pvtks55leldbuslqtprt.apps.googleusercontent.com',
     iosBundleId: 'com.example.kurdwork',
   );
 
@@ -70,7 +71,8 @@ class DefaultFirebaseOptions {
     messagingSenderId: '237630468649',
     projectId: 'kurdwork-99',
     storageBucket: 'kurdwork-99.appspot.com',
-    iosClientId: '237630468649-vv2ig7jgle00pvtks55leldbuslqtprt.apps.googleusercontent.com',
+    iosClientId:
+        '237630468649-vv2ig7jgle00pvtks55leldbuslqtprt.apps.googleusercontent.com',
     iosBundleId: 'com.example.kurdwork',
   );
 }
