@@ -2,11 +2,8 @@
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:google_sign_in/google_sign_in.dart';
-import 'package:kurdwork/screens/createProfileScreen.dart';
 import 'package:kurdwork/screens/homeScreen.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/services.dart';
 import 'package:kurdwork/screens/signinScreen.dart';
 
@@ -57,9 +54,9 @@ class MyApp extends StatelessWidget {
                   return const Text('Error initializing Firebase');
                 } else if (snapshot.connectionState == ConnectionState.done) {
                   if (FirebaseAuth.instance.currentUser != null) {
-                    return CreateProfile();
+                    return const HomeScreen();
                   }
-                  return SigninScreen();
+                  return const SigninScreen();
                 }
                 return const CircularProgressIndicator(
                   valueColor: AlwaysStoppedAnimation<Color>(Colors.deepPurple),
