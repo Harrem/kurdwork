@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:kurdwork/main.dart';
 import 'package:kurdwork/screens/jobViewScreen.dart';
 
-import 'Models/job/job.dart';
+import 'Models/job.dart';
 
 class MyWidgets {
   static Widget h1(
@@ -271,8 +271,13 @@ class MyWidgets {
   static Widget myCard(BuildContext context,
       {required Job job, double width = double.infinity}) {
     debugPrint(job.title);
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
+    return Container(
+      padding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+      width: double.infinity,
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(2),
+      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -404,9 +409,10 @@ class MyWidgets {
                     padding: const EdgeInsets.all(10.0),
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(100),
-                      child: job.proImgUrl != null
-                          ? Image.network(job.proImgUrl!, width: 50)
-                          : Image.asset("assets/images/avatar3.png", width: 50),
+                      child: Image.asset(
+                        "assets/images/avatar3.png",
+                        width: 50,
+                      ),
                     ),
                   ),
                   Padding(

@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:kurdwork/myWidgets.dart';
 
-import '../Models/job/job.dart';
+import '../Models/job.dart';
 
 @immutable
 class JobViewerScreen extends StatefulWidget {

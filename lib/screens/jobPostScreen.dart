@@ -4,7 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:kurdwork/services/jobServices.dart';
-import '../Models/job/job.dart';
+import '../Models/job.dart';
 import '../myWidgets.dart';
 
 class JobPosting extends StatefulWidget {
@@ -122,14 +122,8 @@ class PostForm extends StatelessWidget {
             const SizedBox(height: 6),
             TextFormField(
               controller: jobTitleController,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 hintText: "ناوی کار بنووسە",
-                fillColor: Colors.grey[200],
-                filled: true,
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(15),
-                  borderSide: BorderSide.none,
-                ),
               ),
             ),
             const SizedBox(height: 20),
@@ -137,14 +131,8 @@ class PostForm extends StatelessWidget {
             const SizedBox(height: 6),
             TextFormField(
               controller: jobWorkPlaceController,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 hintText: "شوێنی کار هەڵبژێرە",
-                fillColor: Colors.grey[200],
-                filled: true,
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(15),
-                  borderSide: BorderSide.none,
-                ),
               ),
             ),
             const SizedBox(height: 20),
@@ -152,14 +140,8 @@ class PostForm extends StatelessWidget {
             const SizedBox(height: 6),
             TextFormField(
               controller: jobLocatoinController,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 hintText: "شوێنی ئیشکردن هەلبژێرە",
-                fillColor: Colors.grey[200],
-                filled: true,
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(15),
-                  borderSide: BorderSide.none,
-                ),
               ),
             ),
             const SizedBox(height: 20),
@@ -167,14 +149,8 @@ class PostForm extends StatelessWidget {
             const SizedBox(height: 6),
             TextFormField(
               controller: jobTypeController,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 hintText: "جۆری کار هەڵبژێرە",
-                fillColor: Colors.grey[200],
-                filled: true,
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(15),
-                  borderSide: BorderSide.none,
-                ),
               ),
             ),
             const SizedBox(height: 20),
@@ -182,19 +158,12 @@ class PostForm extends StatelessWidget {
             const SizedBox(height: 6),
             TextFormField(
               controller: jobDescriptionController,
-              maxLines: 8,
-              decoration: InputDecoration(
+              maxLines: 6,
+              decoration: const InputDecoration(
                 hintText: "زانیاری دەربارەی کار بنووسە",
-                fillColor: Colors.grey[200],
-                filled: true,
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(15),
-                  borderSide: BorderSide.none,
-                ),
               ),
             ),
-            const SizedBox(height: 20),
-            const SizedBox(height: 80),
+            const SizedBox(height: 70),
           ],
         ),
       ),

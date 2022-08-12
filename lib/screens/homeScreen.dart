@@ -13,7 +13,7 @@ import 'package:kurdwork/screens/profileScreen.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:kurdwork/services/jobServices.dart';
 
-import '../Models/job/job.dart';
+import '../Models/job.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -34,11 +34,6 @@ class _HomeScreenState extends State<HomeScreen>
   var currentIndex = 0;
   var index = 0;
   var searchController = TextEditingController();
-
-  @override
-  void dispose() {
-    super.dispose();
-  }
 
   @override
   void initState() {
@@ -232,7 +227,7 @@ class _HomeScreenState extends State<HomeScreen>
   Future<List<Widget>> mostRecentJobs() async {
     List<Widget> list = [
       Padding(
-        padding: const EdgeInsets.only(right: 20.0, left: 20),
+        padding: const EdgeInsets.all(20),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -264,6 +259,7 @@ class _HomeScreenState extends State<HomeScreen>
     for (var e in jobs) {
       debugPrint("statement");
       list.add(MyWidgets.myCard(context, job: e));
+      list.add(const Divider());
       job = job;
     }
 

@@ -32,6 +32,16 @@ class MyApp extends StatelessWidget {
         ],
         locale: const Locale('ar', 'AE'),
         theme: ThemeData(
+          dividerColor: Colors.transparent,
+          inputDecorationTheme: InputDecorationTheme(
+            fillColor: Colors.grey[200],
+            filled: true,
+            hoverColor: Colors.white,
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(15),
+              borderSide: BorderSide.none,
+            ),
+          ),
           appBarTheme: const AppBarTheme(
             systemOverlayStyle: SystemUiOverlayStyle(
               //<-- SEE HERE
