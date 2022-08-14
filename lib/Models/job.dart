@@ -1,117 +1,132 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
 
-import 'package:collection/collection.dart';
-
 class Job {
-  String? title;
-  String? workplace;
-  String? location;
-  String? type;
-  String? owner;
-  String? date;
-  String? deadline;
+  String title;
+  String workplace;
+  String location;
+  String type;
+  String owner;
+  String date;
+  String deadline;
   String? time;
-  String? description;
-  String? experience;
+  String description;
+  String experience;
   String? proImgUrl;
 
-  Job(
-      {this.title,
-      this.workplace,
-      this.description,
-      this.owner,
-      this.date,
-      this.deadline,
-      this.time,
-      this.location,
-      this.type,
-      this.experience,
-      this.proImgUrl});
+  Job({
+    required this.title,
+    required this.workplace,
+    required this.location,
+    required this.type,
+    required this.owner,
+    required this.date,
+    required this.deadline,
+    this.time,
+    required this.description,
+    required this.experience,
+    this.proImgUrl,
+  });
 
-  factory Job.fromMap(Map<String, dynamic> data) => Job(
-      title: data['title'] as String?,
-      description: data['description'] as String?,
-      workplace: data['workplace'] as String?,
-      owner: data['owner'] as String?,
-      date: data['date'] as String?,
-      deadline: data['deadline'] as String?,
-      time: data['time'] as String?,
-      location: data['location'] as String?,
-      type: data['type'] as String?,
-      experience: data['experience'] as String?,
-      proImgUrl: data['proImgUrl'] as String?);
-
-  Map<String, dynamic> toMap() => {
-        'title': title,
-        'description': description,
-        'workplace': workplace,
-        'owner': owner,
-        'date': date,
-        'deadline': deadline,
-        'time': time,
-        'location': location,
-        'type': type,
-        'experience': experience,
-        'proImgUrl': proImgUrl
-      };
-
-  /// `dart:convert`
-  ///
-  /// Parses the string and returns the resulting Json object as [Job].
-  factory Job.fromJson(String data) {
-    return Job.fromMap(json.decode(data) as Map<String, dynamic>);
+  Job copyWith({
+    String? title,
+    String? workplace,
+    String? location,
+    String? type,
+    String? owner,
+    String? date,
+    String? deadline,
+    String? time,
+    String? description,
+    String? experience,
+    String? proImgUrl,
+  }) {
+    return Job(
+      title: title ?? this.title,
+      workplace: workplace ?? this.workplace,
+      location: location ?? this.location,
+      type: type ?? this.type,
+      owner: owner ?? this.owner,
+      date: date ?? this.date,
+      deadline: deadline ?? this.deadline,
+      time: time ?? this.time,
+      description: description ?? this.description,
+      experience: experience ?? this.experience,
+      proImgUrl: proImgUrl ?? this.proImgUrl,
+    );
   }
 
-  /// `dart:convert`
-  ///
-  /// Converts [Job] to a JSON string.
+  Map<String, dynamic> toMap() {
+    return <String, dynamic>{
+      'title': title,
+      'workplace': workplace,
+      'location': location,
+      'type': type,
+      'owner': owner,
+      'date': date,
+      'deadline': deadline,
+      'time': time,
+      'description': description,
+      'experience': experience,
+      'proImgUrl': proImgUrl,
+    };
+  }
+
+  factory Job.fromMap(Map<String, dynamic> map) {
+    return Job(
+      title: map['title'] as String,
+      workplace: map['workplace'] as String,
+      location: map['location'] as String,
+      type: map['type'] as String,
+      owner: map['owner'] as String,
+      date: map['date'] as String,
+      deadline: map['deadline'] as String,
+      time: map['time'] != null ? map['time'] as String : null,
+      description: map['description'] as String,
+      experience: map['experience'] as String,
+      proImgUrl: map['proImgUrl'] as String?,
+    );
+  }
+
   String toJson() => json.encode(toMap());
 
-  Job copyWith(
-      {String? title,
-      String? description,
-      String? workplace,
-      String? owner,
-      String? date,
-      String? deadline,
-      String? time,
-      String? location,
-      String? type,
-      String? experience,
-      String? proImgUrl}) {
-    return Job(
-        title: title ?? this.title,
-        workplace: workplace ?? this.workplace,
-        description: description ?? this.description,
-        owner: owner ?? this.owner,
-        date: date ?? this.date,
-        deadline: deadline ?? this.deadline,
-        time: time ?? this.time,
-        location: location ?? this.location,
-        type: type ?? this.type,
-        experience: experience ?? this.experience,
-        proImgUrl: proImgUrl ?? this.proImgUrl);
+  factory Job.fromJson(String source) =>
+      Job.fromMap(json.decode(source) as Map<String, dynamic>);
+
+  @override
+  String toString() {
+    return 'Job(title: $title, workplace: $workplace, location: $location, type: $type, owner: $owner, date: $date, deadline: $deadline, time: $time, description: $description, experience: $experience, proImgUrl: $proImgUrl)';
   }
 
   @override
-  bool operator ==(Object other) {
-    if (identical(other, this)) return true;
-    if (other is! Job) return false;
-    final mapEquals = const DeepCollectionEquality().equals;
-    return mapEquals(other.toMap(), toMap());
+  bool operator ==(covariant Job other) {
+    if (identical(this, other)) return true;
+
+    return other.title == title &&
+        other.workplace == workplace &&
+        other.location == location &&
+        other.type == type &&
+        other.owner == owner &&
+        other.date == date &&
+        other.deadline == deadline &&
+        other.time == time &&
+        other.description == description &&
+        other.experience == experience &&
+        other.proImgUrl == proImgUrl;
   }
 
   @override
-  int get hashCode =>
-      title.hashCode ^
-      description.hashCode ^
-      workplace.hashCode ^
-      owner.hashCode ^
-      date.hashCode ^
-      deadline.hashCode ^
-      time.hashCode ^
-      location.hashCode ^
-      type.hashCode ^
-      experience.hashCode ^
-      proImgUrl.hashCode;
+  int get hashCode {
+    return title.hashCode ^
+        workplace.hashCode ^
+        location.hashCode ^
+        type.hashCode ^
+        owner.hashCode ^
+        date.hashCode ^
+        deadline.hashCode ^
+        time.hashCode ^
+        description.hashCode ^
+        experience.hashCode ^
+        proImgUrl.hashCode;
+  }
 }

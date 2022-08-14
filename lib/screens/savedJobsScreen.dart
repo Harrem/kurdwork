@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:kurdwork/widgets/custom_card.dart';
 
 class SearchScreen extends StatefulWidget {
   SearchScreen({Key? key}) : super(key: key);
@@ -11,37 +12,13 @@ class SearchScreen extends StatefulWidget {
 class _SearchScreenState extends State<SearchScreen> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return const Scaffold(
         body: SafeArea(
       child: Scaffold(
-          body: SingleChildScrollView(
-        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Expanded(
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Icon(CupertinoIcons.search),
-                  SizedBox(
-                    height: 45,
-                    width: 250,
-                    child: TextField(
-                      decoration: InputDecoration(
-                        hintText: "Search",
-                        border: UnderlineInputBorder(
-                          borderRadius: BorderRadius.circular(15),
-                          borderSide: BorderSide.none,
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ]),
-      )),
+        body: SingleChildScrollView(
+          child: Center(child: Text("hello")),
+        ),
+      ),
     ));
   }
 }

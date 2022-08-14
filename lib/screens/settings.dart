@@ -1,13 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:kurdwork/myWidgets.dart';
-import 'package:kurdwork/main.dart';
-import 'package:kurdwork/screens/signinScreen.dart';
+import '../screens/signin.dart';
 
-import '../authentication.dart';
+import '../services/authentication.dart';
 
 class Settings extends StatefulWidget {
-  Settings({Key? key}) : super(key: key);
+  const Settings({Key? key}) : super(key: key);
 
   @override
   State<Settings> createState() => _SettingsState();
@@ -49,7 +48,7 @@ class _SettingsState extends State<Settings> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (BuildContext context) => SigninScreen(),
+                  builder: (BuildContext context) => const SigninScreen(),
                 ),
               );
             });

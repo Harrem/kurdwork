@@ -7,18 +7,15 @@ import 'package:kurdwork/myWidgets.dart';
 import '../Models/job.dart';
 
 @immutable
-class JobViewerScreen extends StatefulWidget {
+class JobDetailScreen extends StatefulWidget {
   final Job job;
-  const JobViewerScreen({required this.job, Key? key}) : super(key: key);
+  const JobDetailScreen({required this.job, Key? key}) : super(key: key);
 
   @override
-  State<JobViewerScreen> createState() => _JobViewerScreenState(job);
+  State<JobDetailScreen> createState() => _JobDetailScreenState();
 }
 
-class _JobViewerScreenState extends State<JobViewerScreen> {
-  Job job;
-  _JobViewerScreenState(this.job);
-
+class _JobDetailScreenState extends State<JobDetailScreen> {
   String timePosted(releaseTime) {
     var measuredTime =
         (DateTime.now().difference(DateTime.parse("$releaseTime")));
@@ -29,11 +26,13 @@ class _JobViewerScreenState extends State<JobViewerScreen> {
     if (measuredTime.inHours < 24) {
       return "${measuredTime.inHours} کاتژمێر ";
     }
-    if (measuredTime.inHours >= 24) {
+    if (measuredTime.inHours >= 24 && measuredTime.inDays < 7) {
       return "${measuredTime.inDays} ڕۆژ ";
     }
-    return measuredTime.inHours.toString();
+    return "${(measuredTime.inDays / const Duration(days: 7).inDays).round().toString()} هەفتە";
   }
+
+  late final Job job = widget.job;
 
   @override
   Widget build(BuildContext context) {
@@ -64,7 +63,7 @@ class _JobViewerScreenState extends State<JobViewerScreen> {
                   Padding(
                     padding: const EdgeInsets.only(right: 8.0, left: 8),
                     child: Text(
-                      job.title!,
+                      job.title,
                       style: const TextStyle(
                           fontSize: 22, fontWeight: FontWeight.bold),
                     ),
@@ -96,7 +95,7 @@ class _JobViewerScreenState extends State<JobViewerScreen> {
                   ),
                   Padding(
                     padding: const EdgeInsets.all(8.0),
-                    child: Text(job.description!),
+                    child: Text(job.description),
                   ),
                   const SizedBox(height: 10),
                   Row(
@@ -122,7 +121,7 @@ class _JobViewerScreenState extends State<JobViewerScreen> {
                             width: 100,
                             height: 30,
                             child: Text(
-                              job.experience!,
+                              job.experience,
                               style:
                                   const TextStyle(fontWeight: FontWeight.bold),
                             ),
@@ -148,7 +147,7 @@ class _JobViewerScreenState extends State<JobViewerScreen> {
                             alignment: Alignment.center,
                             height: 30,
                             child: Text(
-                              job.type!,
+                              job.type,
                               style:
                                   const TextStyle(fontWeight: FontWeight.bold),
                             ),
@@ -176,7 +175,7 @@ class _JobViewerScreenState extends State<JobViewerScreen> {
                             width: 100,
                             height: 30,
                             child: Text(
-                              job.location!,
+                              job.location,
                               style:
                                   const TextStyle(fontWeight: FontWeight.bold),
                             ),
@@ -203,7 +202,7 @@ class _JobViewerScreenState extends State<JobViewerScreen> {
                           left: 10.0,
                         ),
                         child: Text(
-                          job.owner!,
+                          job.owner,
                           style: const TextStyle(color: Colors.black),
                         ),
                       ),

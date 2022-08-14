@@ -20,7 +20,7 @@ class _JobPostingState extends State<JobPosting> {
   User user;
 
   JobServices jobServices = JobServices();
-  Job job = Job();
+  late Job job;
 
   PostForm form = PostForm();
 
