@@ -70,15 +70,47 @@ class _HomeScreenState extends State<HomeScreen>
                               hintText: "گەڕان",
                               prefixIcon: const Icon(CupertinoIcons.search),
                               suffixIcon: IconButton(
-                                  onPressed: () {
-                                    searchController.clear();
-                                  },
-                                  icon: const Icon(CupertinoIcons.multiply)),
+                                onPressed: () {
+                                  searchController.clear();
+                                },
+                                icon: const Icon(CupertinoIcons.multiply),
+                              ),
                             ),
                           ),
                         ),
                       ),
+                      const SizedBox(height: 20),
 
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 20),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              "نوێترین هەلی کار",
+                              style: Theme.of(context).textTheme.headline6,
+                            ),
+                            SizedBox(
+                              height: 45,
+                              width: 45,
+                              child: OutlinedButton(
+                                onPressed: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (BuildContext context) =>
+                                          JobPosting(
+                                        user: user,
+                                      ),
+                                    ),
+                                  );
+                                },
+                                child: const Icon(Icons.filter_list),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
                       // JobDetailCard(job: job),
                       const SizedBox(height: 20),
                       FutureBuilder<List<Widget>>(
@@ -219,34 +251,7 @@ class _HomeScreenState extends State<HomeScreen>
   }
 
   Future<List<Widget>> mostRecentJobs() async {
-    List<Widget> list = [
-      Padding(
-        padding: const EdgeInsets.all(20),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            MyWidgets.h1("نوێترین هەلی کار", fontWeight: FontWeight.bold),
-            SizedBox(
-              height: 50,
-              width: 50,
-              child: OutlinedButton(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (BuildContext context) => JobPosting(
-                        user: user,
-                      ),
-                    ),
-                  );
-                },
-                child: const Icon(Icons.filter_list),
-              ),
-            ),
-          ],
-        ),
-      ),
-    ];
+    List<Widget> list = [];
     List<Job> jobs = await JobServices().getJobList();
     for (var e in jobs) {
       debugPrint("statement");

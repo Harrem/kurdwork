@@ -40,7 +40,6 @@ class _JobDetailScreenState extends State<JobDetailScreen> {
       color: Colors.grey[100],
       child: SafeArea(
         child: Scaffold(
-          backgroundColor: Colors.grey[100],
           body: SingleChildScrollView(
             child: Padding(
               padding: const EdgeInsets.all(15),

@@ -11,13 +11,11 @@ class JobPosting extends StatefulWidget {
   JobPosting({Key? key, required this.user}) : super(key: key);
   User user;
   @override
-  State<JobPosting> createState() => _JobPostingState(user);
+  State<JobPosting> createState() => _JobPostingState();
 }
 
 class _JobPostingState extends State<JobPosting> {
-  _JobPostingState(this.user);
-
-  User user;
+  late final User user;
 
   JobServices jobServices = JobServices();
   late Job job;
@@ -27,6 +25,7 @@ class _JobPostingState extends State<JobPosting> {
   @override
   void initState() {
     super.initState();
+    user = widget.user;
   }
 
   @override
@@ -63,7 +62,7 @@ class _JobPostingState extends State<JobPosting> {
               child: ElevatedButton(
                 onPressed: () async {
                   setState(() {});
-                  if (form.formKey.currentState!.validate()) {
+                  if (!form.formKey.currentState!.validate()) {
                     job.title = form.jobTitleController.value.text;
                     job.workplace = form.jobWorkPlaceController.text;
                     job.location = form.jobLocatoinController.text;
@@ -82,13 +81,7 @@ class _JobPostingState extends State<JobPosting> {
 
                     jobServices.postJob(job);
                   }
-                  debugPrint(job.toJson().toString());
                 },
-                style: ElevatedButton.styleFrom(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(14),
-                  ),
-                ),
                 child: const Text("post job"),
               ),
             ),
