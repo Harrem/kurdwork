@@ -20,10 +20,13 @@ class CustomTheme {
           borderSide: BorderSide.none,
         ),
       ),
-      cardTheme: const CardTheme(
+      cardTheme: CardTheme(
         elevation: 0,
         clipBehavior: Clip.hardEdge,
         color: Colors.white,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(5),
+        ),
       ),
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
@@ -46,6 +49,7 @@ class CustomTheme {
           ),
         ),
       ),
+      dividerTheme: const DividerThemeData(thickness: 1, space: 1),
     );
   }
 }
