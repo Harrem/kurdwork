@@ -12,8 +12,11 @@ class JobServices {
   Future<List<Job>> getJobList() async {
     List<Job> jobs = [];
 
-    QuerySnapshot<Map<String, dynamic>> jobList =
-        await firestore.collection("jobs").get().then((value) => value);
+    QuerySnapshot<Map<String, dynamic>> jobList = await firestore
+        .collection("jobs")
+        .orderBy("date", descending: true)
+        .get()
+        .then((value) => value);
     for (var e in jobList.docs) {
       jobs.add(Job.fromMap(e.data()));
     }

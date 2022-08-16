@@ -26,10 +26,10 @@ class MyApp extends StatelessWidget {
         GlobalWidgetsLocalizations.delegate,
       ],
       supportedLocales: const [
-        Locale('en', 'US'),
-        Locale('ar', 'AE'),
+        Locale('en', ''),
+        Locale('ar', ''),
       ],
-      locale: const Locale('ar', 'AE'),
+      locale: const Locale('ar', ''),
       theme: CustomTheme.lightTheme,
       home: Scaffold(
         body: Center(

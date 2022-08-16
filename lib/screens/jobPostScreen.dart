@@ -7,19 +7,17 @@ import 'package:kurdwork/services/jobServices.dart';
 import '../Models/job.dart';
 import '../myWidgets.dart';
 
-class JobPosting extends StatefulWidget {
-  JobPosting({Key? key, required this.user}) : super(key: key);
+class JobPost extends StatefulWidget {
+  JobPost({Key? key, required this.user}) : super(key: key);
   User user;
   @override
-  State<JobPosting> createState() => _JobPostingState();
+  State<JobPost> createState() => _JobPostState();
 }
 
-class _JobPostingState extends State<JobPosting> {
+class _JobPostState extends State<JobPost> {
   late final User user;
 
   JobServices jobServices = JobServices();
-  late Job job;
-
   PostForm form = PostForm();
 
   @override
@@ -62,22 +60,26 @@ class _JobPostingState extends State<JobPosting> {
               child: ElevatedButton(
                 onPressed: () async {
                   setState(() {});
-                  if (!form.formKey.currentState!.validate()) {
-                    job.title = form.jobTitleController.value.text;
-                    job.workplace = form.jobWorkPlaceController.text;
-                    job.location = form.jobLocatoinController.text;
-                    job.type = form.jobTypeController.text;
-                    job.description = form.jobDescriptionController.text;
-                    job.date = DateTime.now().toIso8601String();
-                    job.deadline = DateTime.now()
-                        .add(const Duration(days: 10))
-                        .toIso8601String();
-                    job.experience = "زیاتر لە ٥ ساڵ";
-                    job.owner = await FirebaseFirestore.instance
-                        .collection("users")
-                        .doc(user.uid.toString())
-                        .get()
-                        .then((value) => value.data()!['fname']);
+                  if (form.formKey.currentState!.validate()) {
+                    Job job = Job(
+                      title: form.jobTitleController.value.text,
+                      workplace: form.jobWorkPlaceController.text,
+                      location: form.jobLocatoinController.text,
+                      type: form.jobTypeController.text,
+                      description: form.jobDescriptionController.text,
+                      date: DateTime.fromMicrosecondsSinceEpoch(
+                          DateTime.now().microsecondsSinceEpoch),
+                      //TODO: add a field to select the deadline for the post
+                      deadline: DateTime.now()
+                          .add(const Duration(days: 10))
+                          .toIso8601String(),
+                      experience: "زیاتر لە ٥ ساڵ",
+                      owner: await FirebaseFirestore.instance
+                          .collection("users")
+                          .doc(user.uid.toString())
+                          .get()
+                          .then((value) => value.data()!['fname']),
+                    );
 
                     jobServices.postJob(job);
                   }

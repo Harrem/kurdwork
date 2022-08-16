@@ -99,7 +99,7 @@ class _HomeScreenState extends State<HomeScreen>
                                     context,
                                     MaterialPageRoute(
                                       builder: (BuildContext context) =>
-                                          JobPosting(
+                                          JobPost(
                                         user: user,
                                       ),
                                     ),
@@ -238,7 +238,7 @@ class _HomeScreenState extends State<HomeScreen>
               itemCount: users.length,
               itemBuilder: ((context, index) {
                 return Padding(
-                  padding: const EdgeInsets.only(right: 8, left: 8),
+                  padding: const EdgeInsets.symmetric(horizontal: 8),
                   child: MyWidgets.personHeads(
                       title: users[index]['fname'].toString(), radius: 70),
                 );

@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:kurdwork/Models/job.dart';
-import 'package:kurdwork/widgets/time.dart';
+import 'package:kurdwork/controller/time.dart';
 
 import '../screens/jobViewScreen.dart';
 
@@ -40,7 +40,7 @@ class JobDetailCard extends StatelessWidget {
                             ),
                           ),
                           Text(
-                            "${TimeText(releaseDate: DateTime.parse(job.date))} لەمەوبەر",
+                            "${TimeText.calculateReleaseDate(job.date)} لەمەوبەر",
                             style: const TextStyle(color: Colors.grey),
                           ),
                         ],

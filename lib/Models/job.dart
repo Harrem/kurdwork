@@ -7,7 +7,7 @@ class Job {
   String location;
   String type;
   String owner;
-  String date;
+  DateTime date;
   String deadline;
   String? time;
   String description;
@@ -34,7 +34,7 @@ class Job {
     String? location,
     String? type,
     String? owner,
-    String? date,
+    DateTime? date,
     String? deadline,
     String? time,
     String? description,
@@ -63,7 +63,7 @@ class Job {
       'location': location,
       'type': type,
       'owner': owner,
-      'date': date,
+      'date': date.millisecondsSinceEpoch,
       'deadline': deadline,
       'time': time,
       'description': description,
@@ -79,12 +79,12 @@ class Job {
       location: map['location'] as String,
       type: map['type'] as String,
       owner: map['owner'] as String,
-      date: map['date'] as String,
+      date: DateTime.fromMillisecondsSinceEpoch(map['date'] as int),
       deadline: map['deadline'] as String,
       time: map['time'] != null ? map['time'] as String : null,
       description: map['description'] as String,
       experience: map['experience'] as String,
-      proImgUrl: map['proImgUrl'] as String?,
+      proImgUrl: map['proImgUrl'] != null ? map['proImgUrl'] as String : null,
     );
   }
 
