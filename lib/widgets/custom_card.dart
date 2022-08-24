@@ -40,7 +40,7 @@ class JobDetailCard extends StatelessWidget {
                             ),
                           ),
                           Text(
-                            "${TimeText.calculateReleaseDate(job.date)} لەمەوبەر",
+                            "${TimeText.calculateReleaseDate(job.date)} ago",
                             style: const TextStyle(color: Colors.grey),
                           ),
                         ],
@@ -66,7 +66,7 @@ class JobDetailCard extends StatelessWidget {
                   Icon(CupertinoIcons.info, color: Colors.grey[600], size: 18),
                   const VerticalDivider(thickness: 0.2, width: 3),
                   Text(
-                    "زانیاری کار",
+                    "Description: ",
                     style: TextStyle(color: Colors.grey[600]),
                   ),
                 ],
@@ -92,7 +92,7 @@ class JobDetailCard extends StatelessWidget {
                       Container(
                         alignment: Alignment.center,
                         height: 25,
-                        child: const Text("ئەزموون",
+                        child: const Text("Experience",
                             style: TextStyle(color: Colors.grey, fontSize: 14)),
                       ),
                       Container(
@@ -109,7 +109,7 @@ class JobDetailCard extends StatelessWidget {
                       Container(
                         alignment: Alignment.center,
                         height: 25,
-                        child: const Text("کات",
+                        child: const Text("Duration",
                             style: TextStyle(color: Colors.grey, fontSize: 14)),
                       ),
                       Container(
@@ -127,7 +127,7 @@ class JobDetailCard extends StatelessWidget {
                         alignment: Alignment.center,
                         width: 100,
                         height: 25,
-                        child: const Text("شوێن",
+                        child: const Text("Location",
                             style: TextStyle(color: Colors.grey, fontSize: 14)),
                       ),
                       Container(
@@ -176,7 +176,7 @@ class JobDetailCard extends StatelessWidget {
                         ),
                       );
                     },
-                    child: const Text("زیاتر بزانە"),
+                    child: const Text("see more"),
                   ),
                 ),
               ],

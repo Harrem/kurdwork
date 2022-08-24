@@ -87,7 +87,7 @@ class _HomeScreenState extends State<HomeScreen>
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(
-                              "نوێترین هەلی کار",
+                              "Recent Jobs",
                               style: Theme.of(context).textTheme.headline6,
                             ),
                             SizedBox(

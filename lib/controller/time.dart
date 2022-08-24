@@ -6,13 +6,13 @@ class TimeText {
     var str = "";
 
     if (measuredTime.inHours < 1) {
-      str = "${measuredTime.inMinutes} دەقە ";
+      str = "${measuredTime.inMinutes} minutes";
     } else if (measuredTime.inHours < 24) {
-      str = "${measuredTime.inHours} کاتژمێر ";
+      str = "${measuredTime.inHours} hours ";
     } else if (measuredTime.inHours >= 24) {
-      str = "${measuredTime.inDays} ڕۆژ ";
+      str = "${measuredTime.inDays} day ";
     } else if (measuredTime.inDays >= 30) {
-      str = "${measuredTime.inDays / 30} مانگ ";
+      str = "${measuredTime.inDays / 30} month ";
     }
     return str;
   }

@@ -37,23 +37,14 @@ class _JobDetailScreenState extends State<JobDetailScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       SizedBox(
-                        width: double.infinity,
-                        height: 60,
-                        child: Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              SizedBox(
-                                height: 40,
-                                width: 40,
-                                child: OutlinedButton(
-                                  onPressed: () {},
-                                  child: const Icon(CupertinoIcons.back),
-                                ),
-                              ),
-                              const VerticalDivider(),
-                              MyWidgets.h1("زانیاری کار"),
-                            ]),
+                        height: 40,
+                        width: 40,
+                        child: OutlinedButton(
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                          child: const Icon(CupertinoIcons.back),
+                        ),
                       ),
                       const SizedBox(height: 15),
                       Padding(
@@ -69,24 +60,30 @@ class _JobDetailScreenState extends State<JobDetailScreen> {
                         padding: const EdgeInsets.only(
                             left: 8, right: 8, bottom: 10),
                         child: Text(
-                          "${TimeText.calculateReleaseDate(job.date)} لەمەوبەر",
+                          "${TimeText.calculateReleaseDate(job.date)} ago",
                           style: const TextStyle(color: Colors.grey),
                         ),
                       ),
                       const SizedBox(height: 15),
                       Padding(
-                        padding: const EdgeInsets.only(right: 10.0, left: 10.0),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: const [
-                            Icon(CupertinoIcons.info_circle_fill,
-                                color: Colors.grey, size: 20),
-                            VerticalDivider(thickness: 0.2, width: 3),
-                            Text(
-                              "زانیاری کار",
-                              style: TextStyle(color: Colors.grey),
-                            ),
-                          ],
+                        padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                        child: SizedBox(
+                          height: 30,
+                          child: Row(
+                            children: [
+                              const Icon(CupertinoIcons.info_circle_fill,
+                                  color: Colors.grey, size: 20),
+                              const VerticalDivider(thickness: 1, width: 5),
+                              Container(
+                                height: 25,
+                                alignment: Alignment.bottomCenter,
+                                child: const Text(
+                                  "Description: ",
+                                  style: TextStyle(color: Colors.grey),
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                       Padding(
@@ -218,7 +215,7 @@ class _JobDetailScreenState extends State<JobDetailScreen> {
                             child: const Icon(Icons.bookmark_add),
                           ),
                         ),
-                        const VerticalDivider(),
+                        const VerticalDivider(width: 10),
                         SizedBox(
                           width: 250,
                           child: ElevatedButton(
