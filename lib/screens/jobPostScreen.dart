@@ -2,6 +2,7 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:kurdwork/services/jobServices.dart';
 import '../Models/job.dart';
@@ -35,18 +36,29 @@ class _JobPostState extends State<JobPost> {
             padding: const EdgeInsets.all(20.0),
             child: form,
           ),
-          Container(
-            color: const Color.fromARGB(255, 250, 250, 250),
+          SizedBox(
             width: double.infinity,
             height: 70,
             child: Padding(
               padding: const EdgeInsets.all(10.0),
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  MyWidgets.h1("دروستکرندی کار"),
-                  MyWidgets.backButton(context),
+                  SizedBox(
+                    width: 40,
+                    height: 40,
+                    child: OutlinedButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      child: const Icon(CupertinoIcons.back),
+                    ),
+                  ),
+                  const SizedBox(width: 10),
+                  Text(
+                    "Post a Job",
+                    style: Theme.of(context).textTheme.headline6,
+                  )
                 ],
               ),
             ),
@@ -73,7 +85,7 @@ class _JobPostState extends State<JobPost> {
                       deadline: DateTime.now()
                           .add(const Duration(days: 10))
                           .toIso8601String(),
-                      experience: "زیاتر لە ٥ ساڵ",
+                      experience: "Experience",
                       owner: await FirebaseFirestore.instance
                           .collection("users")
                           .doc(user.uid.toString())
