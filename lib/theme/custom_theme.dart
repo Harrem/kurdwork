@@ -23,6 +23,7 @@ class CustomTheme {
       cardTheme: CardTheme(
         elevation: 0,
         clipBehavior: Clip.hardEdge,
+        margin: EdgeInsets.zero,
         color: Colors.white,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(5),
