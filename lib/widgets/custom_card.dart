@@ -5,8 +5,8 @@ import 'package:kurdwork/controller/time.dart';
 
 import '../screens/jobViewScreen.dart';
 
-class JobDetailCard extends StatelessWidget {
-  const JobDetailCard({Key? key, required this.job}) : super(key: key);
+class JobCard extends StatelessWidget {
+  const JobCard({Key? key, required this.job}) : super(key: key);
   final Job job;
   @override
   Widget build(BuildContext context) {
@@ -182,6 +182,44 @@ class JobDetailCard extends StatelessWidget {
               ],
             ),
           ],
+        ),
+      ),
+    );
+  }
+}
+
+class ProfileCard extends StatelessWidget {
+  const ProfileCard(
+      {Key? key, required this.text, required this.body, this.trailing})
+      : super(key: key);
+  final String text;
+  final Widget body;
+  final Widget? trailing;
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: double.infinity,
+      child: Card(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 20),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    text,
+                    style: Theme.of(context).textTheme.headline6,
+                  ),
+                  trailing ?? const Text(""),
+                ],
+              ),
+              Divider(color: Colors.grey[100]),
+              const SizedBox(height: 10),
+              body,
+            ],
+          ),
         ),
       ),
     );
