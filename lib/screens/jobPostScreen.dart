@@ -81,11 +81,10 @@ class _JobPostState extends State<JobPost> {
                       description: form.jobDescriptionController.text,
                       date: DateTime.fromMicrosecondsSinceEpoch(
                           DateTime.now().microsecondsSinceEpoch),
-                      //TODO: add a field to select the deadline for the post
                       deadline: DateTime.now()
                           .add(const Duration(days: 10))
                           .toIso8601String(),
-                      experience: "Experience",
+                      experience: form.experienceLevelController.text,
                       owner: await FirebaseFirestore.instance
                           .collection("users")
                           .doc(user.uid.toString())
@@ -114,6 +113,7 @@ class PostForm extends StatelessWidget {
   TextEditingController jobWorkPlaceController = TextEditingController();
   TextEditingController jobLocatoinController = TextEditingController();
   TextEditingController jobTypeController = TextEditingController();
+  TextEditingController experienceLevelController = TextEditingController();
   TextEditingController jobDescriptionController = TextEditingController();
 
   @override
@@ -125,49 +125,46 @@ class PostForm extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const SizedBox(height: 60),
-            const Text("ناوی کار"),
-            const SizedBox(height: 6),
             TextFormField(
               controller: jobTitleController,
               decoration: const InputDecoration(
-                hintText: "ناوی کار بنووسە",
+                labelText: "Job Title",
               ),
             ),
             const SizedBox(height: 20),
-            const Text("شوێنی کار"),
-            const SizedBox(height: 6),
             TextFormField(
               controller: jobWorkPlaceController,
               decoration: const InputDecoration(
-                hintText: "شوێنی کار هەڵبژێرە",
+                labelText: "Job Location",
               ),
             ),
             const SizedBox(height: 20),
-            const Text("شوێنی ئیشکردن"),
-            const SizedBox(height: 6),
             TextFormField(
               controller: jobLocatoinController,
               decoration: const InputDecoration(
-                hintText: "شوێنی ئیشکردن هەلبژێرە",
+                hintText: "Job WorkPlace",
               ),
             ),
             const SizedBox(height: 20),
-            const Text("جۆری کار"),
-            const SizedBox(height: 6),
             TextFormField(
               controller: jobTypeController,
               decoration: const InputDecoration(
-                hintText: "جۆری کار هەڵبژێرە",
+                hintText: "Job Type",
               ),
             ),
             const SizedBox(height: 20),
-            const Text("دەربارەی کار"),
-            const SizedBox(height: 6),
+            TextFormField(
+              controller: experienceLevelController,
+              decoration: const InputDecoration(
+                hintText: "Experience Level",
+              ),
+            ),
+            const SizedBox(height: 20),
             TextFormField(
               controller: jobDescriptionController,
               maxLines: 6,
               decoration: const InputDecoration(
-                hintText: "زانیاری دەربارەی کار بنووسە",
+                hintText: "Job Description",
               ),
             ),
             const SizedBox(height: 70),

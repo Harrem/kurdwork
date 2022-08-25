@@ -25,14 +25,13 @@ class _JobDetailScreenState extends State<JobDetailScreen> {
       color: Colors.grey[100],
       child: SafeArea(
         child: Scaffold(
-          body: SingleChildScrollView(
-            child: Container(
-              height: MediaQuery.of(context).size.height,
-              padding: const EdgeInsets.all(15),
-              child: Stack(
-                alignment: Alignment.bottomCenter,
-                children: [
-                  Column(
+          body: Container(
+            height: MediaQuery.of(context).size.height,
+            padding: const EdgeInsets.all(15),
+            child: Stack(
+              children: [
+                SingleChildScrollView(
+                  child: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -103,7 +102,7 @@ class _JobDetailScreenState extends State<JobDetailScreen> {
                               Container(
                                 alignment: Alignment.center,
                                 height: 25,
-                                child: const Text("ئەزموون",
+                                child: const Text("Experience",
                                     style: TextStyle(
                                         color: Colors.grey,
                                         fontSize: 14,
@@ -130,7 +129,7 @@ class _JobDetailScreenState extends State<JobDetailScreen> {
                               Container(
                                 alignment: Alignment.center,
                                 height: 25,
-                                child: const Text("کات",
+                                child: const Text("Job Type",
                                     style: TextStyle(
                                         color: Colors.grey,
                                         fontSize: 14,
@@ -157,7 +156,7 @@ class _JobDetailScreenState extends State<JobDetailScreen> {
                                 alignment: Alignment.center,
                                 width: 100,
                                 height: 25,
-                                child: const Text("شوێن",
+                                child: const Text("Location",
                                     style: TextStyle(
                                         color: Colors.grey,
                                         fontSize: 14,
@@ -201,33 +200,37 @@ class _JobDetailScreenState extends State<JobDetailScreen> {
                           ),
                         ],
                       ),
+                      const SizedBox(height: 60)
                     ],
                   ),
-                  Positioned(
-                    bottom: 10,
-                    child: Row(
-                      children: [
-                        SizedBox(
-                          height: 47,
-                          width: 47,
-                          child: OutlinedButton(
-                            onPressed: () {},
-                            child: const Icon(Icons.bookmark_add),
-                          ),
+                ),
+                Positioned(
+                  //TODO: get rid of the media query call
+                  width: MediaQuery.of(context).size.width,
+                  bottom: 10,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      SizedBox(
+                        height: 47,
+                        width: 47,
+                        child: OutlinedButton(
+                          onPressed: () {},
+                          child: const Icon(Icons.bookmark_add),
                         ),
-                        const VerticalDivider(width: 10),
-                        SizedBox(
-                          width: 250,
-                          child: ElevatedButton(
-                            onPressed: () {},
-                            child: const Text("Apply"),
-                          ),
+                      ),
+                      const VerticalDivider(width: 10),
+                      SizedBox(
+                        width: 250,
+                        child: ElevatedButton(
+                          onPressed: () {},
+                          child: const Text("Apply"),
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
         ),

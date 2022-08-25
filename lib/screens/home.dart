@@ -6,7 +6,7 @@ import 'package:kurdwork/mockData/categoriesData.dart';
 import 'package:kurdwork/mockData/users.dart';
 import 'package:kurdwork/screens/jobPostScreen.dart';
 import 'package:kurdwork/screens/savedJobsScreen.dart';
-import 'package:kurdwork/screens/profileScreen.dart';
+import 'package:kurdwork/screens/profile.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:kurdwork/services/jobServices.dart';
 import 'package:kurdwork/widgets/custom_card.dart';
@@ -255,7 +255,7 @@ class _HomeScreenState extends State<HomeScreen>
     List<Job> jobs = await JobServices().getJobList();
     for (var e in jobs) {
       debugPrint("statement");
-      list.add(JobDetailCard(job: e));
+      list.add(JobCard(job: e));
       list.add(const Divider());
     }
     return list;

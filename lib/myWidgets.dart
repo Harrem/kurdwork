@@ -149,12 +149,12 @@ class MyWidgets {
       height: 45,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(15),
-        color: Colors.deepPurple,
+        color: Colors.grey[200],
       ),
       child: Padding(
         padding: const EdgeInsets.all(12.0),
-        child: Text(text,
-            style: const TextStyle(fontSize: 16, color: Colors.white)),
+        child:
+            Text(text, style: TextStyle(fontSize: 16, color: Colors.grey[600])),
       ),
     );
   }
