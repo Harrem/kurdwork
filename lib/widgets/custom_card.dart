@@ -201,7 +201,7 @@ class ProfileCard extends StatelessWidget {
       width: double.infinity,
       child: Card(
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 20),
+          padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 10),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [

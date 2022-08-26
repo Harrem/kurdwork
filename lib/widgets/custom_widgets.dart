@@ -18,3 +18,20 @@ class OvalPicture extends StatelessWidget {
     );
   }
 }
+
+class CustomChip extends StatelessWidget {
+  const CustomChip({Key? key, required this.label, this.padding})
+      : super(key: key);
+  final Widget label;
+  final EdgeInsets? padding;
+
+  @override
+  Widget build(BuildContext context) {
+    return Chip(
+      label: label,
+      labelPadding:
+          padding ?? const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
+    );
+  }
+}

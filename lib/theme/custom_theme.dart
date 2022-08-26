@@ -38,11 +38,13 @@ class CustomTheme {
           ),
         ),
       ),
+      buttonTheme:
+          ButtonThemeData(materialTapTargetSize: MaterialTapTargetSize.padded),
       outlinedButtonTheme: OutlinedButtonThemeData(
         style: OutlinedButton.styleFrom(
-          padding: const EdgeInsets.all(10),
+          padding: const EdgeInsets.all(20),
           elevation: 0,
-          backgroundColor: Colors.white,
+          backgroundColor: Colors.indigo[50],
           tapTargetSize: MaterialTapTargetSize.padded,
           side: BorderSide.none,
           shape: RoundedRectangleBorder(
@@ -50,7 +52,7 @@ class CustomTheme {
           ),
         ),
       ),
-      dividerTheme: const DividerThemeData(thickness: 1, space: 1),
+      dividerTheme: const DividerThemeData(thickness: 1, space: 10),
     );
   }
 }

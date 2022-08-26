@@ -4,7 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:kurdwork/screens/home.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:kurdwork/screens/profile.dart';
+import 'package:kurdwork/screens/profile_screens/profile.dart';
 import 'package:kurdwork/screens/signin.dart';
 import 'package:kurdwork/theme/custom_theme.dart';
 import 'services/authentication.dart';

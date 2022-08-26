@@ -6,12 +6,14 @@ import 'package:kurdwork/mockData/categoriesData.dart';
 import 'package:kurdwork/mockData/users.dart';
 import 'package:kurdwork/screens/jobPostScreen.dart';
 import 'package:kurdwork/screens/savedJobsScreen.dart';
-import 'package:kurdwork/screens/profile.dart';
+import 'package:kurdwork/screens/profile_screens/profile.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:kurdwork/services/jobServices.dart';
 import 'package:kurdwork/widgets/custom_card.dart';
 
 import '../Models/job.dart';
+
+//TODO: fix scroll bug
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -162,20 +164,20 @@ class _HomeScreenState extends State<HomeScreen>
                   color: Colors.black,
                   tabs: const [
                     GButton(
-                      icon: CupertinoIcons.home,
-                      text: 'سەرەکی',
+                      icon: CupertinoIcons.briefcase,
+                      text: 'Jobs',
                     ),
                     GButton(
                       icon: CupertinoIcons.heart,
-                      text: 'هەڵگیراو',
+                      text: 'Saved',
                     ),
                     GButton(
                       icon: CupertinoIcons.bell,
-                      text: 'هەنوکە',
+                      text: 'Notifications',
                     ),
                     GButton(
                       icon: CupertinoIcons.person,
-                      text: 'پڕۆفایل',
+                      text: 'Profile',
                     ),
                   ],
                   selectedIndex: currentIndex,
@@ -256,7 +258,7 @@ class _HomeScreenState extends State<HomeScreen>
     for (var e in jobs) {
       debugPrint("statement");
       list.add(JobCard(job: e));
-      list.add(const Divider());
+      list.add(const SizedBox(height: 10));
     }
     return list;
   }
