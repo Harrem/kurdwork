@@ -7,8 +7,6 @@ import 'package:kurdwork/screens/settings.dart';
 import 'package:kurdwork/widgets/custom_card.dart';
 import 'package:kurdwork/widgets/custom_widgets.dart';
 
-import '../../mockData/categoriesData.dart';
-import '../../myWidgets.dart';
 import 'add_skill.dart';
 import 'write_about.dart';
 

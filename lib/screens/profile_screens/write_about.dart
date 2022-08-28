@@ -9,7 +9,6 @@ class About extends StatelessWidget {
       child: Material(
         color: Colors.transparent,
         child: Container(
-          height: 343,
           padding: const EdgeInsets.all(20),
           child: Card(
             child: Container(
