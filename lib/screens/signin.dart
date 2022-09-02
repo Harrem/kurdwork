@@ -64,16 +64,7 @@ class _SigninScreenState extends State<SigninScreen> {
                           controller: passwordController,
                           obscureText: !isVisible,
                           decoration: InputDecoration(
-                            fillColor: Colors.grey[200],
-                            filled: true,
                             labelText: "وشەی تێپەر",
-                            labelStyle: const TextStyle(color: Colors.grey),
-                            floatingLabelStyle:
-                                const TextStyle(color: Colors.deepPurple),
-                            border: OutlineInputBorder(
-                              borderSide: BorderSide.none,
-                              borderRadius: BorderRadius.circular(15),
-                            ),
                             suffixIcon: IconButton(
                               onPressed: () {
                                 setState(() {
