@@ -2,13 +2,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:kurdwork/mockData/users.dart';
 import 'package:kurdwork/screens/profile_screens/add_education.dart';
+import 'package:kurdwork/screens/profile_screens/edit_profile.dart';
 import 'package:kurdwork/screens/profile_screens/edit_userlinks.dart';
 import 'package:kurdwork/screens/settings.dart';
 import 'package:kurdwork/widgets/custom_card.dart';
 import 'package:kurdwork/widgets/custom_widgets.dart';
 
 import 'add_skill.dart';
-import 'write_about.dart';
+import 'about.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({Key? key}) : super(key: key);
@@ -20,29 +21,31 @@ class ProfileScreen extends StatefulWidget {
 class _ProfileScreenState extends State<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        body: Container(
-      color: Colors.grey[100],
-      child: SafeArea(
-        child: Scaffold(
-          backgroundColor: Colors.grey[100],
-          body: SingleChildScrollView(
+    return SafeArea(
+      child: Scaffold(
+        body: SafeArea(
+          child: SingleChildScrollView(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Container(
+                  height: 50,
                   color: Colors.white,
                   padding: const EdgeInsets.all(10),
                   child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       IconButton(
-                          onPressed: () {}, icon: const Icon(Icons.search)),
+                          padding: const EdgeInsets.all(2),
+                          onPressed: () {},
+                          icon: const Icon(Icons.search)),
                       Text(
                         "Profile",
                         style: Theme.of(context).textTheme.headline6,
                       ),
                       IconButton(
+                        padding: const EdgeInsets.all(2),
                         onPressed: () {
                           Navigator.push(
                             context,
@@ -81,7 +84,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         children: [
                           Text(
                             "${users[0]['fname']} ${users[0]['lname']}",
-                            style: Theme.of(context).textTheme.headline5,
+                            style: Theme.of(context).textTheme.headline6,
                           ),
                           Text(
                             "${users[0]['headline']}",
@@ -93,7 +96,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         child: Container(
                           alignment: Alignment.centerRight,
                           child: IconButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              showCupertinoModalPopup(
+                                context: context,
+                                builder: (context) => const EditProfile(),
+                              );
+                            },
                             icon: const Icon(
                               CupertinoIcons.pencil_circle,
                             ),
@@ -143,7 +151,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   trailing: IconButton(
                     onPressed: () {
                       showCupertinoModalPopup(
-                          context: context, builder: (context) => AddSkill());
+                          context: context, builder: (context) => EditSkills());
                     },
                     icon: const Icon(
                       CupertinoIcons.plus_circle,
@@ -295,6 +303,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
           ),
         ),
       ),
-    ));
+    );
   }
 }

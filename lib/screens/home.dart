@@ -43,7 +43,7 @@ class _HomeScreenState extends State<HomeScreen>
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Colors.grey[100],
+      color: Colors.blueGrey[50],
       child: SafeArea(
         bottom: false,
         child: DefaultTabController(

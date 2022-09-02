@@ -1,54 +1,107 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
 
+import 'package:flutter/foundation.dart';
+
 class User {
-  String? username;
   String? fname;
   String? lname;
-  String? email;
-  DateTime? datePosted;
+  String? headline;
+  String? about;
+  List<String>? skills;
+  List<String>? educations;
+  List<String>? userLinks;
+  List<String>? licenses;
+  List<String>? certifications;
+  String? cvRef;
+  DateTime? dateJoined;
   String? experience;
   User({
-    this.username,
     this.fname,
     this.lname,
-    this.datePosted,
+    this.headline,
+    this.about,
+    this.skills,
+    required this.educations,
+    required this.userLinks,
+    required this.licenses,
+    required this.certifications,
+    this.cvRef,
+    this.dateJoined,
     this.experience,
   });
 
   User copyWith({
-    String? username,
     String? fname,
     String? lname,
-    DateTime? datePosted,
+    String? headline,
+    String? about,
+    List<String>? skills,
+    List<String>? educations,
+    List<String>? userLinks,
+    List<String>? licenses,
+    List<String>? certifications,
+    String? cvRef,
+    DateTime? dateJoined,
     String? experience,
   }) {
     return User(
-      username: username ?? this.username,
       fname: fname ?? this.fname,
       lname: lname ?? this.lname,
-      datePosted: datePosted ?? this.datePosted,
+      headline: headline ?? this.headline,
+      about: about ?? this.about,
+      skills: skills ?? this.skills,
+      educations: educations ?? this.educations,
+      userLinks: userLinks ?? this.userLinks,
+      licenses: licenses ?? this.licenses,
+      certifications: certifications ?? this.certifications,
+      cvRef: cvRef ?? this.cvRef,
+      dateJoined: dateJoined ?? this.dateJoined,
       experience: experience ?? this.experience,
     );
   }
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
-      'username': username,
       'fname': fname,
       'lname': lname,
-      'datePosted': datePosted?.millisecondsSinceEpoch,
+      'headline': headline,
+      'about': about,
+      'skills': skills,
+      'educations': educations,
+      'userLinks': userLinks,
+      'licenses': licenses,
+      'certifications': certifications,
+      'cvRef': cvRef,
+      'dateJoined': dateJoined?.millisecondsSinceEpoch,
       'experience': experience,
     };
   }
 
   factory User.fromMap(Map<String, dynamic> map) {
     return User(
-      username: map['username'] != null ? map['username'] as String : null,
       fname: map['fname'] != null ? map['fname'] as String : null,
       lname: map['lname'] != null ? map['lname'] as String : null,
-      datePosted: map['datePosted'] != null
-          ? DateTime.fromMillisecondsSinceEpoch(map['datePosted'] as int)
+      headline: map['headline'] != null ? map['headline'] as String : null,
+      about: map['about'] != null ? map['about'] as String : null,
+      skills: map['skills'] != null
+          ? List<String>.from((map['skills'] as List<String>))
+          : null,
+      educations: map['educations'] != null
+          ? List<String>.from((map['educations'] as List<String>))
+          : null,
+      userLinks: map['userLinks'] != null
+          ? List<String>.from((map['userLinks'] as List<String>))
+          : null,
+      licenses: map['licenses'] != null
+          ? List<String>.from((map['licenses'] as List<String>))
+          : null,
+      certifications: map['certifications'] != null
+          ? List<String>.from((map['certifications'] as List<String>))
+          : null,
+      cvRef: map['cvRef'] != null ? map['cvRef'] as String : null,
+      dateJoined: map['dateJoined'] != null
+          ? DateTime.fromMillisecondsSinceEpoch(map['dateJoined'] as int)
           : null,
       experience:
           map['experience'] != null ? map['experience'] as String : null,
@@ -62,26 +115,40 @@ class User {
 
   @override
   String toString() {
-    return 'User(username: $username, fname: $fname, lname: $lname, datePosted: $datePosted, experience: $experience)';
+    return 'User(fname: $fname, lname: $lname, headline: $headline, about: $about, skills: $skills, educations: $educations, userLinks: $userLinks, licenses: $licenses, certifications: $certifications, cvRef: $cvRef, dateJoined: $dateJoined, experience: $experience)';
   }
 
   @override
   bool operator ==(covariant User other) {
     if (identical(this, other)) return true;
 
-    return other.username == username &&
-        other.fname == fname &&
+    return other.fname == fname &&
         other.lname == lname &&
-        other.datePosted == datePosted &&
+        other.headline == headline &&
+        other.about == about &&
+        listEquals(other.skills, skills) &&
+        listEquals(other.educations, educations) &&
+        listEquals(other.userLinks, userLinks) &&
+        listEquals(other.licenses, licenses) &&
+        listEquals(other.certifications, certifications) &&
+        other.cvRef == cvRef &&
+        other.dateJoined == dateJoined &&
         other.experience == experience;
   }
 
   @override
   int get hashCode {
-    return username.hashCode ^
-        fname.hashCode ^
+    return fname.hashCode ^
         lname.hashCode ^
-        datePosted.hashCode ^
+        headline.hashCode ^
+        about.hashCode ^
+        skills.hashCode ^
+        educations.hashCode ^
+        userLinks.hashCode ^
+        licenses.hashCode ^
+        certifications.hashCode ^
+        cvRef.hashCode ^
+        dateJoined.hashCode ^
         experience.hashCode;
   }
 }
