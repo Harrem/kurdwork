@@ -1,5 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:kurdwork/bloc/user_bloc.dart';
+import 'package:kurdwork/bloc/user_state.dart';
 import 'package:kurdwork/mockData/users.dart';
 import 'package:kurdwork/screens/profile_screens/add_education.dart';
 import 'package:kurdwork/screens/profile_screens/edit_profile.dart';
@@ -11,14 +14,9 @@ import 'package:kurdwork/widgets/custom_widgets.dart';
 import 'add_skill.dart';
 import 'about.dart';
 
-class ProfileScreen extends StatefulWidget {
+class ProfileScreen extends StatelessWidget {
   const ProfileScreen({Key? key}) : super(key: key);
 
-  @override
-  State<ProfileScreen> createState() => _ProfileScreenState();
-}
-
-class _ProfileScreenState extends State<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -97,10 +95,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           alignment: Alignment.centerRight,
                           child: IconButton(
                             onPressed: () {
-                              showCupertinoModalPopup(
-                                context: context,
-                                builder: (context) => const EditProfile(),
-                              );
+                              Navigator.of(context).push(MaterialPageRoute(
+                                  builder: (context) => EditProfile()));
                             },
                             icon: const Icon(
                               CupertinoIcons.pencil_circle,

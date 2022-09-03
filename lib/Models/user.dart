@@ -14,6 +14,7 @@ class User {
   List<String>? licenses;
   List<String>? certifications;
   String? cvRef;
+  String? profileUrl;
   DateTime? dateJoined;
   String? experience;
   User({
@@ -27,6 +28,7 @@ class User {
     required this.licenses,
     required this.certifications,
     this.cvRef,
+    this.profileUrl,
     this.dateJoined,
     this.experience,
   });
@@ -42,6 +44,7 @@ class User {
     List<String>? licenses,
     List<String>? certifications,
     String? cvRef,
+    String? profileUrl,
     DateTime? dateJoined,
     String? experience,
   }) {
@@ -56,6 +59,7 @@ class User {
       licenses: licenses ?? this.licenses,
       certifications: certifications ?? this.certifications,
       cvRef: cvRef ?? this.cvRef,
+      profileUrl: profileUrl ?? this.profileUrl,
       dateJoined: dateJoined ?? this.dateJoined,
       experience: experience ?? this.experience,
     );
@@ -73,6 +77,7 @@ class User {
       'licenses': licenses,
       'certifications': certifications,
       'cvRef': cvRef,
+      'profileUrl': profileUrl,
       'dateJoined': dateJoined?.millisecondsSinceEpoch,
       'experience': experience,
     };
@@ -85,21 +90,23 @@ class User {
       headline: map['headline'] != null ? map['headline'] as String : null,
       about: map['about'] != null ? map['about'] as String : null,
       skills: map['skills'] != null
-          ? List<String>.from((map['skills'] as List<String>))
+          ? List<String>.from(map['skills'] as List<String>)
           : null,
       educations: map['educations'] != null
-          ? List<String>.from((map['educations'] as List<String>))
+          ? List<String>.from(map['educations'] as List<String>)
           : null,
       userLinks: map['userLinks'] != null
-          ? List<String>.from((map['userLinks'] as List<String>))
+          ? List<String>.from(map['userLinks'] as List<String>)
           : null,
       licenses: map['licenses'] != null
-          ? List<String>.from((map['licenses'] as List<String>))
+          ? List<String>.from(map['licenses'] as List<String>)
           : null,
       certifications: map['certifications'] != null
-          ? List<String>.from((map['certifications'] as List<String>))
+          ? List<String>.from(map['certifications'] as List<String>)
           : null,
       cvRef: map['cvRef'] != null ? map['cvRef'] as String : null,
+      profileUrl:
+          map['profileUrl'] != null ? map['profileUrl'] as String : null,
       dateJoined: map['dateJoined'] != null
           ? DateTime.fromMillisecondsSinceEpoch(map['dateJoined'] as int)
           : null,
@@ -115,7 +122,7 @@ class User {
 
   @override
   String toString() {
-    return 'User(fname: $fname, lname: $lname, headline: $headline, about: $about, skills: $skills, educations: $educations, userLinks: $userLinks, licenses: $licenses, certifications: $certifications, cvRef: $cvRef, dateJoined: $dateJoined, experience: $experience)';
+    return 'User(fname: $fname, lname: $lname, headline: $headline, about: $about, skills: $skills, educations: $educations, userLinks: $userLinks, licenses: $licenses, certifications: $certifications, cvRef: $cvRef, profileUrl: $profileUrl, dateJoined: $dateJoined, experience: $experience)';
   }
 
   @override
@@ -132,6 +139,7 @@ class User {
         listEquals(other.licenses, licenses) &&
         listEquals(other.certifications, certifications) &&
         other.cvRef == cvRef &&
+        other.profileUrl == profileUrl &&
         other.dateJoined == dateJoined &&
         other.experience == experience;
   }
@@ -148,6 +156,7 @@ class User {
         licenses.hashCode ^
         certifications.hashCode ^
         cvRef.hashCode ^
+        profileUrl.hashCode ^
         dateJoined.hashCode ^
         experience.hashCode;
   }
