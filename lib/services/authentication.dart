@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import '../firebase_options.dart';
@@ -23,33 +25,49 @@ class Authentication {
     try {
       UserCredential userCredential = await auth.createUserWithEmailAndPassword(
           email: email, password: password);
+
       user = userCredential.user;
     } on FirebaseAuthException catch (e) {
-      Future.error(e.message!);
+      if (e.code == "user-not-found") {
+        return Future.error("User Not Found");
+      } else if (e.code == "wrong-password") {
+        return Future.error("Invalid Password");
+      } else if (e.code == "invalid-email") {
+        return Future.error("Invalid Email Address");
+      } else {
+        return Future.error(e.message.toString());
+      }
+    } on SocketException catch (e) {
+      debugPrint(e.message);
+      return Future.error("Network Error");
     } catch (e) {
-      debugPrint(e.toString());
+      return Future.error(e.toString());
     }
     return user;
   }
 
   Future<User?> signInWithEmailAndPassword(
       {required email, required password}) async {
-    FirebaseAuth auth = FirebaseAuth.instance;
     User? user;
     try {
       UserCredential userCredential = await auth.signInWithEmailAndPassword(
           email: email, password: password);
+
       user = userCredential.user;
     } on FirebaseAuthException catch (e) {
       if (e.code == "user-not-found") {
-        Future.error("${e.message}");
+        return Future.error("User Not Found");
+      } else if (e.code == "wrong-password") {
+        return Future.error("Invalid Password");
+      } else if (e.code == "invalid-email") {
+        return Future.error("Invalid Email Address");
+      } else {
+        return Future.error(e.message.toString());
       }
-      if (e.code == "wrong-password") {
-        Future.error("${e.message}");
-      }
-      Future.error("${e.message}");
+    } on SocketException catch (e) {
+      return Future.error("Network Error: $e");
     } catch (e) {
-      Future.error("$e");
+      return Future.error(e.toString());
     }
 
     return user;

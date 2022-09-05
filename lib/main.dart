@@ -7,6 +7,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kurdwork/bloc/authentication_bloc/auth_bloc.dart';
 import 'package:kurdwork/bloc/authentication_bloc/auth_event.dart';
+import 'package:kurdwork/bloc/user_bloc.dart';
+import 'package:kurdwork/bloc/user_event.dart';
+import 'package:kurdwork/bloc/user_state.dart';
 import 'package:kurdwork/screens/home.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:kurdwork/screens/profile_screens/profile.dart';
@@ -29,9 +32,16 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return RepositoryProvider(
       create: (context) => Authentication(),
-      child: BlocProvider(
-        create: (context) =>
-            AuthBloc(auth: RepositoryProvider.of<Authentication>(context)),
+      child: MultiBlocProvider(
+        providers: [
+          BlocProvider(
+            create: (context) =>
+                AuthBloc(auth: RepositoryProvider.of<Authentication>(context)),
+          ),
+          BlocProvider(
+            create: (context) => UserBloc(),
+          ),
+        ],
         child: MaterialApp(
           debugShowCheckedModeBanner: false,
           localizationsDelegates: const [
@@ -49,6 +59,7 @@ class MyApp extends StatelessWidget {
               child: BlocListener<AuthBloc, AuthState>(
                 listener: (context, state) {
                   if (state is Authenticated) {
+                    context.read<UserBloc>().add(InitializeUser());
                     Navigator.of(context).push(MaterialPageRoute(
                         builder: (context) => const HomeScreen()));
                   } else if (state is Unauthenticated) {
@@ -56,13 +67,21 @@ class MyApp extends StatelessWidget {
                         builder: (context) => const SigninScreen()));
                   } else if (state is Loading) {
                     showCupertinoModalPopup(
-                        context: context,
-                        builder: (context) =>
-                            const Center(child: CircularProgressIndicator()));
+                      context: context,
+                      builder: (context) => const Center(
+                        child: CircularProgressIndicator(),
+                      ),
+                    );
+                  } else if (state is AuthError) {
+                    Navigator.pop(context);
+                    ScaffoldMessenger.of(context)
+                        .showSnackBar(SnackBar(content: Text(state.error)));
                   }
                 },
                 child: FutureBuilder(builder: ((context, snapshot) {
+                  //TODO: use cached user data
                   if (FirebaseAuth.instance.currentUser != null) {
+                    context.read<UserBloc>().add(InitializeUser());
                     return const HomeScreen();
                   }
                   return const SigninScreen();

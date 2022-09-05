@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:kurdwork/widgets/custom_widgets.dart';
 
-import '../../mockData/users.dart';
+import '../../mockData/userMockData.dart';
 
 class EditSkills extends StatelessWidget {
   EditSkills({Key? key}) : super(key: key);
@@ -43,14 +43,14 @@ class EditSkills extends StatelessWidget {
                       runSpacing: 15,
                       clipBehavior: Clip.hardEdge,
                       children: List.generate(
-                        (users[0]['skills'] as List<String>).length,
+                        (userMock['skills'] as List<String>).length,
                         (index) => Stack(
                           alignment: Alignment.centerRight,
                           children: [
                             CustomChip(
                               padding: const EdgeInsets.fromLTRB(10, 7, 30, 5),
                               label: Text(
-                                  (users[0]['skills'] as List<String>)[index]),
+                                  (userMock['skills'] as List<String>)[index]),
                             ),
                             IconButton(
                               onPressed: () {},

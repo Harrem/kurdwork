@@ -1,9 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:kurdwork/bloc/authentication_bloc/auth_bloc.dart';
+import 'package:kurdwork/bloc/authentication_bloc/auth_event.dart';
 import 'package:kurdwork/myWidgets.dart';
 import '../screens/signin.dart';
-
-import '../services/authentication.dart';
 
 class Settings extends StatefulWidget {
   const Settings({Key? key}) : super(key: key);
@@ -40,7 +41,7 @@ class _SettingsState extends State<Settings> {
         GestureDetector(
           onTap: () {
             try {
-              Authentication.signOut(context: context);
+              BlocProvider.of<AuthBloc>(context).add(SignOutRequested());
             } catch (e) {
               const SnackBar(content: Text("an error occured"));
             }

@@ -1,9 +1,10 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:kurdwork/mockData/userMockData.dart';
 import 'package:kurdwork/myWidgets.dart';
 import 'package:kurdwork/mockData/categoriesData.dart';
-import 'package:kurdwork/mockData/users.dart';
 import 'package:kurdwork/screens/jobPostScreen.dart';
 import 'package:kurdwork/screens/savedJobsScreen.dart';
 import 'package:kurdwork/screens/profile_screens/profile.dart';
@@ -193,6 +194,11 @@ class _HomeScreenState extends State<HomeScreen>
             ),
             floatingActionButton: FloatingActionButton(
               onPressed: () {
+                FirebaseFirestore.instance
+                    .collection('users')
+                    .doc(FirebaseAuth.instance.currentUser!.uid)
+                    .set(userMock);
+                debugPrint("data has been written");
                 // Navigator.of(context).push(MaterialPageRoute(builder: (context)=> JobPost()));
               },
               child: const Icon(Icons.add),
@@ -229,36 +235,36 @@ class _HomeScreenState extends State<HomeScreen>
     );
   }
 
-  Widget topDevs(String title) {
-    // return Text("data");
-    return Padding(
-      padding: const EdgeInsets.only(top: 20),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Padding(
-            padding: const EdgeInsets.only(right: 20.0),
-            child: MyWidgets.h1("باشترین گەشەپێدەرەکان"),
-          ),
-          const Divider(color: Colors.transparent),
-          SizedBox(
-            height: 110,
-            child: ListView.builder(
-              scrollDirection: Axis.horizontal,
-              itemCount: users.length,
-              itemBuilder: ((context, index) {
-                return Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8),
-                  child: MyWidgets.personHeads(
-                      title: users[index]['fname'].toString(), radius: 70),
-                );
-              }),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
+  // Widget topDevs(String title) {
+  //   // return Text("data");
+  //   return Padding(
+  //     padding: const EdgeInsets.only(top: 20),
+  //     child: Column(
+  //       crossAxisAlignment: CrossAxisAlignment.start,
+  //       children: [
+  //         Padding(
+  //           padding: const EdgeInsets.only(right: 20.0),
+  //           child: MyWidgets.h1("باشترین گەشەپێدەرەکان"),
+  //         ),
+  //         const Divider(color: Colors.transparent),
+  //         SizedBox(
+  //           height: 110,
+  //           child: ListView.builder(
+  //             scrollDirection: Axis.horizontal,
+  //             itemCount: user.length,
+  //             itemBuilder: ((context, index) {
+  //               return Padding(
+  //                 padding: const EdgeInsets.symmetric(horizontal: 8),
+  //                 child: MyWidgets.personHeads(
+  //                     title: users[index]['fname'].toString(), radius: 70),
+  //               );
+  //             }),
+  //           ),
+  //         ),
+  //       ],
+  //     ),
+  //   );
+  // }
 
   Future<List<Widget>> mostRecentJobs() async {
     List<Widget> list = [];

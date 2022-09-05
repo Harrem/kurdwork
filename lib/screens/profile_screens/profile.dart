@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kurdwork/bloc/user_bloc.dart';
 import 'package:kurdwork/bloc/user_state.dart';
-import 'package:kurdwork/mockData/users.dart';
+import 'package:kurdwork/mockData/userMockData.dart';
 import 'package:kurdwork/screens/profile_screens/add_education.dart';
 import 'package:kurdwork/screens/profile_screens/edit_profile.dart';
 import 'package:kurdwork/screens/profile_screens/edit_userlinks.dart';
@@ -19,6 +19,7 @@ class ProfileScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var userBloc = context.read<UserBloc>();
     return SafeArea(
       child: Scaffold(
         body: SafeArea(
@@ -81,11 +82,11 @@ class ProfileScreen extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            "${users[0]['fname']} ${users[0]['lname']}",
+                            "${userBloc.user.fname}  ${userBloc.user.lname}",
                             style: Theme.of(context).textTheme.headline6,
                           ),
                           Text(
-                            "${users[0]['headline']}",
+                            "${userMock['headline']}",
                             style: Theme.of(context).textTheme.subtitle2,
                           ),
                         ],
@@ -96,7 +97,7 @@ class ProfileScreen extends StatelessWidget {
                           child: IconButton(
                             onPressed: () {
                               Navigator.of(context).push(MaterialPageRoute(
-                                  builder: (context) => EditProfile()));
+                                  builder: (context) => const EditProfile()));
                             },
                             icon: const Icon(
                               CupertinoIcons.pencil_circle,
@@ -111,7 +112,7 @@ class ProfileScreen extends StatelessWidget {
                 //TODO: add realtime Data
                 ProfileCard(
                   text: "About",
-                  body: Text("${users[0]['about']}"),
+                  body: Text("${userMock['about']}"),
                   trailing: IconButton(
                     onPressed: () {
                       showCupertinoModalPopup(
@@ -133,13 +134,13 @@ class ProfileScreen extends StatelessWidget {
                       spacing: 15,
                       runSpacing: 15,
                       children: List.generate(
-                        (users[0]['skills'] as List<String>).length,
+                        (userMock['skills'] as List<String>).length,
                         (index) => index == 6
                             ? const CustomChip(
                                 label: Text("More"),
                               )
                             : CustomChip(
-                                label: Text((users[0]['skills']
+                                label: Text((userMock['skills']
                                     as List<String>)[index])),
                       ),
                     ),

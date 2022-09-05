@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart';
 
 class User {
+  String uid;
   String? fname;
   String? lname;
   String? headline;
@@ -18,15 +19,16 @@ class User {
   DateTime? dateJoined;
   String? experience;
   User({
+    required this.uid,
     this.fname,
     this.lname,
     this.headline,
     this.about,
     this.skills,
-    required this.educations,
-    required this.userLinks,
-    required this.licenses,
-    required this.certifications,
+    this.educations,
+    this.userLinks,
+    this.licenses,
+    this.certifications,
     this.cvRef,
     this.profileUrl,
     this.dateJoined,
@@ -34,6 +36,7 @@ class User {
   });
 
   User copyWith({
+    String? uid,
     String? fname,
     String? lname,
     String? headline,
@@ -49,6 +52,7 @@ class User {
     String? experience,
   }) {
     return User(
+      uid: uid ?? this.uid,
       fname: fname ?? this.fname,
       lname: lname ?? this.lname,
       headline: headline ?? this.headline,
@@ -67,6 +71,7 @@ class User {
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
+      'uid': uid,
       'fname': fname,
       'lname': lname,
       'headline': headline,
@@ -85,6 +90,7 @@ class User {
 
   factory User.fromMap(Map<String, dynamic> map) {
     return User(
+      uid: map['uid'] as String,
       fname: map['fname'] != null ? map['fname'] as String : null,
       lname: map['lname'] != null ? map['lname'] as String : null,
       headline: map['headline'] != null ? map['headline'] as String : null,
@@ -122,14 +128,15 @@ class User {
 
   @override
   String toString() {
-    return 'User(fname: $fname, lname: $lname, headline: $headline, about: $about, skills: $skills, educations: $educations, userLinks: $userLinks, licenses: $licenses, certifications: $certifications, cvRef: $cvRef, profileUrl: $profileUrl, dateJoined: $dateJoined, experience: $experience)';
+    return 'User(uid: $uid, fname: $fname, lname: $lname, headline: $headline, about: $about, skills: $skills, educations: $educations, userLinks: $userLinks, licenses: $licenses, certifications: $certifications, cvRef: $cvRef, profileUrl: $profileUrl, dateJoined: $dateJoined, experience: $experience)';
   }
 
   @override
   bool operator ==(covariant User other) {
     if (identical(this, other)) return true;
 
-    return other.fname == fname &&
+    return other.uid == uid &&
+        other.fname == fname &&
         other.lname == lname &&
         other.headline == headline &&
         other.about == about &&
@@ -146,7 +153,8 @@ class User {
 
   @override
   int get hashCode {
-    return fname.hashCode ^
+    return uid.hashCode ^
+        fname.hashCode ^
         lname.hashCode ^
         headline.hashCode ^
         about.hashCode ^

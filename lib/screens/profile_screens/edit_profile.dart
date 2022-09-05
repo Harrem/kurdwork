@@ -1,8 +1,4 @@
-import 'dart:io';
-
 import 'package:file_picker/file_picker.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kurdwork/bloc/user_event.dart';
@@ -17,6 +13,8 @@ class EditProfile extends StatelessWidget {
   const EditProfile({Key? key}) : super(key: key);
   @override
   Widget build(context) {
+    var userBloc = context.read<UserBloc>();
+
     return Material(
       child: Scaffold(
         backgroundColor: Colors.transparent,
@@ -41,14 +39,13 @@ class EditProfile extends StatelessWidget {
                 ],
               ),
               const Divider(),
-              BlocBuilder<UserBloc, UserState>(
-                builder: (context, state) {
-                  return OvalPicture(
-                      image: state is SetProfilePic
-                          ? Image.file(File(state.platformFile.path!))
-                          : Image.asset("assets/images/avatar.png"),
-                      scale: 100);
-                },
+              BlocListener<UserBloc, UserState>(
+                listener: (context, state) {},
+                child: OvalPicture(
+                    image: userBloc.user.profileUrl!.isNotEmpty
+                        ? Image.network(userBloc.user.profileUrl!)
+                        : Image.asset("assets/images/avatar3.png"),
+                    scale: 100),
               ),
               const Divider(),
               OutlinedButton(
@@ -58,6 +55,10 @@ class EditProfile extends StatelessWidget {
                   if (result != null) {
                     var platformFile = result.files[0];
                     debugPrint(platformFile.path);
+                    // ignore: use_build_context_synchronously
+                    context
+                        .read<UserBloc>()
+                        .add(UpdateProfilePicture(platformFile));
                   }
                 },
                 child: const Text("Choose Picture"),

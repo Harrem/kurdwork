@@ -112,6 +112,7 @@ class _SignupScreenState extends State<SignupScreen> {
                       SizedBox(
                         width: MediaQuery.of(context).size.width - 100,
                         child: TextFormField(
+                          controller: emailController,
                           decoration: const InputDecoration(
                             labelText: "Email",
                           ),
@@ -130,6 +131,7 @@ class _SignupScreenState extends State<SignupScreen> {
                       SizedBox(
                         width: MediaQuery.of(context).size.width - 100,
                         child: TextFormField(
+                          controller: passwordController,
                           obscureText: !isVisible,
                           decoration: InputDecoration(
                               labelText: "Password",
@@ -164,7 +166,6 @@ class _SignupScreenState extends State<SignupScreen> {
                   child: ElevatedButton(
                     onPressed: () async {
                       if (_formKey.currentState!.validate()) {
-                        FirebaseAuth.instance.currentUser;
                         authBloc.add(
                           SignUpRequested(
                               emailController.text, passwordController.text),
