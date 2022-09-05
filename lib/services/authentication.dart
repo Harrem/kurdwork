@@ -4,15 +4,19 @@ import '../firebase_options.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
+//TODO: Handle Errors Properly
+
 class Authentication {
-  static Future<FirebaseApp> initializeFirebase() async {
+  FirebaseAuth auth = FirebaseAuth.instance;
+
+  Future<FirebaseApp> initializeFirebase() async {
     FirebaseApp firebaseApp = await Firebase.initializeApp(
         options: DefaultFirebaseOptions.currentPlatform);
     return firebaseApp;
   }
 
-  static Future<User?> signUpWithEmailAndPassword(
-      {required context, required email, required password}) async {
+  Future<User?> signUpWithEmailAndPassword(
+      {required email, required password}) async {
     FirebaseAuth auth = FirebaseAuth.instance;
     User? user;
 
@@ -21,17 +25,15 @@ class Authentication {
           email: email, password: password);
       user = userCredential.user;
     } on FirebaseAuthException catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        Authentication.customSnackBar(content: "$e"),
-      );
+      Future.error(e.message!);
     } catch (e) {
       debugPrint(e.toString());
     }
     return user;
   }
 
-  static Future<User?> signInWithEmailAndPassword(
-      {required context, required email, required password}) async {
+  Future<User?> signInWithEmailAndPassword(
+      {required email, required password}) async {
     FirebaseAuth auth = FirebaseAuth.instance;
     User? user;
     try {
@@ -40,25 +42,20 @@ class Authentication {
       user = userCredential.user;
     } on FirebaseAuthException catch (e) {
       if (e.code == "user-not-found") {
-        ScaffoldMessenger.of(context).showSnackBar(
-          Authentication.customSnackBar(content: "ئەم هەژمارە بوونی نییە!"),
-        );
+        Future.error("${e.message}");
       }
       if (e.code == "wrong-password") {
-        ScaffoldMessenger.of(context).showSnackBar(
-          Authentication.customSnackBar(content: "وشەی تەپەڕت هەڵەیە!"),
-        );
+        Future.error("${e.message}");
       }
+      Future.error("${e.message}");
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        Authentication.customSnackBar(content: "an error occured: $e"),
-      );
+      Future.error("$e");
     }
 
     return user;
   }
 
-  static Future<User?> signInWithGoogle({required BuildContext context}) async {
+  Future<User?> signInWithGoogle() async {
     FirebaseAuth auth = FirebaseAuth.instance;
     User? user;
 
@@ -67,11 +64,7 @@ class Authentication {
     try {
       googleSignInAccount = await googleSignIn.signIn();
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        Authentication.customSnackBar(
-          content: 'Error occurred while accessing credentials. Try again :$e',
-        ),
-      );
+      Future.error("$e");
     }
 
     if (googleSignInAccount != null) {
@@ -94,32 +87,20 @@ class Authentication {
             content: 'The account already exists with a different credential.',
           );
         } else if (e.code == "invalid-credential") {
-          ScaffoldMessenger.of(context).showSnackBar(
-            Authentication.customSnackBar(
-              content: 'Error occurred while accessing credentials. Try again.',
-            ),
-          );
+          Future.error("${e.message}");
         }
       } catch (e) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          Authentication.customSnackBar(
-            content: 'Error occurred using Google Sign-In. Try again.',
-          ),
-        );
+        Future.error("$e");
       }
     }
     return user;
   }
 
-  static Future<void> signOut({required BuildContext context}) async {
+  Future<void> signOut() async {
     try {
       await FirebaseAuth.instance.signOut();
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        Authentication.customSnackBar(
-          content: 'Error while signing out. Try again. \n $e',
-        ),
-      );
+      Future.error(e.toString());
     }
   }
 

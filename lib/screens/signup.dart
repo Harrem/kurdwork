@@ -4,9 +4,11 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:email_validator/email_validator.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:kurdwork/bloc/authentication_bloc/auth_bloc.dart';
+import 'package:kurdwork/bloc/authentication_bloc/auth_event.dart';
 import 'package:kurdwork/myWidgets.dart';
 import 'package:kurdwork/screens/create_profile.dart';
-import '../services/authentication.dart';
 import 'signin.dart';
 
 class SignupScreen extends StatefulWidget {
@@ -17,11 +19,13 @@ class SignupScreen extends StatefulWidget {
 }
 
 class _SignupScreenState extends State<SignupScreen> {
-  String email = "", password = "";
-  bool isVisible = false;
   final _formKey = GlobalKey<FormState>();
+  bool isVisible = false;
+  TextEditingController emailController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
   @override
   Widget build(BuildContext context) {
+    AuthBloc authBloc = BlocProvider.of<AuthBloc>(context);
     return Scaffold(
       body: Center(
         child: SizedBox(
@@ -30,9 +34,9 @@ class _SignupScreenState extends State<SignupScreen> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                MyWidgets.h1("دروستکردنی هەژماری تایبەت"),
+                MyWidgets.h1("Create New Account"),
                 const SizedBox(height: 30),
-                MyWidgets.h3("دروستکردن لەگەڵ", color: Colors.grey),
+                MyWidgets.h3("Sign up with", color: Colors.grey),
                 const SizedBox(height: 10),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -44,25 +48,25 @@ class _SignupScreenState extends State<SignupScreen> {
                         width: 60,
                         child: ElevatedButton(
                           onPressed: () async {
-                            User? user;
-                            user = await Authentication.signInWithGoogle(
-                                context: context);
+                            authBloc.add(GoogleSignInRequested());
 
-                            bool exists = await FirebaseFirestore.instance
-                                .collection("users")
-                                .doc(user!.uid)
-                                .get()
-                                .then((value) => value.exists);
-                            if (exists) {
-                              // ignore: use_build_context_synchronously
-                              Navigator.pushReplacement(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (BuildContext context) =>
-                                      const CreateProfile(),
-                                ),
-                              );
-                            }
+                            //TODO: Check if user signed in or up the first time then navigate to CreateProfile
+
+                            // bool exists = await FirebaseFirestore.instance
+                            //     .collection("users")
+                            //     .doc(user!.uid)
+                            //     .get()
+                            //     .then((value) => value.exists);
+                            // if (exists) {
+                            //   // ignore: use_build_context_synchronously
+                            //   Navigator.pushReplacement(
+                            //     context,
+                            //     MaterialPageRoute(
+                            //       builder: (BuildContext context) =>
+                            //           const CreateProfile(),
+                            //     ),
+                            //   );
+                            // }
                           },
                           style: ElevatedButton.styleFrom(
                               primary: const Color.fromARGB(255, 255, 255, 255),
@@ -99,8 +103,7 @@ class _SignupScreenState extends State<SignupScreen> {
                   ],
                 ),
                 const SizedBox(height: 40),
-                MyWidgets.h3("دروستکردن بە ئیمەیل یان ژمارە مۆبایل",
-                    color: Colors.grey),
+                MyWidgets.h3("Create using Email", color: Colors.grey),
                 const SizedBox(height: 10),
                 Form(
                   key: _formKey,
@@ -109,26 +112,16 @@ class _SignupScreenState extends State<SignupScreen> {
                       SizedBox(
                         width: MediaQuery.of(context).size.width - 100,
                         child: TextFormField(
-                          decoration: InputDecoration(
-                            fillColor: Colors.grey[200],
-                            filled: true,
-                            labelText: "ئیمەیل",
-                            labelStyle: const TextStyle(color: Colors.grey),
-                            floatingLabelStyle:
-                                const TextStyle(color: Colors.deepPurple),
-                            border: OutlineInputBorder(
-                              borderSide: BorderSide.none,
-                              borderRadius: BorderRadius.circular(15),
-                            ),
+                          decoration: const InputDecoration(
+                            labelText: "Email",
                           ),
                           validator: (value) {
                             if (value == "" || value == null) {
-                              return "تکایە بۆشاییەکان پڕبکەوە";
+                              return "Field must not be empty";
                             }
                             if (!EmailValidator.validate(value)) {
-                              return "هەڵە هەیە لە ئیمەیلەکە";
+                              return "Invalid Email";
                             }
-                            email = value;
                             return null;
                           },
                         ),
@@ -139,16 +132,7 @@ class _SignupScreenState extends State<SignupScreen> {
                         child: TextFormField(
                           obscureText: !isVisible,
                           decoration: InputDecoration(
-                              fillColor: Colors.grey[200],
-                              filled: true,
-                              labelText: "وشەی تێپەر",
-                              labelStyle: const TextStyle(color: Colors.grey),
-                              floatingLabelStyle:
-                                  const TextStyle(color: Colors.deepPurple),
-                              border: OutlineInputBorder(
-                                borderSide: BorderSide.none,
-                                borderRadius: BorderRadius.circular(15),
-                              ),
+                              labelText: "Password",
                               suffixIcon: IconButton(
                                 onPressed: () {
                                   setState(() {
@@ -161,12 +145,11 @@ class _SignupScreenState extends State<SignupScreen> {
                               )),
                           validator: (value) {
                             if (value == "") {
-                              return "تکایە بۆشاییەکان پڕبکەوە";
+                              return "Field must not be empty";
                             }
                             if (value!.length < 8) {
-                              return "وشەی تێپەر پێویستە لە ٨ پیت یان ژمارە زیاتربێت";
+                              return "Must be more that 8 characters";
                             }
-                            password = value;
                             return null;
                           },
                         ),
@@ -177,42 +160,46 @@ class _SignupScreenState extends State<SignupScreen> {
                 const SizedBox(height: 20),
                 SizedBox(
                   width: MediaQuery.of(context).size.width - 100,
-                  child: MyWidgets.myElevatedButton(
-                    text: "دروستکردن",
+                  height: 50,
+                  child: ElevatedButton(
                     onPressed: () async {
-                      User? user;
                       if (_formKey.currentState!.validate()) {
-                        user = await Authentication.signUpWithEmailAndPassword(
-                            context: context, email: email, password: password);
+                        FirebaseAuth.instance.currentUser;
+                        authBloc.add(
+                          SignUpRequested(
+                              emailController.text, passwordController.text),
+                        );
                       }
-                      setState(() {
-                        if (user != null) {
-                          debugPrint("User created \n user email: $user");
-                          Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                              builder: (BuildContext context) =>
-                                  const CreateProfile(),
-                            ),
-                          );
-                        }
-                      });
+
+                      //TODO: get to create profile
+                      // if (user != null) {
+                      //   debugPrint("User created \n user email: $user");
+                      //   Navigator.pushReplacement(
+                      //     context,
+                      //     MaterialPageRoute(
+                      //       builder: (BuildContext context) =>
+                      //           const CreateProfile(),
+                      //     ),
+                      //   );
+                      // }
+                      // });
                     },
+                    child: const Text("Sign Up"),
                   ),
                 ),
                 const SizedBox(height: 20),
-                MyWidgets.h3("هەژماری تایبەت بە خۆتت هەیە؟",
-                    color: Colors.grey),
+                MyWidgets.h3("Have an account?", color: Colors.grey),
                 const SizedBox(height: 5),
                 TextButton(
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => SigninScreen()),
+                      MaterialPageRoute(
+                          builder: (context) => const SigninScreen()),
                     );
                   },
                   child: const Text(
-                    'بچۆرە ژوورەوە',
+                    'Sign In',
                     style: TextStyle(fontSize: 16),
                   ),
                 ),

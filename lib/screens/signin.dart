@@ -1,10 +1,10 @@
 import 'package:email_validator/email_validator.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:kurdwork/bloc/authentication_bloc/auth_bloc.dart';
+import 'package:kurdwork/bloc/authentication_bloc/auth_event.dart';
 import '../myWidgets.dart';
-import '../services/authentication.dart';
 import 'signup.dart';
-import 'home.dart';
 
 class SigninScreen extends StatefulWidget {
   const SigninScreen({Key? key}) : super(key: key);
@@ -18,9 +18,9 @@ class _SigninScreenState extends State<SigninScreen> {
   bool isVisible = false;
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
-
   @override
   Widget build(BuildContext context) {
+    var authBloc = BlocProvider.of<AuthBloc>(context);
     return Scaffold(
       body: Center(
         child: SizedBox(
@@ -30,7 +30,7 @@ class _SigninScreenState extends State<SigninScreen> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  "چوونە ناو هەژمارەکەت",
+                  "Sign In",
                   style: Theme.of(context).textTheme.headline5,
                 ),
                 const SizedBox(height: 20),
@@ -44,13 +44,13 @@ class _SigninScreenState extends State<SigninScreen> {
                         child: TextFormField(
                           controller: emailController,
                           decoration: const InputDecoration(
-                            labelText: "ئیمەیل",
+                            labelText: "Email",
                           ),
                           validator: (value) {
                             if (value == "" || value == null || value.isEmpty) {
-                              return "تکایە بۆشاییەکان پڕبکەوە";
+                              return "Field must not be empty";
                             } else if (!EmailValidator.validate(value)) {
-                              return "هەڵە هەیە لە ئیمەیلەکە";
+                              return "Invalid Email!";
                             }
                             return null;
                           },
@@ -64,7 +64,7 @@ class _SigninScreenState extends State<SigninScreen> {
                           controller: passwordController,
                           obscureText: !isVisible,
                           decoration: InputDecoration(
-                            labelText: "وشەی تێپەر",
+                            labelText: "Password",
                             suffixIcon: IconButton(
                               onPressed: () {
                                 setState(() {
@@ -78,10 +78,10 @@ class _SigninScreenState extends State<SigninScreen> {
                           ),
                           validator: (value) {
                             if (value == "") {
-                              return "تکایە بۆشاییەکان پڕبکەوە";
+                              return "Field must not be empty";
                             }
                             if (value!.length < 8) {
-                              return "وشەی تێپەر پێویستە لە ٨ پیت یان ژمارە زیاتربێت";
+                              return "Password should be more than 8 characters";
                             }
                             return null;
                           },
@@ -103,7 +103,7 @@ class _SigninScreenState extends State<SigninScreen> {
                       );
                     },
                     child: const Text(
-                      'وشەی تێپەڕت بیرچۆتەوە؟',
+                      'Forgot Password?',
                       style: TextStyle(fontSize: 16),
                     ),
                   ),
@@ -111,38 +111,21 @@ class _SigninScreenState extends State<SigninScreen> {
                 const SizedBox(height: 10),
                 SizedBox(
                   width: MediaQuery.of(context).size.width - 100,
+                  height: 50,
                   child: ElevatedButton(
                     onPressed: () async {
-                      User? user;
-
                       if (formKey.currentState!.validate()) {
-                        user = await Authentication.signInWithEmailAndPassword(
-                          context: context,
-                          email: emailController.value.text,
-                          password: passwordController.value.text,
-                        );
+                        authBloc.add(SignInRequested(emailController.value.text,
+                            passwordController.value.text));
                       }
-                      setState(
-                        () {
-                          if (user != null) {
-                            Navigator.pushReplacement(
-                              context,
-                              MaterialPageRoute(
-                                builder: (BuildContext context) =>
-                                    const HomeScreen(),
-                              ),
-                            );
-                          }
-                        },
-                      );
                     },
-                    child: const Text("چوونەژورەوە"),
+                    child: const Text("Sign In"),
                   ),
                 ),
                 const SizedBox(height: 20),
-                MyWidgets.h3("یان", color: Colors.grey),
-                const SizedBox(height: 20),
-                MyWidgets.h3("چوونەژەرەوە لەگەڵ", color: Colors.grey),
+                MyWidgets.h3("or", color: Colors.grey),
+                const SizedBox(height: 10),
+                MyWidgets.h3("Sign in with", color: Colors.grey),
                 const SizedBox(height: 10),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -154,18 +137,7 @@ class _SigninScreenState extends State<SigninScreen> {
                         width: 60,
                         child: ElevatedButton(
                           onPressed: () async {
-                            User? user;
-                            user = await Authentication.signInWithGoogle(
-                                context: context);
-                            if (user != null) {
-                              Navigator.pushReplacement(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (BuildContext context) =>
-                                      const HomeScreen(),
-                                ),
-                              );
-                            }
+                            authBloc.add(GoogleSignInRequested());
                           },
                           style: ElevatedButton.styleFrom(
                               primary: const Color.fromARGB(255, 255, 255, 255),
@@ -202,7 +174,7 @@ class _SigninScreenState extends State<SigninScreen> {
                   ],
                 ),
                 const SizedBox(height: 40),
-                MyWidgets.h3("تا ئێستا هەژمارت نییە؟", color: Colors.grey),
+                MyWidgets.h3("Don't have an account yet?", color: Colors.grey),
                 const SizedBox(height: 5),
                 TextButton(
                   onPressed: () {
@@ -213,7 +185,7 @@ class _SigninScreenState extends State<SigninScreen> {
                     );
                   },
                   child: const Text(
-                    'هەژمارێکی نوێ دروستبکە',
+                    'Create Account',
                     style: TextStyle(fontSize: 16),
                   ),
                 ),
