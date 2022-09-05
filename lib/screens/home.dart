@@ -182,12 +182,20 @@ class _HomeScreenState extends State<HomeScreen>
                   ],
                   selectedIndex: currentIndex,
                   onTabChange: (index) {
-                    setState(() {
-                      tabController.index = index;
-                    });
+                    setState(
+                      () {
+                        tabController.index = index;
+                      },
+                    );
                   },
                 ),
               ),
+            ),
+            floatingActionButton: FloatingActionButton(
+              onPressed: () {
+                // Navigator.of(context).push(MaterialPageRoute(builder: (context)=> JobPost()));
+              },
+              child: const Icon(Icons.add),
             ),
           ),
         ),
