@@ -42,8 +42,8 @@ class EditProfile extends StatelessWidget {
               BlocListener<UserBloc, UserState>(
                 listener: (context, state) {},
                 child: OvalPicture(
-                    image: userBloc.user.profileUrl!.isNotEmpty
-                        ? Image.network(userBloc.user.profileUrl!)
+                    image: userBloc.userData.profileUrl!.isNotEmpty
+                        ? Image.network(userBloc.userData.profileUrl!)
                         : Image.asset("assets/images/avatar3.png"),
                     scale: 100),
               ),

@@ -82,7 +82,7 @@ class ProfileScreen extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            "${userBloc.user.fname}  ${userBloc.user.lname}",
+                            "${userBloc.userData.fname}  ${userBloc.userData.lname}",
                             style: Theme.of(context).textTheme.headline6,
                           ),
                           Text(
