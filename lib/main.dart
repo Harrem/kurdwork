@@ -1,6 +1,5 @@
 // ignore_for_file: use_build_context_synchronously
 
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -10,14 +9,16 @@ import 'package:kurdwork/bloc/authentication_bloc/auth_event.dart';
 import 'package:kurdwork/bloc/user_bloc.dart';
 import 'package:kurdwork/bloc/user_event.dart';
 import 'package:kurdwork/bloc/user_state.dart';
+import 'package:kurdwork/screens/create_profile.dart';
 import 'package:kurdwork/screens/home.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:kurdwork/screens/profile_screens/profile.dart';
 import 'package:kurdwork/screens/signin.dart';
 import 'package:kurdwork/theme/custom_theme.dart';
 import 'bloc/authentication_bloc/auth_state.dart';
 import 'firebase_options.dart';
 import 'services/authentication.dart';
+
+//TODO: add splash screen
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -60,8 +61,6 @@ class MyApp extends StatelessWidget {
                 listener: (context, state) {
                   if (state is Authenticated) {
                     context.read<UserBloc>().add(InitializeUser());
-                    Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => const HomeScreen()));
                   } else if (state is Unauthenticated) {
                     Navigator.of(context).push(MaterialPageRoute(
                         builder: (context) => const SigninScreen()));
@@ -78,14 +77,29 @@ class MyApp extends StatelessWidget {
                         .showSnackBar(SnackBar(content: Text(state.error)));
                   }
                 },
-                child: FutureBuilder(builder: ((context, snapshot) {
-                  //TODO: use cached user data
-                  if (FirebaseAuth.instance.currentUser != null) {
-                    context.read<UserBloc>().add(InitializeUser());
-                    return const HomeScreen();
+                child: BlocListener<UserBloc, UserState>(
+                    listener: (context, state) {
+                  if (state is UserNotInitialized) {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const CreateProfile(),
+                      ),
+                    );
+                  } else if (state is UserInitialized) {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const HomeScreen(),
+                      ),
+                    );
                   }
-                  return const SigninScreen();
-                })),
+                }, child: FutureBuilder(
+                  builder: ((context, snapshot) {
+                    context.read<AuthBloc>().add(AppStarted());
+                    return const CircularProgressIndicator();
+                  }),
+                )),
               ),
             ),
           ),

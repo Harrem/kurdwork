@@ -3,14 +3,14 @@ import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
 
-class User {
-  String uid;
+class UserData {
+  String? uid;
   String? fname;
   String? lname;
   String? headline;
   String? about;
   List<String>? skills;
-  List<String>? educations;
+  List<Map<String, String>>? educations;
   List<String>? userLinks;
   List<String>? licenses;
   List<String>? certifications;
@@ -18,7 +18,7 @@ class User {
   String? profileUrl;
   DateTime? dateJoined;
   String? experience;
-  User({
+  UserData({
     required this.uid,
     this.fname,
     this.lname,
@@ -35,14 +35,14 @@ class User {
     this.experience,
   });
 
-  User copyWith({
+  UserData copyWith({
     String? uid,
     String? fname,
     String? lname,
     String? headline,
     String? about,
     List<String>? skills,
-    List<String>? educations,
+    List<Map<String, String>>? educations,
     List<String>? userLinks,
     List<String>? licenses,
     List<String>? certifications,
@@ -51,7 +51,7 @@ class User {
     DateTime? dateJoined,
     String? experience,
   }) {
-    return User(
+    return UserData(
       uid: uid ?? this.uid,
       fname: fname ?? this.fname,
       lname: lname ?? this.lname,
@@ -88,18 +88,18 @@ class User {
     };
   }
 
-  factory User.fromMap(Map<String, dynamic> map) {
-    return User(
-      uid: map['uid'] as String,
+//TODO: fix Skill type cast error
+  factory UserData.fromMap(Map<String, dynamic> map) {
+    return UserData(
+      uid: map['uid'] != null ? map['uid'] as String : null,
       fname: map['fname'] != null ? map['fname'] as String : null,
       lname: map['lname'] != null ? map['lname'] as String : null,
       headline: map['headline'] != null ? map['headline'] as String : null,
       about: map['about'] != null ? map['about'] as String : null,
-      skills: map['skills'] != null
-          ? List<String>.from(map['skills'] as List<String>)
-          : null,
+      skills: map['skills'] != null ? List<String>.from(map['skills']) : null,
       educations: map['educations'] != null
-          ? List<String>.from(map['educations'] as List<String>)
+          ? List<Map<String, String>>.from(
+              map['educations'] as List<Map<String, String>>)
           : null,
       userLinks: map['userLinks'] != null
           ? List<String>.from(map['userLinks'] as List<String>)
@@ -123,8 +123,8 @@ class User {
 
   String toJson() => json.encode(toMap());
 
-  factory User.fromJson(String source) =>
-      User.fromMap(json.decode(source) as Map<String, dynamic>);
+  factory UserData.fromJson(String source) =>
+      UserData.fromMap(json.decode(source) as Map<String, dynamic>);
 
   @override
   String toString() {
@@ -132,7 +132,7 @@ class User {
   }
 
   @override
-  bool operator ==(covariant User other) {
+  bool operator ==(covariant UserData other) {
     if (identical(this, other)) return true;
 
     return other.uid == uid &&

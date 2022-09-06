@@ -17,6 +17,13 @@ class Authentication {
     return firebaseApp;
   }
 
+  Future<bool> checkAuth() async {
+    if (auth.currentUser != null) {
+      return true;
+    }
+    return false;
+  }
+
   Future<User?> signUpWithEmailAndPassword(
       {required email, required password}) async {
     FirebaseAuth auth = FirebaseAuth.instance;
