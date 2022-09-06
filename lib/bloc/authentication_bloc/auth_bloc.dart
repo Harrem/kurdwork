@@ -13,6 +13,15 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final Authentication auth;
 
   AuthBloc({required this.auth}) : super(Unauthenticated()) {
+    on<AppStarted>(((event, emit) async {
+      bool userLoggedIn = await auth.checkAuth();
+      if (userLoggedIn) {
+        emit(Authenticated());
+      } else {
+        emit(Unauthenticated());
+      }
+    }));
+
     on<SignInRequested>(
       ((event, emit) async {
         emit(Loading());
