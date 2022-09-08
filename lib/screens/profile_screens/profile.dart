@@ -86,7 +86,7 @@ class ProfileScreen extends StatelessWidget {
                             style: Theme.of(context).textTheme.headline6,
                           ),
                           Text(
-                            "${userMock['headline']}",
+                            userBloc.userData.headline ?? "headline",
                             style: Theme.of(context).textTheme.subtitle2,
                           ),
                         ],
@@ -97,7 +97,7 @@ class ProfileScreen extends StatelessWidget {
                           child: IconButton(
                             onPressed: () {
                               Navigator.of(context).push(MaterialPageRoute(
-                                  builder: (context) => const EditProfile()));
+                                  builder: (context) => EditProfile()));
                             },
                             icon: const Icon(
                               CupertinoIcons.pencil_circle,
@@ -112,12 +112,12 @@ class ProfileScreen extends StatelessWidget {
                 //TODO: add realtime Data
                 ProfileCard(
                   text: "About",
-                  body: Text("${userMock['about']}"),
+                  body: Text(userBloc.userData.about ?? "write about yourself"),
                   trailing: IconButton(
                     onPressed: () {
                       showCupertinoModalPopup(
                         context: context,
-                        builder: (BuildContext context) => About(),
+                        builder: (BuildContext context) => const About(),
                       );
                     },
                     icon: const Icon(

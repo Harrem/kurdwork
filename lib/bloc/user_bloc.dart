@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kurdwork/Models/user.dart';
 import 'package:kurdwork/bloc/user_event.dart';
 import 'package:kurdwork/bloc/user_state.dart';
-import '../controller/profile_settings.dart';
+import '../controller/user_actions.dart';
 
 class UserBloc extends Bloc<UserEvents, UserState> {
   late UserData userData;
@@ -19,12 +19,13 @@ class UserBloc extends Bloc<UserEvents, UserState> {
         debugPrint("User initialized!");
       } else {
         emit(UserNotInitialized());
-        debugPrint("User NOT initialized!");
+        debugPrint("User did NOT initialize!");
       }
     }));
 
     on<UpdateProfilePicture>(((event, emit) {
-      SetProfilePic(userData.profileUrl);
+      userActions.updateProfilePic(event.image);
+      emit(SetProfilePic(event.image.path));
     }));
   }
 }

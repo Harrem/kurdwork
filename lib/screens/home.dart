@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kurdwork/mockData/userMockData.dart';
 import 'package:kurdwork/myWidgets.dart';
 import 'package:kurdwork/mockData/categoriesData.dart';
@@ -13,6 +14,8 @@ import 'package:kurdwork/services/jobServices.dart';
 import 'package:kurdwork/widgets/custom_card.dart';
 
 import '../Models/job.dart';
+import '../bloc/authentication_bloc/auth_bloc.dart';
+import '../bloc/authentication_bloc/auth_state.dart';
 
 //TODO: fix scroll bug
 
@@ -35,173 +38,178 @@ class _HomeScreenState extends State<HomeScreen>
   var searchController = TextEditingController();
 
   @override
-  void initState() {
-    super.initState();
-    user = FirebaseAuth.instance.currentUser!;
-    // job = getJobs();
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: Colors.blueGrey[50],
-      child: SafeArea(
-        bottom: false,
-        child: DefaultTabController(
-          length: 4,
-          child: Scaffold(
-            key: _scaffoldKey,
-            body: TabBarView(
-              controller: tabController,
-              physics: const NeverScrollableScrollPhysics(),
-              children: [
-                SingleChildScrollView(
-                  child: Column(
-                    children: [
-                      // topCategories(),
-                      const SizedBox(height: 20),
-                      // topDevs("title"),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 20),
-                        child: SizedBox(
-                          height: 50,
-                          child: TextField(
-                            controller: searchController,
-                            decoration: InputDecoration(
-                              contentPadding: const EdgeInsets.symmetric(
-                                  vertical: 5, horizontal: 15),
-                              hintText: "گەڕان",
-                              prefixIcon: const Icon(CupertinoIcons.search),
-                              suffixIcon: IconButton(
-                                onPressed: () {
-                                  searchController.clear();
-                                },
-                                icon: const Icon(CupertinoIcons.multiply),
+    return BlocListener<AuthBloc, AuthState>(
+      listener: (context, state) {
+        // TODO: implement listener
+        if (state is Unauthenticated) dispose();
+      },
+      child: Container(
+        color: Colors.blueGrey[50],
+        child: SafeArea(
+          bottom: false,
+          child: DefaultTabController(
+            length: 4,
+            child: Scaffold(
+              key: _scaffoldKey,
+              body: TabBarView(
+                controller: tabController,
+                physics: const NeverScrollableScrollPhysics(),
+                children: [
+                  SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        // topCategories(),
+                        const SizedBox(height: 20),
+                        // topDevs("title"),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 20),
+                          child: SizedBox(
+                            height: 50,
+                            child: TextField(
+                              controller: searchController,
+                              decoration: InputDecoration(
+                                contentPadding: const EdgeInsets.symmetric(
+                                    vertical: 5, horizontal: 15),
+                                hintText: "گەڕان",
+                                prefixIcon: const Icon(CupertinoIcons.search),
+                                suffixIcon: IconButton(
+                                  onPressed: () {
+                                    searchController.clear();
+                                  },
+                                  icon: const Icon(CupertinoIcons.multiply),
+                                ),
                               ),
                             ),
                           ),
                         ),
-                      ),
-                      const SizedBox(height: 20),
+                        const SizedBox(height: 20),
 
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 20),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              "Recent Jobs",
-                              style: Theme.of(context).textTheme.headline6,
-                            ),
-                            SizedBox(
-                              height: 45,
-                              width: 45,
-                              child: OutlinedButton(
-                                onPressed: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (BuildContext context) =>
-                                          JobPost(
-                                        user: user,
-                                      ),
-                                    ),
-                                  );
-                                },
-                                child: const Icon(Icons.filter_list),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 20),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                "Recent Jobs",
+                                style: Theme.of(context).textTheme.headline6,
                               ),
-                            ),
-                          ],
+                              SizedBox(
+                                height: 45,
+                                width: 45,
+                                child: OutlinedButton(
+                                  onPressed: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (BuildContext context) =>
+                                            JobPost(
+                                          user: user,
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                  child: const Icon(Icons.filter_list),
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
-                      ),
-                      // JobDetailCard(job: job),
-                      const SizedBox(height: 20),
-                      FutureBuilder<List<Widget>>(
-                          future: mostRecentJobs(),
-                          builder: ((context, snapshot) {
-                            if (snapshot.data != null) {
-                              return Column(children: snapshot.data!);
-                            }
-                            if (snapshot.data == null) {
-                              debugPrint("null");
-                            }
-                            return const Center(
-                              child: CircularProgressIndicator(),
-                            );
-                          })),
-                      const SizedBox(height: 10),
-                    ],
+                        // JobDetailCard(job: job),
+                        const SizedBox(height: 20),
+                        FutureBuilder<List<Widget>>(
+                            future: mostRecentJobs(),
+                            builder: ((context, snapshot) {
+                              if (snapshot.data != null) {
+                                return Column(children: snapshot.data!);
+                              }
+                              if (snapshot.data == null) {
+                                debugPrint("null");
+                              }
+                              return const Center(
+                                child: CircularProgressIndicator(),
+                              );
+                            })),
+                        const SizedBox(height: 10),
+                      ],
+                    ),
                   ),
-                ),
-                SearchScreen(),
-                SearchScreen(),
-                ProfileScreen(),
-              ],
-            ),
-            bottomNavigationBar: Container(
-              padding: const EdgeInsets.only(bottom: 10),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                boxShadow: [
-                  BoxShadow(
-                    blurRadius: 20,
-                    color: Colors.black.withOpacity(.1),
-                  )
+                  SearchScreen(),
+                  SearchScreen(),
+                  ProfileScreen(),
                 ],
               ),
-              child: Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 15.0, vertical: 10),
-                child: GNav(
-                  rippleColor: Colors.grey[300]!,
-                  hoverColor: Colors.grey[100]!,
-                  gap: 8,
-                  activeColor: Colors.black,
-                  iconSize: 24,
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-                  duration: const Duration(milliseconds: 400),
-                  // tabBackgroundColor: const Color.fromARGB(255, 242, 235, 255),
-                  color: Colors.black,
-                  tabs: const [
-                    GButton(
-                      icon: CupertinoIcons.briefcase,
-                      text: 'Jobs',
-                    ),
-                    GButton(
-                      icon: CupertinoIcons.heart,
-                      text: 'Saved',
-                    ),
-                    GButton(
-                      icon: CupertinoIcons.bell,
-                      text: 'Notifications',
-                    ),
-                    GButton(
-                      icon: CupertinoIcons.person,
-                      text: 'Profile',
-                    ),
+              bottomNavigationBar: Container(
+                padding: const EdgeInsets.only(bottom: 10),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  boxShadow: [
+                    BoxShadow(
+                      blurRadius: 20,
+                      color: Colors.black.withOpacity(.1),
+                    )
                   ],
-                  selectedIndex: currentIndex,
-                  onTabChange: (index) {
-                    setState(
-                      () {
-                        tabController.index = index;
-                      },
-                    );
-                  },
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 15.0, vertical: 10),
+                  child: GNav(
+                    rippleColor: Colors.grey[300]!,
+                    hoverColor: Colors.grey[100]!,
+                    gap: 8,
+                    activeColor: Colors.black,
+                    iconSize: 24,
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 20, vertical: 12),
+                    duration: const Duration(milliseconds: 400),
+                    // tabBackgroundColor: const Color.fromARGB(255, 242, 235, 255),
+                    color: Colors.black,
+                    tabs: const [
+                      GButton(
+                        icon: CupertinoIcons.briefcase,
+                        text: 'Jobs',
+                      ),
+                      GButton(
+                        icon: CupertinoIcons.heart,
+                        text: 'Saved',
+                      ),
+                      GButton(
+                        icon: CupertinoIcons.bell,
+                        text: 'Notifications',
+                      ),
+                      GButton(
+                        icon: CupertinoIcons.person,
+                        text: 'Profile',
+                      ),
+                    ],
+                    selectedIndex: currentIndex,
+                    onTabChange: (index) {
+                      setState(
+                        () {
+                          tabController.index = index;
+                        },
+                      );
+                    },
+                  ),
                 ),
               ),
-            ),
-            floatingActionButton: FloatingActionButton(
-              onPressed: () {
-                FirebaseFirestore.instance
-                    .collection('users')
-                    .doc(FirebaseAuth.instance.currentUser!.uid)
-                    .set(userMock);
-                debugPrint("data has been written");
-                // Navigator.of(context).push(MaterialPageRoute(builder: (context)=> JobPost()));
-              },
-              child: const Icon(Icons.add),
+              floatingActionButton: FloatingActionButton(
+                onPressed: () {
+                  FirebaseFirestore.instance
+                      .collection('users')
+                      .doc(FirebaseAuth.instance.currentUser!.uid)
+                      .set(userMock);
+                  debugPrint("data has been written");
+                  // Navigator.of(context).push(MaterialPageRoute(builder: (context)=> JobPost()));
+                },
+                child: const Icon(Icons.add),
+              ),
             ),
           ),
         ),

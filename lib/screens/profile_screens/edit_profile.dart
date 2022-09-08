@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -10,10 +12,17 @@ import '../../bloc/user_bloc.dart';
 //TODO: Add image croping option
 
 class EditProfile extends StatelessWidget {
-  const EditProfile({Key? key}) : super(key: key);
+  EditProfile({Key? key}) : super(key: key);
+  final fnameController = TextEditingController();
+  final lnameController = TextEditingController();
+  final headlineController = TextEditingController();
+  PlatformFile? profilePic;
   @override
   Widget build(context) {
     var userBloc = context.read<UserBloc>();
+    fnameController.text = userBloc.userData.fname ?? '';
+    lnameController.text = userBloc.userData.lname ?? '';
+    headlineController.text = userBloc.userData.headline ?? '';
 
     return Material(
       child: Scaffold(
@@ -40,10 +49,14 @@ class EditProfile extends StatelessWidget {
               ),
               const Divider(),
               BlocListener<UserBloc, UserState>(
-                listener: (context, state) {},
+                listener: (context, state) {
+                  if (state is SetProfilePic) {
+                    Image.file(File(state.picUrl!));
+                  }
+                },
                 child: OvalPicture(
-                    image: userBloc.userData.profileUrl!.isNotEmpty
-                        ? Image.network(userBloc.userData.profileUrl!)
+                    image: profilePic != null
+                        ? Image.file(File(profilePic!.path!))
                         : Image.asset("assets/images/avatar3.png"),
                     scale: 100),
               ),
@@ -55,6 +68,7 @@ class EditProfile extends StatelessWidget {
                   if (result != null) {
                     var platformFile = result.files[0];
                     debugPrint(platformFile.path);
+                    profilePic = platformFile;
                     // ignore: use_build_context_synchronously
                     context
                         .read<UserBloc>()
@@ -64,20 +78,32 @@ class EditProfile extends StatelessWidget {
                 child: const Text("Choose Picture"),
               ),
               const Divider(),
-              const TextField(
-                decoration: InputDecoration(labelText: "First Name"),
+              TextField(
+                controller: fnameController,
+                decoration: const InputDecoration(labelText: "First Name"),
               ),
               const Divider(),
-              const TextField(
-                decoration: InputDecoration(labelText: "Last Name"),
+              TextField(
+                controller: lnameController,
+                decoration: const InputDecoration(labelText: "Last Name"),
               ),
               const Divider(),
-              const TextField(
-                decoration: InputDecoration(labelText: "Headline"),
+              TextField(
+                controller: headlineController,
+                decoration: const InputDecoration(labelText: "Headline"),
               ),
               const Divider(),
               ElevatedButton(
-                onPressed: () {},
+                onPressed: () {
+                  userBloc.userActions
+                      .updateName(fnameController.text, lnameController.text);
+
+                  userBloc.userActions.updateHeadline(headlineController.text);
+
+                  if (profilePic != null) {
+                    userBloc.userActions.updateProfilePic(profilePic!);
+                  }
+                },
                 child: const Text("Save"),
               ),
             ],
