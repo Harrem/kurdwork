@@ -12,22 +12,26 @@ import 'package:kurdwork/Models/user.dart';
 class UserActions {
   FirebaseStorage firebaseStorage = FirebaseStorage.instance;
   FirebaseAuth firebaseAuth = FirebaseAuth.instance;
-
   late DocumentReference<Map<String, dynamic>> docRef;
 
   ///Initailize userData
-  ///if userData is null, it returns null.
+  ///if userData is null, it returns a null userdata.
   Future<UserData?> initializeUser() async {
     final String uid = FirebaseAuth.instance.currentUser!.uid;
-    docRef = FirebaseFirestore.instance.collection('users').doc(uid);
     UserData? userData;
+
+    docRef = FirebaseFirestore.instance.collection('users').doc(uid);
     var map = await docRef.get();
-    if (map.data()!.entries.isNotEmpty) {
+    if (map.data() == null) {
+      debugPrint(
+          "!!!!!!!!!!!!!!!     is First Time user   and null   !!!!!!!!!!!!!");
+    } else if (map.data()!.entries.isNotEmpty) {
       userData = UserData.fromMap(map.data()!);
       debugPrint("user data initialized, data: ${map.data()!.entries}");
     } else {
       debugPrint("!!!!!!!!!!!!!!!     is First Time user      !!!!!!!!!!!!!");
     }
+
     return userData;
   }
 
@@ -40,27 +44,26 @@ class UserActions {
   ///Creates a new UserData and returns it
   Future<UserData> createProfile() async {
     final String uid = FirebaseAuth.instance.currentUser!.uid;
-
     return UserData(uid: uid);
   }
 
   ///Updates user first name and lastname
   Future<void> updateName(String fname, String lname) async {
-    docRef.set({'fname': fname, 'lname': lname});
+    docRef.update({'fname': fname, 'lname': lname});
   }
 
   ///updates user headline (appers under user name)
   Future<void> updateHeadline(String headline) async {
-    docRef.set({'headline': headline});
+    docRef.update({'headline': headline});
   }
 
   ///updates user about data
   Future<void> updateAbout(String about) async {
-    docRef.set({'about': about});
+    await docRef.update({'about': about});
   }
 
   /// updates user Profile picture and uploads it to firestore
-  Future<void> updateProfilePic(PlatformFile platformFile) async {
+  Future<String?> updateProfilePic(PlatformFile platformFile) async {
     final String uid = FirebaseAuth.instance.currentUser!.uid;
 
     //profile picture path on firebase storage
@@ -71,12 +74,35 @@ class UserActions {
     if (platformFile.path != null || platformFile.path!.isNotEmpty) {
       File file = File(platformFile.path!);
       try {
-        await userStorageRef.putFile(file);
+        var snapshot = await userStorageRef.putFile(file);
+        if (snapshot.state == TaskState.running) {
+          debugPrint("Uploading File");
+        }
+        if (snapshot.state == TaskState.error) {
+          debugPrint("Upload Failed");
+        }
+        if (snapshot.state == TaskState.success) {
+          debugPrint("File Uploaded!");
+        }
+        var downloadUrl = await userStorageRef.getDownloadURL();
+        docRef.update({'profileUrl': downloadUrl});
+        return downloadUrl;
       } catch (e) {
-        Future.error(e.toString());
+        Future.error("error");
+        debugPrint("error when uplaoding picture");
       }
     } else {
       debugPrint("Failed to upload, file is null");
     }
+    return null;
+  }
+
+  Future<List<String>> updateSkills(List<String> skills) async {
+    await docRef.update({'skills': skills});
+    return skills;
+  }
+
+  Future<void> updateData(UserData data) async {
+    docRef.update(data.toMap());
   }
 }

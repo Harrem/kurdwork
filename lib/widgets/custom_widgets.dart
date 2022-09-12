@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class OvalPicture extends StatelessWidget {
-  OvalPicture({Key? key, required this.image, required this.scale})
+  OvalPicture({Key? key, required this.image, this.scale = 10})
       : super(key: key);
 
   Image image;

@@ -23,9 +23,30 @@ class UserBloc extends Bloc<UserEvents, UserState> {
       }
     }));
 
-    on<UpdateProfilePicture>(((event, emit) {
-      userActions.updateProfilePic(event.image);
-      emit(SetProfilePic(event.image.path));
+    on<UpdateProfilePicture>(((event, emit) async {
+      try {
+        var downloadUrl = await userActions.updateProfilePic(event.image);
+        userData.profileUrl = downloadUrl;
+        debugPrint(downloadUrl);
+        if (userData.profileUrl != null) {
+          debugPrint(userData.profileUrl);
+          emit(ProfilePictureUpdated(userData.profileUrl!));
+        } else {
+          debugPrint("Profile image is null");
+        }
+      } catch (e) {
+        debugPrint(e.toString());
+      }
     }));
+
+    on<UpdateAbout>(((event, emit) {
+      userActions.updateAbout(event.data);
+      emit(AboutUpdated(event.data));
+    }));
+
+    on<UpdateSkills>((event, emit) async {
+      var skills = await userActions.updateSkills(event.skills);
+      emit(SkillsUpdated(skills));
+    });
   }
 }

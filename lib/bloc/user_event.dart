@@ -48,3 +48,5 @@ class UpdateLicensesAndCertifications {}
 class UpdateCV extends UserEvents {}
 
 class FirstTimeUser extends UserEvents {}
+
+class Error extends UserEvents {}

@@ -8,8 +8,9 @@ import 'package:kurdwork/services/jobServices.dart';
 import '../Models/job.dart';
 
 class JobPost extends StatefulWidget {
-  const JobPost({Key? key, required this.user}) : super(key: key);
-  final User user;
+  const JobPost({
+    Key? key,
+  }) : super(key: key);
   @override
   State<JobPost> createState() => _JobPostState();
 }
@@ -23,7 +24,6 @@ class _JobPostState extends State<JobPost> {
   @override
   void initState() {
     super.initState();
-    user = widget.user;
   }
 
   @override
