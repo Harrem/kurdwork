@@ -28,8 +28,6 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen>
     with SingleTickerProviderStateMixin {
-  late User user;
-
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   late final tabController = TabController(length: 4, vsync: this);
@@ -77,7 +75,7 @@ class _HomeScreenState extends State<HomeScreen>
                               decoration: InputDecoration(
                                 contentPadding: const EdgeInsets.symmetric(
                                     vertical: 5, horizontal: 15),
-                                hintText: "گەڕان",
+                                hintText: "Search",
                                 prefixIcon: const Icon(CupertinoIcons.search),
                                 suffixIcon: IconButton(
                                   onPressed: () {
@@ -109,9 +107,7 @@ class _HomeScreenState extends State<HomeScreen>
                                       context,
                                       MaterialPageRoute(
                                         builder: (BuildContext context) =>
-                                            JobPost(
-                                          user: user,
-                                        ),
+                                            const JobPost(),
                                       ),
                                     );
                                   },
