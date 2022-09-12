@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:kurdwork/bloc/user_event.dart';
+
+import '../../bloc/user_bloc.dart';
 
 class About extends StatelessWidget {
-  const About({Key? key}) : super(key: key);
-
+  About({Key? key}) : super(key: key);
+  final TextEditingController textController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Material(
@@ -27,6 +31,7 @@ class About extends StatelessWidget {
                 color: Colors.grey[200],
               ),
               TextField(
+                controller: textController,
                 maxLines: 6,
                 decoration: InputDecoration(
                     fillColor: Colors.grey[300],
@@ -42,7 +47,13 @@ class About extends StatelessWidget {
                       },
                       child: const Text("Cancel")),
                   const VerticalDivider(),
-                  ElevatedButton(onPressed: () {}, child: const Text("Done")),
+                  ElevatedButton(
+                      onPressed: () {
+                        context
+                            .read<UserBloc>()
+                            .add(UpdateAbout(textController.text));
+                      },
+                      child: const Text("Done")),
                 ],
               ),
             ],

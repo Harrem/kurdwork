@@ -48,17 +48,21 @@ class EditProfile extends StatelessWidget {
                 ],
               ),
               const Divider(),
-              BlocListener<UserBloc, UserState>(
-                listener: (context, state) {
-                  if (state is SetProfilePic) {
-                    Image.file(File(state.picUrl!));
+              //Profile Picture
+              BlocBuilder<UserBloc, UserState>(
+                builder: (context, state) {
+                  if (state is ProfilePictureUpdated) {
+                    debugPrint("profile notified");
+                    return OvalPicture(
+                      image: Image.file(File(profilePic!.path!)),
+                      scale: 100,
+                    );
                   }
+                  return OvalPicture(
+                    image: Image.asset("assets/images/avatar3.png"),
+                    scale: 100,
+                  );
                 },
-                child: OvalPicture(
-                    image: profilePic != null
-                        ? Image.file(File(profilePic!.path!))
-                        : Image.asset("assets/images/avatar3.png"),
-                    scale: 100),
               ),
               const Divider(),
               OutlinedButton(
