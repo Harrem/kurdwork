@@ -1,10 +1,23 @@
 # kurdwork
 
-A new Flutter project.
+Job vacancy application for both Android&iOS.
 
 ## Getting Started
 
-This project is a starting point for a Flutter application.
+This project is made and will be maintained with Flutter.
+
+## Project Core Features
+- User Authentication with Firebase Authentication
+- Sign in with Google
+- Posting job to Firebase Database (aka Firestore)
+- Apply for jobs
+- Profile Management
+- State Management with Bloc Design Pattern
+more features will be added in the future
+
+
+##Screenshots
+
 
 A few resources to get you started if this is your first Flutter project:
 
