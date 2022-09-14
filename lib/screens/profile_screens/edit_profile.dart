@@ -3,11 +3,11 @@ import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:kurdwork/bloc/user_event.dart';
-import 'package:kurdwork/bloc/user_state.dart';
 import 'package:kurdwork/widgets/custom_widgets.dart';
 
-import '../../bloc/user_bloc.dart';
+import '../../bloc/user_bloc/user_bloc.dart';
+import '../../bloc/user_bloc/user_event.dart';
+import '../../bloc/user_bloc/user_state.dart';
 
 //TODO: Add image croping option
 

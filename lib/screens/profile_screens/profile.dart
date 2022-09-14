@@ -2,25 +2,22 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kurdwork/Models/user.dart';
-import 'package:kurdwork/bloc/user_bloc.dart';
-import 'package:kurdwork/bloc/user_state.dart';
-import 'package:kurdwork/mockData/userMockData.dart';
 import 'package:kurdwork/screens/profile_screens/add_education.dart';
 import 'package:kurdwork/screens/profile_screens/edit_profile.dart';
 import 'package:kurdwork/screens/profile_screens/edit_userlinks.dart';
 import 'package:kurdwork/screens/settings.dart';
 import 'package:kurdwork/widgets/custom_card.dart';
 import 'package:kurdwork/widgets/custom_widgets.dart';
+import '../../bloc/user_bloc/user_bloc.dart';
+import '../../bloc/user_bloc/user_state.dart';
 import 'add_skill.dart';
 import 'about.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     final UserData userData = BlocProvider.of<UserBloc>(context).userData;
-    var userBloc = context.read<UserBloc>();
     return BlocListener<UserBloc, UserState>(
       listener: (context, state) {
         if (state is UserInitState) {}
@@ -162,24 +159,32 @@ class ProfileScreen extends StatelessWidget {
                       );
                     },
                   ),
-
+//TODO: get skills to working
                   const SizedBox(height: 10),
                   ProfileCard(
                     text: "Skills",
                     body: SizedBox(
-                      child: Wrap(
-                        spacing: 15,
-                        runSpacing: 15,
-                        children: List.generate(
-                          (userData.skills ?? []).length,
-                          (index) => index == 6
-                              ? const CustomChip(
-                                  label: Text("More"),
-                                )
-                              : CustomChip(
-                                  label: Text((userData.skills
-                                      as List<String>)[index])),
-                        ),
+                      child: BlocBuilder<UserBloc, UserState>(
+                        builder: (context, state) {
+                          List<String> skills;
+                          if (state is SkillsUpdated) {
+                            skills = state.skills;
+                          } else {
+                            skills = userData.skills ?? [];
+                          }
+                          return Wrap(
+                            spacing: 15,
+                            runSpacing: 15,
+                            children: List.generate(
+                              skills.length,
+                              (index) => index >= 10
+                                  ? const CustomChip(
+                                      label: Text("More"),
+                                    )
+                                  : CustomChip(label: Text((skills)[index])),
+                            ),
+                          );
+                        },
                       ),
                     ),
                     trailing: IconButton(

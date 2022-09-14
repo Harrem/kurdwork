@@ -6,15 +6,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kurdwork/bloc/authentication_bloc/auth_bloc.dart';
 import 'package:kurdwork/bloc/authentication_bloc/auth_event.dart';
-import 'package:kurdwork/bloc/user_bloc.dart';
-import 'package:kurdwork/bloc/user_event.dart';
-import 'package:kurdwork/bloc/user_state.dart';
 import 'package:kurdwork/screens/create_profile.dart';
 import 'package:kurdwork/screens/home.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:kurdwork/screens/signin.dart';
 import 'package:kurdwork/theme/custom_theme.dart';
 import 'bloc/authentication_bloc/auth_state.dart';
+import 'bloc/user_bloc/user_bloc.dart';
+import 'bloc/user_bloc/user_event.dart';
+import 'bloc/user_bloc/user_state.dart';
 import 'firebase_options.dart';
 import 'services/authentication.dart';
 

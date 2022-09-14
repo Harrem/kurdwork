@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kurdwork/widgets/custom_widgets.dart';
 
+import '../../bloc/user_bloc/user_bloc.dart';
+import '../../bloc/user_bloc/user_event.dart';
+import '../../bloc/user_bloc/user_state.dart';
 import '../../mockData/userMockData.dart';
 
 class EditSkills extends StatelessWidget {
@@ -8,6 +12,8 @@ class EditSkills extends StatelessWidget {
   final TextEditingController controller = TextEditingController();
   @override
   Widget build(BuildContext context) {
+    List<String> skills;
+    skills = context.read<UserBloc>().userData.skills ?? [];
     return Material(
       color: Colors.transparent,
       child: Center(
@@ -38,31 +44,65 @@ class EditSkills extends StatelessWidget {
                 child: Padding(
                   padding: const EdgeInsets.all(10.0),
                   child: SingleChildScrollView(
-                    child: Wrap(
-                      spacing: 15,
-                      runSpacing: 15,
-                      clipBehavior: Clip.hardEdge,
-                      children: List.generate(
-                        (userMock['skills'] as List<String>).length,
-                        (index) => Stack(
-                          alignment: Alignment.centerRight,
-                          children: [
-                            CustomChip(
-                              padding: const EdgeInsets.fromLTRB(10, 7, 30, 5),
-                              label: Text(
-                                  (userMock['skills'] as List<String>)[index]),
-                            ),
-                            IconButton(
-                              onPressed: () {},
-                              icon: const Icon(
-                                Icons.remove_circle,
-                                size: 20,
-                                color: Colors.grey,
+                    child: BlocBuilder<UserBloc, UserState>(
+                      builder: (context, state) {
+                        skills = context.read<UserBloc>().userData.skills ?? [];
+                        if (state is SkillsUpdated) {
+                          skills = state.skills;
+                          return Wrap(
+                            spacing: 15,
+                            runSpacing: 15,
+                            clipBehavior: Clip.hardEdge,
+                            children: List.generate(
+                              (skills).length,
+                              (index) => Stack(
+                                alignment: Alignment.centerRight,
+                                children: [
+                                  CustomChip(
+                                    padding:
+                                        const EdgeInsets.fromLTRB(10, 7, 30, 5),
+                                    label: Text((skills)[index]),
+                                  ),
+                                  IconButton(
+                                    onPressed: () {},
+                                    icon: const Icon(
+                                      Icons.remove_circle,
+                                      size: 20,
+                                      color: Colors.grey,
+                                    ),
+                                  ),
+                                ],
                               ),
                             ),
-                          ],
-                        ),
-                      ),
+                          );
+                        }
+                        return Wrap(
+                          spacing: 15,
+                          runSpacing: 15,
+                          clipBehavior: Clip.hardEdge,
+                          children: List.generate(
+                            (skills).length,
+                            (index) => Stack(
+                              alignment: Alignment.centerRight,
+                              children: [
+                                CustomChip(
+                                  padding:
+                                      const EdgeInsets.fromLTRB(10, 7, 30, 5),
+                                  label: Text((skills)[index]),
+                                ),
+                                IconButton(
+                                  onPressed: () {},
+                                  icon: const Icon(
+                                    Icons.remove_circle,
+                                    size: 20,
+                                    color: Colors.grey,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        );
+                      },
                     ),
                   ),
                 ),
@@ -79,6 +119,8 @@ class EditSkills extends StatelessWidget {
                   OutlinedButton(
                     onPressed: () {
                       String skill = controller.text;
+                      skills.add(skill);
+                      context.read<UserBloc>().add(UpdateSkills(skills));
                     },
                     child: const Text("Add"),
                   ),
