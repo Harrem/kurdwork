@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import 'package:kurdwork/Models/user.dart';
+import 'package:kurdwork/Data/Models/user.dart';
 
 abstract class UserState extends Equatable {}
 

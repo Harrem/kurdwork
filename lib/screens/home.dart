@@ -3,17 +3,17 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:kurdwork/mockData/userMockData.dart';
+import 'package:kurdwork/Data/mockData/userMockData.dart';
 import 'package:kurdwork/myWidgets.dart';
-import 'package:kurdwork/mockData/categoriesData.dart';
+import 'package:kurdwork/Data/mockData/categoriesData.dart';
 import 'package:kurdwork/screens/jobPostScreen.dart';
 import 'package:kurdwork/screens/savedJobsScreen.dart';
-import 'package:kurdwork/screens/profile_screens/profile.dart';
+import 'package:kurdwork/screens/profile/profile.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:kurdwork/services/jobServices.dart';
 import 'package:kurdwork/widgets/custom_card.dart';
 
-import '../Models/job.dart';
+import '../Data/Models/job.dart';
 import '../bloc/authentication_bloc/auth_bloc.dart';
 import '../bloc/authentication_bloc/auth_state.dart';
 
@@ -186,26 +186,25 @@ class _HomeScreenState extends State<HomeScreen>
                     ],
                     selectedIndex: currentIndex,
                     onTabChange: (index) {
-                      setState(
-                        () {
-                          tabController.index = index;
-                        },
-                      );
+                      tabController.index = index;
+                      setState(() {});
                     },
                   ),
                 ),
               ),
-              floatingActionButton: FloatingActionButton(
-                onPressed: () {
-                  FirebaseFirestore.instance
-                      .collection('users')
-                      .doc(FirebaseAuth.instance.currentUser!.uid)
-                      .set(userMock);
-                  debugPrint("data has been written");
-                  // Navigator.of(context).push(MaterialPageRoute(builder: (context)=> JobPost()));
-                },
-                child: const Icon(Icons.add),
-              ),
+              floatingActionButton: (tabController.index == 0)
+                  ? FloatingActionButton(
+                      onPressed: () {
+                        // Navigator.of(context).push(MaterialPageRoute(builder: (context)=> JobPost()));
+                      },
+                      child: const Icon(Icons.add),
+                    )
+                  : FloatingActionButton(
+                      onPressed: () {
+                        // Navigator.of(context).push(MaterialPageRoute(builder: (context)=> JobPost()));
+                      },
+                      child: const Icon(Icons.settings_outlined),
+                    ),
             ),
           ),
         ),

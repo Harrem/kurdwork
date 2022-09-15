@@ -5,7 +5,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
-import 'package:kurdwork/Models/user.dart';
+import 'package:kurdwork/Data/Models/user.dart';
 
 ///User common actions like
 ///updating profile info and picture
@@ -13,11 +13,12 @@ class UserActions {
   FirebaseStorage firebaseStorage = FirebaseStorage.instance;
   FirebaseAuth firebaseAuth = FirebaseAuth.instance;
   late DocumentReference<Map<String, dynamic>> docRef;
+  late String uid;
 
   ///Initailize userData
   ///if userData is null, it returns a null userdata.
   Future<UserData?> initializeUser() async {
-    final String uid = FirebaseAuth.instance.currentUser!.uid;
+    uid = FirebaseAuth.instance.currentUser!.uid;
     UserData? userData;
 
     docRef = FirebaseFirestore.instance.collection('users').doc(uid);
@@ -36,14 +37,11 @@ class UserActions {
   }
 
   Future<UserData> updateUserData() async {
-    final String uid = FirebaseAuth.instance.currentUser!.uid;
-
     return UserData(uid: uid);
   }
 
   ///Creates a new UserData and returns it
   Future<UserData> createProfile() async {
-    final String uid = FirebaseAuth.instance.currentUser!.uid;
     return UserData(uid: uid);
   }
 
@@ -64,8 +62,6 @@ class UserActions {
 
   /// updates user Profile picture and uploads it to firestore
   Future<String?> updateProfilePic(PlatformFile platformFile) async {
-    final String uid = FirebaseAuth.instance.currentUser!.uid;
-
     //profile picture path on firebase storage
     String storageRef = "$uid/profilePic.${platformFile.extension}";
 

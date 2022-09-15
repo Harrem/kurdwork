@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:kurdwork/Models/user.dart';
+import 'package:kurdwork/Data/Models/user.dart';
 import '../../controller/user_actions.dart';
 import 'user_event.dart';
 import 'user_state.dart';
@@ -12,7 +12,9 @@ class UserBloc extends Bloc<UserEvents, UserState> {
   UserBloc() : super(UserInitState()) {
     on<InitializeUser>(((event, emit) async {
       debugPrint("Initializing User!");
+
       UserData? tempUserData = await userActions.initializeUser();
+
       if (tempUserData != null) {
         userData = tempUserData;
         emit(UserInitialized());
@@ -27,15 +29,13 @@ class UserBloc extends Bloc<UserEvents, UserState> {
       try {
         var downloadUrl = await userActions.updateProfilePic(event.image);
         userData.profileUrl = downloadUrl;
-        debugPrint(downloadUrl);
         if (userData.profileUrl != null) {
-          debugPrint(userData.profileUrl);
           emit(ProfilePictureUpdated(userData.profileUrl!));
         } else {
           debugPrint("Profile image is null");
         }
       } catch (e) {
-        debugPrint(e.toString());
+        debugPrint("Profile update Error: $e");
       }
     }));
 

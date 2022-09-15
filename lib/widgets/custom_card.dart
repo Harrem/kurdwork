@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:kurdwork/Models/job.dart';
+import 'package:kurdwork/Data/Models/job.dart';
 import 'package:kurdwork/controller/time.dart';
 
 import '../screens/jobViewScreen.dart';
