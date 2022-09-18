@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kurdwork/widgets/custom_widgets.dart';
-import '../../bloc/user_bloc/user_bloc.dart';
-import '../../bloc/user_bloc/user_event.dart';
-import '../../bloc/user_bloc/user_state.dart';
+import '../../../bloc/user_bloc/user_bloc.dart';
+import '../../../bloc/user_bloc/user_event.dart';
+import '../../../bloc/user_bloc/user_state.dart';
 
 class EditSkills extends StatelessWidget {
   EditSkills({Key? key}) : super(key: key);

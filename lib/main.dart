@@ -1,15 +1,13 @@
-// ignore_for_file: use_build_context_synchronously
-
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kurdwork/bloc/authentication_bloc/auth_bloc.dart';
 import 'package:kurdwork/bloc/authentication_bloc/auth_event.dart';
-import 'package:kurdwork/screens/create_profile.dart';
-import 'package:kurdwork/screens/home.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:kurdwork/screens/signin.dart';
+import 'package:kurdwork/route.dart';
+import 'package:kurdwork/routes/create_profile.dart';
+import 'package:kurdwork/routes/home.dart';
+import 'package:kurdwork/routes/signin.dart';
 import 'package:kurdwork/theme/custom_theme.dart';
 import 'bloc/authentication_bloc/auth_state.dart';
 import 'bloc/user_bloc/user_bloc.dart';
@@ -45,16 +43,8 @@ class MyApp extends StatelessWidget {
         ],
         child: MaterialApp(
           debugShowCheckedModeBanner: false,
-          localizationsDelegates: const [
-            GlobalCupertinoLocalizations.delegate,
-            GlobalMaterialLocalizations.delegate,
-            GlobalWidgetsLocalizations.delegate,
-          ],
-          supportedLocales: const [
-            Locale('en', ''),
-          ],
-          locale: const Locale('en', ''),
           theme: CustomTheme.lightTheme,
+          onGenerateRoute: (settings) => RouteGenerator.generateRoute(settings),
           home: Scaffold(
             body: Center(
               child: BlocListener<AuthBloc, AuthState>(
@@ -87,7 +77,7 @@ class MyApp extends StatelessWidget {
                       ),
                     );
                   } else if (state is UserInitialized) {
-                    Navigator.push(
+                    Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(
                         builder: (context) => const HomeScreen(),

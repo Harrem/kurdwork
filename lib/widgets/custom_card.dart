@@ -1,9 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:kurdwork/Data/Models/job.dart';
+import 'package:kurdwork/Models/job.dart';
 import 'package:kurdwork/controller/time.dart';
 
-import '../screens/jobViewScreen.dart';
+import '../routes/jobViewScreen.dart';
 
 class JobCard extends StatelessWidget {
   const JobCard({Key? key, required this.job}) : super(key: key);

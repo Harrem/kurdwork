@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'signin.dart';
-import 'package:kurdwork/myWidgets.dart';
 
 class WelcomeScreen extends StatefulWidget {
   const WelcomeScreen({Key? key}) : super(key: key);
@@ -41,8 +40,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                   ),
                 ),
                 const SizedBox(height: 70),
-                MyWidgets.myElevatedButton(
-                  text: "چوونە بەژوورەوە",
+                ElevatedButton(
                   onPressed: () {
                     Navigator.push(
                       context,
@@ -50,6 +48,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                           builder: (context) => const SigninScreen()),
                     );
                   },
+                  child: const Text("چوونە بەژوورەوە"),
                 ),
                 Padding(
                   padding: const EdgeInsets.all(20.0),

@@ -5,7 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:kurdwork/services/jobServices.dart';
-import '../Data/Models/job.dart';
+import '../Models/job.dart';
 
 class JobPost extends StatefulWidget {
   const JobPost({

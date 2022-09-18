@@ -4,7 +4,7 @@ import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import '../Data/Models/job.dart';
+import '../Models/job.dart';
 
 class JobServices {
   FirebaseFirestore firestore = FirebaseFirestore.instance;

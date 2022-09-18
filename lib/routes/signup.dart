@@ -1,14 +1,10 @@
 // ignore_for_file: file_names
 
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kurdwork/bloc/authentication_bloc/auth_bloc.dart';
 import 'package:kurdwork/bloc/authentication_bloc/auth_event.dart';
-import 'package:kurdwork/myWidgets.dart';
-import 'package:kurdwork/screens/create_profile.dart';
 import 'signin.dart';
 
 class SignupScreen extends StatefulWidget {
@@ -34,9 +30,10 @@ class _SignupScreenState extends State<SignupScreen> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                MyWidgets.h1("Create New Account"),
+                Text("Create New Account",
+                    style: Theme.of(context).textTheme.headline5),
                 const SizedBox(height: 30),
-                MyWidgets.h3("Sign up with", color: Colors.grey),
+                const Text("Sign up with"),
                 const SizedBox(height: 10),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -49,27 +46,8 @@ class _SignupScreenState extends State<SignupScreen> {
                         child: ElevatedButton(
                           onPressed: () async {
                             authBloc.add(GoogleSignInRequested());
-
-                            //TODO: Check if user signed in or up the first time then navigate to CreateProfile
-
-                            // bool exists = await FirebaseFirestore.instance
-                            //     .collection("users")
-                            //     .doc(user!.uid)
-                            //     .get()
-                            //     .then((value) => value.exists);
-                            // if (exists) {
-                            //   // ignore: use_build_context_synchronously
-                            //   Navigator.pushReplacement(
-                            //     context,
-                            //     MaterialPageRoute(
-                            //       builder: (BuildContext context) =>
-                            //           const CreateProfile(),
-                            //     ),
-                            //   );
-                            // }
                           },
                           style: ElevatedButton.styleFrom(
-                              primary: const Color.fromARGB(255, 255, 255, 255),
                               elevation: 0,
                               fixedSize: const Size(60, 60),
                               padding: const EdgeInsets.all(9)),
@@ -103,7 +81,7 @@ class _SignupScreenState extends State<SignupScreen> {
                   ],
                 ),
                 const SizedBox(height: 40),
-                MyWidgets.h3("Create using Email", color: Colors.grey),
+                Text("Create using Email"),
                 const SizedBox(height: 10),
                 Form(
                   key: _formKey,
@@ -171,25 +149,13 @@ class _SignupScreenState extends State<SignupScreen> {
                               emailController.text, passwordController.text),
                         );
                       }
-
                       //TODO: get to create profile
-                      // if (user != null) {
-                      //   debugPrint("User created \n user email: $user");
-                      //   Navigator.pushReplacement(
-                      //     context,
-                      //     MaterialPageRoute(
-                      //       builder: (BuildContext context) =>
-                      //           const CreateProfile(),
-                      //     ),
-                      //   );
-                      // }
-                      // });
                     },
                     child: const Text("Sign Up"),
                   ),
                 ),
                 const SizedBox(height: 20),
-                MyWidgets.h3("Have an account?", color: Colors.grey),
+                Text("Have an account?"),
                 const SizedBox(height: 5),
                 TextButton(
                   onPressed: () {

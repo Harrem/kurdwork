@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:kurdwork/Data/Models/user.dart';
+import 'package:kurdwork/Models/user.dart';
 import '../../controller/user_actions.dart';
 import 'user_event.dart';
 import 'user_state.dart';

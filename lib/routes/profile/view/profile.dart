@@ -2,14 +2,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kurdwork/Models/user.dart';
-import 'package:kurdwork/screens/profile_screens/add_education.dart';
-import 'package:kurdwork/screens/profile_screens/edit_profile.dart';
-import 'package:kurdwork/screens/profile_screens/edit_userlinks.dart';
-import 'package:kurdwork/screens/settings.dart';
+import 'package:kurdwork/route.dart';
+import 'add_education.dart';
+import 'edit_profile.dart';
+import 'edit_userlinks.dart';
 import 'package:kurdwork/widgets/custom_card.dart';
 import 'package:kurdwork/widgets/custom_widgets.dart';
-import '../../bloc/user_bloc/user_bloc.dart';
-import '../../bloc/user_bloc/user_state.dart';
+import '../../../bloc/user_bloc/user_bloc.dart';
+import '../../../bloc/user_bloc/user_state.dart';
 import 'add_skill.dart';
 import 'about.dart';
 
@@ -30,36 +30,6 @@ class ProfileScreen extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Container(
-                    height: 50,
-                    color: Colors.white,
-                    padding: const EdgeInsets.all(10),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        IconButton(
-                            padding: const EdgeInsets.all(2),
-                            onPressed: () {},
-                            icon: const Icon(Icons.search)),
-                        Text(
-                          "Profile",
-                          style: Theme.of(context).textTheme.headline6,
-                        ),
-                        IconButton(
-                          padding: const EdgeInsets.all(2),
-                          onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => const Settings()),
-                            );
-                          },
-                          icon: const Icon(CupertinoIcons.settings),
-                        ),
-                      ],
-                    ),
-                  ),
                   const SizedBox(height: 10),
                   Container(
                     padding: const EdgeInsets.symmetric(
@@ -341,6 +311,12 @@ class ProfileScreen extends StatelessWidget {
                 ],
               ),
             ),
+          ),
+          floatingActionButton: FloatingActionButton(
+            onPressed: () {
+              Navigator.of(context).pushNamed(RouteGenerator.settingsPage);
+            },
+            child: const Icon(CupertinoIcons.settings),
           ),
         ),
       ),

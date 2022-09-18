@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../bloc/user_bloc/user_bloc.dart';
-import '../../bloc/user_bloc/user_event.dart';
+import '../../../bloc/user_bloc/user_bloc.dart';
+import '../../../bloc/user_bloc/user_event.dart';
 
 class About extends StatelessWidget {
   About({Key? key}) : super(key: key);
