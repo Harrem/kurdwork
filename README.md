@@ -11,6 +11,7 @@ This project is made and will be maintained with Flutter.
 
 - User Authentication with Firebase Authentication (Done)
 - Sign in with Google (Done)
+- Sign in with Facebook (Pending)
 - Posting job to Firebase Database (Done)
 - Apply for jobs (Pending)
 - Profile Management (in-progress)
@@ -20,6 +21,15 @@ This project is made and will be maintained with Flutter.
 more features will be added in the future
 
 ## Screenshots
+
+<img src="./screenshots/s1.png"  width="200">
+<img src="./screenshots/s2.png"  width="200">
+<img src="./screenshots/s3.png"  width="200">
+
+<img src="./screenshots/s4.png"  width="200">
+<img src="./screenshots/s5.png"  width="200">
+<img src="./screenshots/s6.png"  width="200">
+
 
 A few resources to get you started if this is your first Flutter project:
 
