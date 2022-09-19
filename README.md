@@ -29,6 +29,7 @@ more features will be added in the future
 <img style="float:left;" src="./screenshots/s4.png"  width="200">
 <img style="float:left;" src="./screenshots/s5.png"  width="200">
 <img style="float:left;" src="./screenshots/s6.png"  width="200">
+
 ## Dependencies
 
 - firebase_core: ^1.20.0
