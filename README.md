@@ -22,14 +22,13 @@ more features will be added in the future
 
 ## Screenshots
 
-<img src="./screenshots/s1.png"  width="200">
-<img src="./screenshots/s2.png"  width="200">
-<img src="./screenshots/s3.png"  width="200">
+<img style="float:left;" src="./screenshots/s1.png"  width="200">
+<img style="float:left;" src="./screenshots/s2.png"  width="200">
+<img style="float:left;" src="./screenshots/s3.png"  width="200">
 
-<img src="./screenshots/s4.png"  width="200">
-<img src="./screenshots/s5.png"  width="200">
-<img src="./screenshots/s6.png"  width="200">
-
+<img style="float:left;" src="./screenshots/s4.png"  width="200">
+<img style="float:left;" src="./screenshots/s5.png"  width="200">
+<img style="float:left;" src="./screenshots/s6.png"  width="200">
 ## Dependencies
 
 - firebase_core: ^1.20.0
