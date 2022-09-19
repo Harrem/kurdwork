@@ -30,6 +30,21 @@ more features will be added in the future
 <img src="./screenshots/s5.png"  width="200">
 <img src="./screenshots/s6.png"  width="200">
 
+## Dependencies
+
+- firebase_core: ^1.20.0
+- firebase_auth: ^3.5.0
+- google_sign_in: ^5.4.0
+- cloud_firestore: ^3.4.0
+- firebase_storage: ^10.3.7
+- cupertino_icons: ^1.0.2
+- google_nav_bar: ^5.0.6
+- email_validator: ^2.1.2
+- flutter_holo_date_picker: ^1.0.6
+- flutter_bloc: any
+- file_picker: ^5.0.1
+- flutter_image_compress: ^1.1.2
+- equatable: ^2.0.5
 
 A few resources to get you started if this is your first Flutter project:
 
