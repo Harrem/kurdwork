@@ -312,12 +312,12 @@ class ProfileScreen extends StatelessWidget {
               ),
             ),
           ),
-          floatingActionButton: FloatingActionButton(
-            onPressed: () {
-              Navigator.of(context).pushNamed(RouteGenerator.settingsPage);
-            },
-            child: const Icon(CupertinoIcons.settings),
-          ),
+          // floatingActionButton: FloatingActionButton(
+          //   onPressed: () {
+          //     Navigator.of(context).pushNamed(RouteGenerator.settingsPage);
+          //   },
+          //   child: const Icon(CupertinoIcons.settings),
+          // ),
         ),
       ),
     );

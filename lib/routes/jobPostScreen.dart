@@ -5,7 +5,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:kurdwork/services/jobServices.dart';
+import 'package:bloc/bloc.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import '../Models/job.dart';
+import '../bloc/user_bloc/user_bloc.dart';
 
 class JobPost extends StatefulWidget {
   const JobPost({
@@ -16,8 +19,6 @@ class JobPost extends StatefulWidget {
 }
 
 class _JobPostState extends State<JobPost> {
-  late final User user;
-
   JobServices jobServices = JobServices();
   PostForm form = PostForm();
 
@@ -28,45 +29,45 @@ class _JobPostState extends State<JobPost> {
 
   @override
   Widget build(BuildContext context) {
+    var bloc = context.read<UserBloc>();
     return Container(
       color: Colors.blueGrey[50],
       child: SafeArea(
         child: Scaffold(
-          body: Column(
+          body: ListView(
             children: [
+              Container(
+                padding: const EdgeInsets.all(20),
+                width: double.infinity,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    SizedBox(
+                      width: 40,
+                      height: 40,
+                      child: OutlinedButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                        child: const Icon(CupertinoIcons.back),
+                      ),
+                    ),
+                    const VerticalDivider(),
+                    Text(
+                      "Post Job",
+                      style: Theme.of(context).textTheme.headline6,
+                    )
+                  ],
+                ),
+              ),
               Padding(
                 padding: const EdgeInsets.all(20.0),
                 child: form,
               ),
-              SizedBox(
-                width: double.infinity,
-                height: 70,
-                child: Padding(
-                  padding: const EdgeInsets.all(10.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      SizedBox(
-                        width: 40,
-                        height: 40,
-                        child: OutlinedButton(
-                          onPressed: () {
-                            Navigator.pop(context);
-                          },
-                          child: const Icon(CupertinoIcons.back),
-                        ),
-                      ),
-                      const SizedBox(width: 10),
-                      Text(
-                        "Post a Job",
-                        style: Theme.of(context).textTheme.headline6,
-                      )
-                    ],
-                  ),
-                ),
-              ),
               Container(
-                padding: const EdgeInsets.all(20),
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                height: 50,
+                width: double.infinity,
                 child: ElevatedButton(
                   onPressed: () async {
                     setState(() {});
@@ -85,7 +86,7 @@ class _JobPostState extends State<JobPost> {
                         experience: form.experienceLevelController.text,
                         owner: await FirebaseFirestore.instance
                             .collection("users")
-                            .doc(user.uid.toString())
+                            .doc(bloc.userData.uid.toString())
                             .get()
                             .then((value) => value.data()!['fname']),
                       );
@@ -93,7 +94,7 @@ class _JobPostState extends State<JobPost> {
                       jobServices.postJob(job);
                     }
                   },
-                  child: const Text("post job"),
+                  child: const Text("Post"),
                 ),
               ),
             ],
@@ -123,9 +124,7 @@ class PostForm extends StatelessWidget {
       key: formKey,
       child: SingleChildScrollView(
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const SizedBox(height: 60),
             TextFormField(
               controller: jobTitleController,
               decoration: const InputDecoration(
@@ -168,7 +167,6 @@ class PostForm extends StatelessWidget {
                 hintText: "Job Description",
               ),
             ),
-            const SizedBox(height: 70),
           ],
         ),
       ),

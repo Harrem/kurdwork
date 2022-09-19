@@ -49,6 +49,7 @@ class _SignupScreenState extends State<SignupScreen> {
                           },
                           style: ElevatedButton.styleFrom(
                               elevation: 0,
+                              backgroundColor: Colors.white,
                               fixedSize: const Size(60, 60),
                               padding: const EdgeInsets.all(9)),
                           clipBehavior: Clip.none,
@@ -66,7 +67,8 @@ class _SignupScreenState extends State<SignupScreen> {
                       child: ElevatedButton(
                         onPressed: () {},
                         style: ElevatedButton.styleFrom(
-                            primary: const Color.fromARGB(255, 221, 247, 255),
+                            backgroundColor:
+                                const Color.fromARGB(255, 221, 247, 255),
                             elevation: 0,
                             fixedSize: const Size(60, 60),
                             padding: const EdgeInsets.all(7)),

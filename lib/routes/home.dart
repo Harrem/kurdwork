@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:kurdwork/route.dart';
 import 'package:kurdwork/routes/jobPostScreen.dart';
 import 'package:kurdwork/routes/savedJobsScreen.dart';
 import 'package:kurdwork/routes/profile/view/profile.dart';
@@ -161,7 +162,7 @@ class _HomeScreenState extends State<HomeScreen>
                       padding: const EdgeInsets.symmetric(
                           horizontal: 20, vertical: 12),
                       duration: const Duration(milliseconds: 400),
-                      // tabBackgroundColor: const Color.fromARGB(255, 242, 235, 255),
+                      tabBackgroundColor: Colors.indigo[50]!,
                       color: Colors.black,
                       tabs: const [
                         GButton(
@@ -184,23 +185,26 @@ class _HomeScreenState extends State<HomeScreen>
                       selectedIndex: currentIndex,
                       onTabChange: (index) {
                         tabController.index = index;
+                        setState(() {});
                       },
                     ),
                   ),
                 ),
-                // floatingActionButton: (tabController.index == 0)
-                //     ? FloatingActionButton(
-                //         onPressed: () {
-                //           // Navigator.of(context).push(MaterialPageRoute(builder: (context)=> JobPost()));
-                //         },
-                //         child: const Icon(Icons.add),
-                //       )
-                //     : FloatingActionButton(
-                //         onPressed: () {
-                //           // Navigator.of(context).push(MaterialPageRoute(builder: (context)=> JobPost()));
-                //         },
-                //         child: const Icon(Icons.settings_outlined),
-                //       ),
+                floatingActionButton: (tabController.index == 0)
+                    ? FloatingActionButton(
+                        onPressed: () {
+                          Navigator.of(context)
+                              .pushNamed(RouteGenerator.postPage);
+                        },
+                        child: const Icon(Icons.add),
+                      )
+                    : FloatingActionButton(
+                        onPressed: () {
+                          Navigator.of(context)
+                              .pushNamed(RouteGenerator.settingsPage);
+                        },
+                        child: const Icon(Icons.settings_outlined),
+                      ),
               ),
             ),
           ),
