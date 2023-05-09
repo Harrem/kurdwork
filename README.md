@@ -1,5 +1,5 @@
 
-# kurdwork
+# KurdWork
 
 Job vacancy application for both Android&iOS.
 
